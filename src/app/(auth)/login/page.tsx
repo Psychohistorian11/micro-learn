@@ -2,7 +2,7 @@ import LogInForm from "@/components/auth/login-form";
 
 export default function LoginPage() {
     return (
-        <div className="min-h-screen  flex flex-row">
+        <div className="min-h-dvh flex flex-row">
             <div className=" md:basis-2/3 hidden md:block pl-6 pt-6 pb-6 ">
                 <div className="dark:bg-white bg-black h-full rounded-lg flex flex-col justify-center items-center">
                     <p className="dark:text-black text-white">Background image</p>
@@ -15,4 +15,4 @@ export default function LoginPage() {
             </div>
         </div>
     );
-}   
+}  
