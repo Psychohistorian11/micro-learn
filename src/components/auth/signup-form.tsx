@@ -1,13 +1,61 @@
+'use client'
+
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { ModeToggle } from "../ui/mode-toggle";
 import { IconBrandGoogleFilled } from "@tabler/icons-react";
+import { useForm } from "react-hook-form";
 import Link from "next/link";
+import FieldError from "../ui/custom/field-error";
+import User from "@/interface/user";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function SignUpForm() {
+
+    const router = useRouter();
+    const [serverError, setServerError] = useState("");
+    const { register, handleSubmit, formState: { errors }, setError, } = useForm();
+
+    const onSubmit = handleSubmit(async (data) => {
+        if (data.password !== data.confirmPassword) {
+            setError("confirmPassword", { message: "Las contraseñas no coinciden", type: "server" }); return;;
+        }
+        const dataToSend: User = {
+            username: data.username,
+            email: data.email,
+            password: data.password
+
+        }
+
+        try {
+            const response = await fetch("/api/auth/signup", {
+                method: "POST",
+                body: JSON.stringify(dataToSend),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+            if (response.ok) {
+                router.push("login");
+            } else {
+                const error = await response.json()
+                if (error.message === "el nombre de usuario ya esta en uso") {
+                    setError("username", { type: "server", message: error.message })
+                } else if (error.message === "el correo electronico ya esta registrado en la aplicación") {
+                    setError("email", { type: "server", message: error.message });
+                } else {
+                    setServerError("Something went wrong. Please try again.");
+                }
+            }
+        } catch (error) {
+            setServerError("Failed to connect to the server.");
+        }
+    })
+
     return (
-        <div className="justify-between flex flex-col gap-4  border border-white ">
-            <header className="flex gap-2 items-center justify-end  border border-red-500">
+        <div className="justify-between flex flex-col gap-4">
+            <header className="flex gap-2 items-center justify-end">
                 <p className="text-xs">¿Ya tienes una cuenta?</p>
                 <Link href="/login">
                     <Button
@@ -21,7 +69,7 @@ export default function SignUpForm() {
                 <ModeToggle />
             </header>
 
-            <main className="flex-1 items-center justify-center flex flex-col gap-2 border border-green-500">
+            <main className="flex-1 items-center justify-center flex flex-col gap-2">
                 <div className="px-10">
                     <div className="text-3xl font-serif text-center">
                         <p>
@@ -35,40 +83,90 @@ export default function SignUpForm() {
                     </div>
                 </div>
 
-                <div className="mt-6 flex flex-col justify-center w-full p-10 border border-yellow-500">
-                    <div className="gap-2 flex flex-col w-full">
-                        <Input
-                            placeholder="Nombre completo"
-                            type="text"
-                            className="w-full placeholder:text-sm"
-                        />
-                        <Input
-                            placeholder="Correo electrónico"
-                            type="email"
-                            className="w-full placeholder:text-sm"
-                        />
-                        <Input
-                            placeholder="Contraseña"
-                            type="password"
-                            className="w-full placeholder:text-sm"
-                        />
-                        <Input
-                            placeholder="Confirmar contraseña"
-                            type="password"
-                            className="w-full placeholder:text-sm"
-                        />
-                    </div>
+                <div className="mt-6 flex flex-col justify-center w-full p-10">
+                    <form onSubmit={onSubmit}>
+                        <div className="gap-2 flex flex-col w-full">
+                            <Input
+                                placeholder="Nombre de usuario"
+                                id="username"
+                                type="text"
+                                className="w-full placeholder:text-sm"
+                                {...register("username", {
+                                    required: {
+                                        value: true,
+                                        message: "El nombre de usuario es obligatorio"
+                                    }
+                                })
 
-                    <div className="w-full mt-4">
-                        <Button className="w-full bg-persian-green cursor-pointer">
-                            Registrarme
-                        </Button>
-                    </div>
+                                }
+                            />
+                            <FieldError errors={errors} field="username" />
 
-                    <div className="flex items-center my-4 w-full mt-6 mb-4">
-                        <div className="flex-grow border-t border border-gray-300 dark:border-white"></div>
+                            <Input
+                                placeholder="Correo electrónico"
+                                id="email"
+                                type="email"
+                                className="w-full placeholder:text-sm"
+                                {
+                                ...register("email", {
+                                    required: {
+                                        value: true,
+                                        message: "El correo electrónico es obligatorio"
+                                    }
+                                })
+                                }
+                            />
+                            <FieldError errors={errors} field="email" />
+
+                            <Input
+                                placeholder="Contraseña"
+                                id="password"
+                                type="password"
+                                className="w-full placeholder:text-sm"
+                                {
+                                ...register("password", {
+                                    required: {
+                                        value: true,
+                                        message: "La contraseña es obligatoria"
+                                    }
+                                })
+                                }
+                            />
+                            <FieldError errors={errors} field="password" />
+
+                            <Input
+                                placeholder="Confirmar contraseña"
+                                id="confirmPassword"
+                                type="password"
+                                className="w-full placeholder:text-sm"
+                                {
+                                ...register("confirmPassword", {
+                                    required: {
+                                        value: true,
+                                        message: "La confirmación de la contraseña es obligatoria"
+                                    }
+                                })
+                                }
+                            />
+                            <FieldError errors={errors} field="confirmPassword" />
+                        </div>
+
+                        <div className="w-full mt-4">
+                            <Button type="submit" className="w-full bg-persian-green cursor-pointer">
+                                Registrarme
+                            </Button>
+                        </div>
+                        {serverError && (
+                            <p className="text-tiffany-blue text-xs text-center mt-2">
+                                {serverError}
+                            </p>
+                        )}
+                    </form>
+
+                    <div className="flex items-center my-4 w-full mt-4 mb-4">
+                        <div className="flex-grow border-t border border-gray-200 dark:border-gray-800"></div>
                         <span className="mx-2 text-xs">O</span>
-                        <div className="flex-grow border-t border border-gray-300 dark:border-white"></div>
+                        <div className="flex-grow border-t border border-gray-200 dark:border-gray-800"></div>
                     </div>
 
                     <div className="text-center w-full">
