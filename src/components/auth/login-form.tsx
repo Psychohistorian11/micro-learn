@@ -7,13 +7,13 @@ import Link from "next/link";
 export default function LogInForm() {
 
     return (
-        <div className="flex flex-col gap-4 h-full">
-            <header className=" flex gap-2 items-center justify-end">
+        <div className="flex flex-col gap-4 h-full border border-white">
+            <header className=" flex gap-2 items-center justify-end border border-amber-500">
                 <p className="text-xs">
                     ¿No tienes una cuenta?
                 </p>
                 <Link href="/signup">
-                    <Button variant="secondary" className="text-xs font-semibold cursor-pointer">Crear</Button>
+                    <Button variant="secondary" size="sm" className="text-sm font-semibold cursor-pointer">Crear</Button>
                 </Link>
 
                 <ModeToggle />
@@ -21,18 +21,18 @@ export default function LogInForm() {
 
             </header>
 
-            <main className=" flex-1 items-center justify-center flex flex-col gap-2">
+            <main className=" flex-1 items-center justify-center flex flex-col gap-2 border border-green-500">
                 <div className="pr-10 pl-10">
-                    <div className="text-4xl font-serif text-center ">
+                    <div className="text-3xl font-serif text-center ">
                         <p>Inicia sesión en <a className="text-persian-green">MicroLearn</a> </p>
                     </div>
-                    <div className="text-xs text-center mt-2">
+                    <div className="text-sm text-center mt-2">
                         Bienvenido a MicroLearn, por favor ingresa tus datos de acceso para usar la aplicación.
                     </div>
                 </div>
 
-                <div className="mt-4 items-center flex flex-col justify-center w-full p-10" >
-                    <div className="gap-4 flex flex-col w-full">
+                <div className="mt-4 items-center flex flex-col justify-center w-full p-10 border border-blue-500" >
+                    <div className="gap-2 flex flex-col w-full">
                         <Input placeholder="Correo electrónico" type="email" className="w-full placeholder:text-sm" />
                         <Input placeholder="Contraseña" type="password" className="w-full placeholder:text-sm" />
                     </div>
@@ -40,7 +40,7 @@ export default function LogInForm() {
                         <Button variant="link" className="text-xs mt-2 mb-2 text-persian-green cursor-pointer" >¿Olvidaste tu contraseña?</Button>
                     </div>
                     <div className="w-full">
-                        <Button className="w-full bg-persian-green cursor-pointer">Iniciar sesión</Button>
+                        <Button className="w-full bg-persian-green cursor-pointer" size="sm">Iniciar sesión</Button>
                     </div>
 
                     <div className="flex items-center my-4 w-full mt-4 mb-4">
@@ -50,7 +50,7 @@ export default function LogInForm() {
                     </div>
 
                     <div className="text-center w-full">
-                        <Button className="w-full cursor-pointer" variant="outline">
+                        <Button className="w-full cursor-pointer text-sm" size="sm" variant="outline">
                             <IconBrandGoogleFilled className="mr-2 h-4 " />
                             Continuar con Google
                         </Button>

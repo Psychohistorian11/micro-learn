@@ -16,10 +16,8 @@
     --font-serif: "Merriweather", serif;
     --font-mono: "Fira Code", monospace;
 
-    --text-xs: 0.75rem;
-    /* 12px */
-    --text-sm: 0.875rem;
-    /* 14px */
+    --text-xs: 0.60rem;
+    --text-sm: 0.75rem;
     --text-base: 1rem;
     /* 16px */
     --text-lg: 1.125rem;
