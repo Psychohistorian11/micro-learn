@@ -7,7 +7,7 @@ import Link from "next/link";
 export default function LogInForm() {
 
     return (
-        <div className="flex flex-col gap-4  h-full">
+        <div className="flex flex-col gap-4 h-full">
             <header className=" flex gap-2 items-center justify-end">
                 <p className="text-xs">
                     ¿No tienes una cuenta?
