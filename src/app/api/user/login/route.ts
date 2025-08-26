@@ -4,6 +4,9 @@ import { validate } from "class-validator";
 import bcrypt from "bcryptjs";
 import prismadb from "@/lib/prismadb";
 import { User, UserLoginDTO, UserResponseDTO } from "@/interface/user";
+import jwt from "jsonwebtoken";
+
+const JWT_SECRET = process.env.JWT_SECRET as string;
 
 export async function POST(request: NextRequest) {
   try {
@@ -41,9 +44,22 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const userResponse = plainToInstance(UserResponseDTO, existingUser);
+    const payload = {
+      sub: existingUser.id,
+      name: existingUser.username,
+    };
 
-    return NextResponse.json(userResponse);
+    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
+
+    try {
+      const response = jwt.verify(token, JWT_SECRET);
+    } catch (error) {
+      return NextResponse.json(
+        { message: "Error encoding jwt" + error },
+        { status: 500 }
+      );
+    }
+    return NextResponse.json({ token });
   } catch (error) {
     console.error("Error creating user:", error);
     return NextResponse.json(
