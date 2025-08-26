@@ -73,8 +73,8 @@ export default function LogInForm() {
                     </div>
                 </div>
 
-                <div className="mt-4 items-center flex flex-col justify-center w-full p-10" >
-                    <form onSubmit={onSubmit}>
+                <div className="mt-4 items-center flex flex-col justify-center w-full p-10 border border-red-500" >
+                    <form onSubmit={onSubmit} className="border border-green-500 w-full">
                         <div className="gap-2 flex flex-col w-full">
                             <Input
                                 placeholder="Correo electrónico"
