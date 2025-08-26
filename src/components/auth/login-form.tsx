@@ -4,12 +4,12 @@ import { useState } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { ModeToggle } from "../ui/mode-toggle";
-import { IconBrandGoogleFilled } from "@tabler/icons-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import User from "@/interface/user";
 import FieldError from "../ui/custom/field-error";
+import SignInGoogleButton from "./signin-google-button";
 
 export default function LogInForm() {
 
@@ -74,7 +74,7 @@ export default function LogInForm() {
                 </div>
 
                 <div className="mt-4 items-center flex flex-col justify-center w-full p-10 " >
-                    <form onSubmit={onSubmit} className=" w-full">
+                    <form onSubmit={onSubmit} className=" w-full items-center flex flex-col justify-center">
                         <div className="gap-2 flex flex-col w-full">
                             <Input
                                 placeholder="Correo electrónico"
@@ -125,12 +125,7 @@ export default function LogInForm() {
                         <div className="flex-grow border-t border border-gray-200 dark:border-gray-800 "></div>
                     </div>
 
-                    <div className="text-center w-full">
-                        <Button className="w-full cursor-pointer text-sm" size="sm" variant="outline">
-                            <IconBrandGoogleFilled className="mr-2 h-4 " />
-                            Continuar con Google
-                        </Button>
-                    </div>
+                    <SignInGoogleButton />
                 </div>
 
 
