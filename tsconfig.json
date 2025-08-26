@@ -1,8 +1,11 @@
 {
   "compilerOptions": {
-    "target": "ES2017",
+    "target": "ES2022",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
+    "experimentalDecorators": true,  
+    "emitDecoratorMetadata": true, 
+    "strictPropertyInitialization": false, 
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
