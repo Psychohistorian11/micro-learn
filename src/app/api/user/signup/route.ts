@@ -4,6 +4,7 @@ import { validate } from "class-validator";
 import bcrypt from "bcryptjs";
 import prismadb from "@/lib/prismadb";
 import { UserCreateDTO } from "@/interface/user";
+import { profile } from "console";
 
 export async function POST(request: NextRequest) {
   try {
@@ -19,7 +20,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const existingUser = await prismadb.users.findFirst({
+    const existingUser = await prismadb.user.findFirst({
       where: {
         OR: [{ email: dto.email }, { username: dto.username }],
       },
@@ -34,20 +35,22 @@ export async function POST(request: NextRequest) {
 
     const hashedPassword = await bcrypt.hash(dto.password, 10);
 
-    const newUser = await prismadb.users.create({
+    const newUser = await prismadb.user.create({
       data: {
         username: dto.username,
         email: dto.email,
         password: hashedPassword,
-        avatar: "", // TODO: Implement placeholder avatar
+        profilePicture: "", // TODO: Implement placeholder avatar
         description: "Me encanta aprender!",
+        role: "student",
       },
       select: {
         id: true,
         username: true,
         email: true,
-        avatar: true,
+        profilePicture: true,
         description: true,
+        role: true,
       },
     });
 
