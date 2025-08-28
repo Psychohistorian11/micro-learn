@@ -61,9 +61,9 @@ export async function POST(request: NextRequest) {
     }
     return NextResponse.json({ token });
   } catch (error) {
-    console.error("Error creating user:", error);
+    console.error("Error creating user: ", error);
     return NextResponse.json(
-      { message: "Error creating user " + error },
+      { message: "Error creating user: " + error },
       { status: 500 }
     );
   }
