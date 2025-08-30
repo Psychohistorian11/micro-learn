@@ -7,7 +7,6 @@ import { ModeToggle } from "../ui/mode-toggle";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { User, UserLoginDTO } from "@/interface/user";
 import FieldError from "../ui/custom/field-error";
 import SignInGoogleButton from "./signin-google-button";
 import { signIn } from "next-auth/react";
