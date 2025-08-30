@@ -15,7 +15,7 @@ export class Resource {
 
   @IsOptional()
   @IsString()
-  avatar?: string;
+  profilePicture?: string;
 
   @IsOptional()
   @IsString()
@@ -48,7 +48,7 @@ export class ResourceResponseDTO {
 
   @IsOptional()
   @IsString()
-  avatar?: string;
+  profilePicture?: string;
 
   @IsOptional()
   @IsString()

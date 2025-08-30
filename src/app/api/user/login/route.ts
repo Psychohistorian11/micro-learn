@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
     const dto = plainToInstance(UserLoginDTO, body);
 
     const errors = await validate(dto);
-    console.log("errors", errors);
+
     if (errors.length > 0) {
       return NextResponse.json(
         { message: "Validation failed", errors },
@@ -22,8 +22,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const existingUser: User | null = await prismadb.user.findFirst({
+    const existingUser = await prismadb.user.findFirst({
       where: { email: dto.email },
+      select: { id: true, username: true, email: true, profilePicture: true, role: true, password: true },
     });
 
     if (!existingUser) {
@@ -46,20 +47,20 @@ export async function POST(request: NextRequest) {
 
     const payload = {
       sub: existingUser.id,
-      name: existingUser.username,
+      name: existingUser.username ?? existingUser.email,
     };
 
     const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
 
-    try {
-      const response = jwt.verify(token, JWT_SECRET);
-    } catch (error) {
-      return NextResponse.json(
-        { message: "Error encoding jwt" + error },
-        { status: 500 }
-      );
-    }
-    return NextResponse.json({ token });
+    const user = {
+      id: existingUser.id,
+      username: existingUser.username ?? existingUser.email.split("@")[0],
+      email: existingUser.email,
+      profilePicture: existingUser.profilePicture ?? "",
+      role: existingUser.role ?? "student",
+    };
+
+    return NextResponse.json({ token, user });
   } catch (error) {
     console.error("Error creating user: ", error);
     return NextResponse.json(

@@ -16,7 +16,7 @@ export class User {
 
   @IsOptional()
   @IsString()
-  avatar?: string;
+  profilePicture?: string;
 
   @IsOptional()
   @IsString()
@@ -54,7 +54,7 @@ export class UserResponseDTO {
 
   @IsOptional()
   @IsString()
-  avatar?: string;
+  profilePicture?: string;
 
   @IsOptional()
   @IsString()

@@ -3,6 +3,7 @@ import { auth } from "../../../auth";
 
 const HomePage = async () => {
     const session = await auth();
+    console.log("full session: ", session)
 
     return (
         <>
