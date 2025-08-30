@@ -11,14 +11,7 @@ const ProfileButtons = ({ userId }: { userId: string }) => {
         <button
           className="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600"
           onClick={() => setShowProfile(!showProfile)}
-        >
-          Perfil
-        </button>
-        <button
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-          onClick={() => alert("Funcionalidad de crear recurso aún no implementada")}
-        >
-          Crear recurso
+        >Perfil
         </button>
       </div>
 

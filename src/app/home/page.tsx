@@ -2,6 +2,8 @@
 import SignOutGoogleButton from "@/components/auth/signuot-google-button";
 import { auth } from "../../../auth";
 import ProfileButtons from "@/components/profile/profileButtons";
+import CreateResource from "@/components/resources/createResource";
+import ResourceButton from "@/components/resources/resourcesButton";
 
 const HomePage = async () => {
     const session = await auth();
@@ -15,6 +17,7 @@ const HomePage = async () => {
             </div>
 
             <ProfileButtons userId={session?.user?.id!} />
+            <ResourceButton userId={session?.user?.id!} />
 
             <div className="flex justify-center">
                 <SignOutGoogleButton />
