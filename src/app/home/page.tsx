@@ -1,6 +1,7 @@
+
 import SignOutGoogleButton from "@/components/auth/signuot-google-button";
 import { auth } from "../../../auth";
-import ProfilePictureUploader from "@/components/profile/ProfilePicture";
+import ProfileButtons from "@/components/profile/profileButtons";
 
 const HomePage = async () => {
     const session = await auth();
@@ -10,17 +11,14 @@ const HomePage = async () => {
             <div className="bg-gray-100 rounded-lg p-4 text-center mb-6">
                 <p className="text-gray-600">Signed in as:</p>
                 <p className="font-medium text-black">{session?.user?.email}</p>
-                <p className="text-black">eoooooo: {session?.user?.id}</p>
-            </div>
-                        <div>
-            <div className="mb-10">
-                <ProfilePictureUploader userId={session?.user?.id!} />
-            </div>
-            </div>
-            <div>
-                <SignOutGoogleButton />
+                <p className="text-black">User ID: {session?.user?.id}</p>
             </div>
 
+            <ProfileButtons userId={session?.user?.id!} />
+
+            <div className="flex justify-center">
+                <SignOutGoogleButton />
+            </div>
         </>
     );
 };

@@ -8,7 +8,7 @@ export async function uploadProfilePicture(userId: string, file: File) {
     .upload(fileName, file, { upsert: true })
 
   if (error) {
-    console.error("Error subiendo imagen:", error)
+    console.error("Error uploading image:", error)
     return null
   }
 
@@ -16,10 +16,7 @@ export async function uploadProfilePicture(userId: string, file: File) {
 
   let publicUrl = data.publicUrl
 
-  let { error: dbError } = await supabase
-    .from("users")
-    .update({ profilePicture: publicUrl })
-    .eq("id", userId)
+  let { error: dbError } = await supabase.from("users").update({ profilePicture: publicUrl }).eq("id", userId)
 
   if (dbError) {
     console.error("Error:", dbError)
