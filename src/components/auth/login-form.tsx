@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form";
 import { User, UserLoginDTO } from "@/interface/user";
 import FieldError from "../ui/custom/field-error";
 import SignInGoogleButton from "./signin-google-button";
+import { signIn } from "next-auth/react";
 
 export default function LogInForm() {
   const router = useRouter();
@@ -21,29 +22,20 @@ export default function LogInForm() {
   } = useForm();
 
   const onSubmit = handleSubmit(async (data) => {
-    const dataToSend: UserLoginDTO = {
-      email: data.email,
-      password: data.password,
-    };
+
+    const email = data.email
+    const password = data.password
 
     try {
-      const response = await fetch("api/user/login", {
-        method: "POST",
-        body: JSON.stringify(dataToSend),
-        headers: {
-          "Content-Type": "application/json",
-        },
+      const res = await signIn("credentials", {
+        redirect: false,
+        email,
+        password,
+
       });
 
-      if (response.ok) {
-        router.push("home");
-      } else {
-        const error = await response.json();
-        if (error.message === "credenciales invalidas") {
-          setServerError(error.message);
-        } else {
-          setServerError("Something went wrong. Please try again.");
-        }
+      if (res.ok) {
+        router.push("/home");
       }
     } catch (error) {
       setServerError("Failed to connect to the server.");
