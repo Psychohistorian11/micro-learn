@@ -2,12 +2,11 @@ import { resourceSelect } from "@/lib/prisma-selects";
 import prismadb from "@/lib/prismadb";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function GET(request: NextRequest, context: any) {
+  const { id } = context.params as { id: string };
+
   const resource = await prismadb.resource.findUnique({
-    where: { id: params.id },
+    where: { id: id },
     select: resourceSelect,
   });
 
@@ -18,12 +17,11 @@ export async function GET(
   return NextResponse.json(resource);
 }
 
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function DELETE(request: NextRequest, context: any) {
+  const { id } = context.params as { id: string };
+
   const resource = await prismadb.resource.delete({
-    where: { id: params.id },
+    where: { id: id },
     select: resourceSelect,
   });
 
