@@ -33,10 +33,10 @@ model User {
 }
 
 model Community {
-  id          String  @id @default(cuid())
+  id          String @id @default(cuid())
   title       String
-  image       String  @default("") // TODO: default image
-  description String  @default("") 
+  image       String @default("") // TODO: default image
+  description String @default("")
 
   users     User_Community[]
   resources Resource_Community[]

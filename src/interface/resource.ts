@@ -18,24 +18,7 @@ export class ResourceDTO {
   isPublic: boolean;
 
   @IsString()
-<<<<<<< HEAD
-  password?: string;
-
-  @IsOptional()
-  @IsString()
-  profilePicture?: string;
-
-  @IsOptional()
-  @IsString()
-  description?: string;
-}
-
-export class ResourceCreateDTO {
-  @IsString()
-  name: string;
-=======
   image: string;
->>>>>>> resources
 
   @IsString()
   description: string;
@@ -97,12 +80,7 @@ export class ResourceUpdateDTO {
 
   @IsString()
   @IsOptional()
-<<<<<<< HEAD
-  @IsString()
-  profilePicture?: string;
-=======
   title?: string;
->>>>>>> resources
 
   @IsBoolean()
   @IsOptional()
@@ -132,4 +110,4 @@ export class ResourceUpdateDTO {
   @IsOptional()
   communities?: string[]; // IDs de comunidades
 }
-  //ResourceResponseDTO en  /lib/prisma-selects.ts
+//ResourceResponseDTO en  /lib/prisma-selects.ts
