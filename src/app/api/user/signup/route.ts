@@ -4,7 +4,6 @@ import { validate } from "class-validator";
 import bcrypt from "bcryptjs";
 import prismadb from "@/lib/prismadb";
 import { UserCreateDTO } from "@/interface/user";
-import { profile } from "console";
 
 export async function POST(request: NextRequest) {
   try {

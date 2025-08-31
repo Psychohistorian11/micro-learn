@@ -33,10 +33,10 @@ model User {
 }
 
 model Community {
-  id          String  @id @default(cuid())
+  id          String @id @default(cuid())
   title       String
-  image       String?
-  description String?
+  image       String @default("") // TODO: default image
+  description String @default("")
 
   users     User_Community[]
   resources Resource_Community[]
@@ -58,13 +58,13 @@ model Resource {
   id          String       @id @default(uuid())
   title       String
   isPublic    Boolean      @default(true)
-  image       String?
+  image       String       @default("") // TODO: default image
   description String
   attachment  String
   type        ResourceType
 
-  authorId String?
-  author   User?   @relation("UserResources", fields: [authorId], references: [id])
+  authorId String
+  author   User   @relation("UserResources", fields: [authorId], references: [id])
 
   communities Resource_Community[]
   areas       Area[]               @relation("ResourceAreas")

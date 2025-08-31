@@ -7,7 +7,6 @@ import { ModeToggle } from "../ui/mode-toggle";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { User, UserLoginDTO } from "@/interface/user";
 import FieldError from "../ui/custom/field-error";
 import SignInGoogleButton from "./signin-google-button";
 import { signIn } from "next-auth/react";
@@ -77,6 +76,7 @@ export default function LogInForm() {
             onSubmit={onSubmit}
             className=" w-full items-center flex flex-col justify-center"
           >
+
             <div className="gap-2 flex flex-col w-full">
               <Input
                 placeholder="Correo electrónico"
