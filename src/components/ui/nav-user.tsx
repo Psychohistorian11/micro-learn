@@ -45,6 +45,7 @@ export function NavUser({
     <SidebarMenu className="w-auto">
       <SidebarMenuItem>
         <DropdownMenu>
+
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
@@ -57,6 +58,7 @@ export function NavUser({
 
             </SidebarMenuButton>
           </DropdownMenuTrigger>
+
 
           <DropdownMenuContent
             className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
@@ -80,7 +82,7 @@ export function NavUser({
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <Sparkles />
-                Upgrade to Pro
+                Login
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />

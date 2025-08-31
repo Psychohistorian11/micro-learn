@@ -76,6 +76,7 @@ export default function LogInForm() {
             onSubmit={onSubmit}
             className=" w-full items-center flex flex-col justify-center"
           >
+
             <div className="gap-2 flex flex-col w-full">
               <Input
                 placeholder="Correo electrónico"
