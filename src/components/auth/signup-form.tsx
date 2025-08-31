@@ -10,6 +10,7 @@ import FieldError from "../ui/custom/field-error";
 import { UserCreateDTO } from "@/interface/user";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import SignInGoogleButton from "./signin-google-button";
 
 export default function SignUpForm() {
   const router = useRouter();
@@ -173,12 +174,8 @@ export default function SignUpForm() {
             <div className="flex-grow border-t border border-gray-200 dark:border-gray-800"></div>
           </div>
 
-          <div className="text-center w-full">
-            <Button className="w-full cursor-pointer" variant="outline">
-              <IconBrandGoogleFilled className="mr-2 h-4" />
-              Continuar con Google
-            </Button>
-          </div>
+          <SignInGoogleButton />
+
         </div>
       </main>
     </div>

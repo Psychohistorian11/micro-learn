@@ -7,6 +7,7 @@ import ResourceButton from "@/components/resources/resourcesButton";
 
 const HomePage = async () => {
     const session = await auth();
+    console.log("full session: ", session)
 
     return (
         <>
