@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { uploadResource } from "./uploadResource";
+import { uploadAttachment } from "./uploadAttachment";
 
 type CreateResourceProps = {
   userId: string;
@@ -15,7 +15,7 @@ export default function CreateResource({ userId }: CreateResourceProps) {
       alert("Selecciona un tipo de recurso y un archivo.");
       return;
     }
-    await uploadResource(userId, resourceType, file);
+    await uploadAttachment(userId, file);
     alert("Recurso subido correctamente!");
     setFile(null);
     setResourceType("");

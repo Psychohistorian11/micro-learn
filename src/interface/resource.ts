@@ -1,56 +1,113 @@
-import { IsEmail, IsOptional, IsString, MinLength } from "class-validator";
+import {
+  IsBoolean,
+  IsOptional,
+  IsString,
+  IsUUID,
+  IsEnum,
+} from "class-validator";
+import { ResourceType } from "@prisma/client";
 
-export class Resource {
-  @IsString()
+export class ResourceDTO {
+  @IsUUID()
   id: string;
 
   @IsString()
   title: string;
 
-  @IsString()
-  area: string;
+  @IsBoolean()
+  isPublic: boolean;
 
   @IsString()
-  password?: string;
-
-  @IsOptional()
-  @IsString()
-  profilePicture?: string;
-
-  @IsOptional()
-  @IsString()
-  description?: string;
-}
-
-export class ResourceCreateDTO {
-  @IsString()
-  name: string;
+  image: string;
 
   @IsString()
   description: string;
 
-  @IsEmail()
-  email: string;
+  @IsString()
+  attachment: string;
+
+  @IsEnum(ResourceType)
+  type: ResourceType;
 
   @IsString()
-  password: string;
+  authorId: string;
+
+  @IsString({ each: true })
+  @IsOptional()
+  areas?: string[]; // IDs de áreas
+
+  @IsString({ each: true })
+  @IsOptional()
+  communities?: string[]; // IDs de comunidades
 }
 
-export class ResourceResponseDTO {
+export class ResourceCreateDTO {
   @IsString()
+  title: string;
+
+  @IsBoolean()
+  @IsOptional()
+  isPublic?: boolean;
+
+  @IsString()
+  @IsOptional()
+  image?: string;
+
+  @IsString()
+  description: string;
+
+  @IsString()
+  attachment: string;
+
+  @IsEnum(ResourceType)
+  type: ResourceType;
+
+  @IsString()
+  authorId: string;
+
+  @IsString({ each: true })
+  @IsOptional()
+  areas?: string[];
+
+  @IsString({ each: true })
+  @IsOptional()
+  communities?: string[];
+}
+
+export class ResourceUpdateDTO {
+  @IsUUID()
   id: string;
 
   @IsString()
-  username: string;
-
-  @IsEmail()
-  email: string;
-
   @IsOptional()
-  @IsString()
-  profilePicture?: string;
+  title?: string;
 
+  @IsBoolean()
   @IsOptional()
+  isPublic?: boolean;
+
   @IsString()
+  @IsOptional()
+  image?: string;
+
+  @IsString()
+  @IsOptional()
   description?: string;
+
+  @IsString()
+  @IsOptional()
+  attachment?: string;
+
+  @IsOptional()
+  @IsEnum(ResourceType)
+  type?: ResourceType;
+
+  @IsString({ each: true })
+  @IsOptional()
+  areas?: string[]; // IDs de áreas
+
+  @IsString({ each: true })
+  @IsOptional()
+  communities?: string[]; // IDs de comunidades
 }
+  //ResourceResponseDTO en  /lib/prisma-selects.ts
