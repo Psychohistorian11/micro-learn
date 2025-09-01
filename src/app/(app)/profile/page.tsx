@@ -4,6 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Pencil } from "lucide-react";
 import UserDescription from "@/components/profile/userDescription";
 import { EditProfileDialogForm } from "@/components/profile/editProfileDialog-form";
+import { AvatarEditable } from "@/components/profile/avatarEditable";
 
 export default async function ProfilePage() {
   const session = await auth();
@@ -24,7 +25,6 @@ export default async function ProfilePage() {
     );
     if (response.ok) {
       userData = await response.json();
-      // Do something with userData
       console.log("userData", userData);
     } else {
       const error = await response.json();
@@ -36,17 +36,8 @@ export default async function ProfilePage() {
   return (
     <div className="relative max-w-3xl mx-auto mt-10 p-6 bg-white border rounded-xl shadow-md flex items-center gap-6">
       <EditProfileDialogForm user={userData} />
-      
-      {/* Foto de perfil */}
-      <Avatar className="h-28 w-28 rounded-lg">
-        <AvatarImage
-          src={session.user.image ?? undefined}
-          alt={session.user.name ?? "User"}
-        />
-        <AvatarFallback className="rounded-lg text-lg font-bold">
-          {session.user.name?.substring(0, 2).toUpperCase()}
-        </AvatarFallback>
-      </Avatar>
+
+      <AvatarEditable user={userData} />
 
       {/* Info del usuario */}
       <div className="flex flex-col">
