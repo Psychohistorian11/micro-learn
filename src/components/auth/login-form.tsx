@@ -34,7 +34,7 @@ export default function LogInForm() {
       });
 
       if (res.ok) {
-        router.push("/home");
+        router.push("/");
       }
     } catch (error) {
       setServerError("Failed to connect to the server.");

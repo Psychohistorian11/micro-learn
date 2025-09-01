@@ -5,13 +5,13 @@ export const data = {
     user: {
         name: "shadcn",
         email: "m@example.com",
-        avatar: "/avatars/shadcn.jpg",
+        avatar: "",
     },
     navMain: [
         { title: "Home", url: "/", icon: IconHomeFilled, isActive: true },
-        { title: "Search", url: "/Search", icon: IconSearch, isActive: true },
-        { title: "Create", url: "/Create", icon: IconLibraryPlus, isActive: false },
-        { title: "Communities", url: "/Communities", icon: IconUsers, isActive: false },
+        { title: "Search", url: "/search", icon: IconSearch, isActive: true },
+        { title: "Create", url: "/create-resource", icon: IconLibraryPlus, isActive: false },
+        { title: "Communities", url: "/communities", icon: IconUsers, isActive: false },
     ],
 
     mails: [
