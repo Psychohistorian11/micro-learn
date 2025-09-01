@@ -74,13 +74,18 @@ export function AvatarEditable({ user }: { user?: any }) {
         className="relative cursor-pointer group"
         onClick={() => fileInputRef.current?.click()}
       >
-        <Avatar className="h-24 w-24">
+        <Avatar className="h-24 w-24 rounded-lg">
           <AvatarImage src={current ?? undefined} alt={user?.name ?? "User"} />
-          <AvatarFallback>
+          <AvatarFallback className="h-24 w-24 rounded-lg">
             {user?.username?.substring(0, 2).toUpperCase()}
           </AvatarFallback>
         </Avatar>
-        <div className="absolute inset-0 bg-black/40 rounded-full opacity-0 group-hover:opacity-100 flex items-center justify-center text-white text-sm transition">
+        <div
+          className="absolute inset-0 rounded-lg bg-black/50 backdrop-blur-sm 
+             opacity-0 group-hover:opacity-100 
+             flex items-center justify-center 
+             text-white text-sm font-medium transition"
+        >
           Cambiar
         </div>
       </div>
@@ -104,7 +109,7 @@ export function AvatarEditable({ user }: { user?: any }) {
 
           <div className="flex justify-center py-4">
             {preview && (
-              <Avatar className="h-28 w-28">
+              <Avatar className="h-28 w-28 rounded-lg">
                 <AvatarImage src={preview} alt="Preview" />
               </Avatar>
             )}
