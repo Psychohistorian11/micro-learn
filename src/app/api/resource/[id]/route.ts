@@ -3,7 +3,7 @@ import prismadb from "@/lib/prismadb";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest, context: any) {
-  const { id } = context.params as { id: string };
+  const { id } = (await context.params) as { id: string };
 
   const resource = await prismadb.resource.findUnique({
     where: { id: id },
@@ -18,7 +18,7 @@ export async function GET(request: NextRequest, context: any) {
 }
 
 export async function DELETE(request: NextRequest, context: any) {
-  const { id } = context.params as { id: string };
+  const { id } = (await context.params) as { id: string };
 
   const resource = await prismadb.resource.delete({
     where: { id: id },

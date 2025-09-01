@@ -17,3 +17,14 @@ export const resourceSelect = {
     select: { id: true },
   },
 };
+
+export const userSelect = {
+  id: true,
+  username: true,
+  email: true,
+  profilePicture: true,
+  description: true,
+  resources: {
+    select: { id: true },
+  },
+};

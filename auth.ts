@@ -3,17 +3,15 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
 
-
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
-
     Google,
 
     Credentials({
       name: "Credentials",
       credentials: {
         email: { label: "Email", type: "text" },
-        password: { label: "Password", type: "password" }
+        password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
         const res = await fetch(`${process.env.NEXTAUTH_URL}/api/user/login`, {
@@ -26,20 +24,19 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         if (res.ok) {
           return {
-            id: data.user.ud,
+            id: data.user.id,
             name: data.user.username,
             email: data.user.email,
             image: data.user.profilePicture,
           };
         }
         return null;
-      }
-    })],
-
+      },
+    }),
+  ],
 
   callbacks: {
     async signIn({ user }) {
-
       try {
         const existingUser = await prismadb.user.findUnique({
           where: { email: user.email! },
@@ -65,28 +62,24 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
     },
     async jwt({ token, user }) {
-
       if (user) {
         token.sub = user.id;
         token.name = user.name;
         token.email = user.email;
         token.picture = user.image;
-
       }
       return token;
     },
     async session({ session, token }) {
-
       session.user = {
         id: token.sub as string,
         name: token.name,
         email: token.email as string,
         image: token.picture,
-        emailVerified: null
+        emailVerified: null,
       };
 
       return session;
     },
-  }
-})
-
+  },
+});
