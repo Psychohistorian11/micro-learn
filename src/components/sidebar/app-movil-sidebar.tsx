@@ -18,7 +18,6 @@ import {
 
 import { useSession } from "next-auth/react"
 
-
 export function AppMobileSidebar() {
     const router = useRouter()
     const { data: session } = useSession()
@@ -27,12 +26,9 @@ export function AppMobileSidebar() {
     )
     const [showDialog, setShowDialog] = React.useState(false)
 
-
     async function handleClick(item: (typeof data.navMain)[0]) {
         if (item.title === "Create") {
-
             if (session?.user?.id) {
-                console.log("session: ", session)
                 setActive(item)
                 router.push(item.url)
             } else {
@@ -46,7 +42,7 @@ export function AppMobileSidebar() {
 
     return (
         <>
-            <nav className="fixed bottom-0 left-0 z-50 w-full border-t bg-background md:hidden">
+            <nav className="sticky bottom-0 left-0 w-full bg-background md:hidden mt-auto">
                 <ul className="flex items-center justify-around h-14">
                     {data.navMain.map((item) => {
                         const isActive = active?.title === item.title
@@ -61,12 +57,10 @@ export function AppMobileSidebar() {
                                             : "text-muted-foreground hover:text-foreground hover:scale-105"
                                     )}
                                 >
-                                    {/* efecto "burbujita" debajo del ícono cuando está activo */}
                                     {isActive && (
-                                        <span className="absolute bottom-1 h-1.5 w-1.5 rounded-full bg-tiffany-blue animate-bounce" />
+                                        <span className="absolute bottom-1 h-1.5 w-1.5 rounded-full bg-persian-green animate-bounce" />
                                     )}
 
-                                    {/* ícono con transición de tamaño */}
                                     <item.icon
                                         className={cn(
                                             "h-5 w-5 transition-all duration-300 ease-in-out",
@@ -82,8 +76,6 @@ export function AppMobileSidebar() {
                 </ul>
             </nav>
 
-
-            {/* AlertDialog solo si no hay sesión */}
             <AlertDialog open={showDialog} onOpenChange={setShowDialog}>
                 <AlertDialogContent>
                     <AlertDialogHeader>

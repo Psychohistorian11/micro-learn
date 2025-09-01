@@ -30,9 +30,12 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 </div>
 
                 {/* Mobile Bottom Navigation */}
-                <AppMobileSidebar />
-                <div className="sm:hidden w-full">
-                    {children}
+                <div className="sm:hidden w-full flex flex-col min-h-dvh">
+                    <div className="flex-1 overflow-auto">
+
+                        {children}
+                    </div>
+                    <AppMobileSidebar />
                 </div>
             </SessionProvider>
         </SidebarProvider>
