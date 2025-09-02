@@ -19,6 +19,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { IconUserCircle } from "@tabler/icons-react";
+import { redirect } from "next/navigation";
 
 export function NavUser({
   user,
@@ -74,7 +75,11 @@ export function NavUser({
             </DropdownMenuGroup>*/}
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  redirect(`/profile`);
+                }}
+              >
                 <IconUserCircle />
                 Mi perfil
               </DropdownMenuItem>

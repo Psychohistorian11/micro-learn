@@ -11,7 +11,6 @@ export function ResourceList({ resources }: { resources: ResourceDTO[] }) {
       </p>
     );
   }
-  console.log("resources", resources);
 
   return (
     <div className="w-full flex flex-col items-center gap-6">

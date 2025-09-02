@@ -6,14 +6,15 @@ import { ResourceList } from "@/components/resources/resourceList";
 export default async function ProfilePage({
   params,
 }: {
-  params: { username: string };
+  params: Promise<{ username: string }>;
 }) {
   const session = await auth();
+  const { username } = await params;
 
   // 1) Traer usuario por username
   const userRes = await fetch(
     `${process.env.NEXTAUTH_URL}/api/user/username/${encodeURIComponent(
-      params.username
+      username
     )}`,
     { cache: "no-store", headers: { "Content-Type": "application/json" } }
   );
@@ -29,7 +30,7 @@ export default async function ProfilePage({
   );
   const resources: [] = resourcesRes.ok ? await resourcesRes.json() : [];
 
-  const isOwner = !!session?.user && session.user.name == params.username;
+  const isOwner = !!session?.user && session.user.name == username;
 
   return (
     <div className="p-6 flex flex-col justify-center items-center h-full">

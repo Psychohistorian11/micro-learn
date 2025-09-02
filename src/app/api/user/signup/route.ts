@@ -11,7 +11,6 @@ export async function POST(request: NextRequest) {
     const dto = plainToInstance(UserCreateDTO, body);
 
     const errors = await validate(dto);
-    console.log("errors", errors);
     if (errors.length > 0) {
       return NextResponse.json(
         { message: "Validation failed", errors },
