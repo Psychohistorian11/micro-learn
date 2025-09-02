@@ -1,53 +1,11 @@
-import { Button } from "@/components/ui/button";
+// app/(app)/profile/page.tsx
+import { redirect } from "next/navigation";
 import { auth } from "../../../../auth";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Pencil } from "lucide-react";
-import UserDescription from "@/components/profile/userDescription";
-import { EditProfileDialogForm } from "@/components/profile/editProfileDialog-form";
-import { AvatarEditable } from "@/components/profile/avatarEditable";
 
-export default async function ProfilePage() {
+export default async function MyProfileRedirect() {
   const session = await auth();
-  let userData = undefined;
-  if (!session?.user) {
-    return <p className="text-center text-gray-500">No hay sesión activa</p>;
-  }
 
-  try {
-    const response = await fetch(
-      `${process.env.NEXTAUTH_URL}/api/user/${session.user.id}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    if (response.ok) {
-      userData = await response.json();
-      console.log("userData", userData);
-    } else {
-      const error = await response.json();
-      console.error("Error:", error);
-    }
-  } catch (error) {
-    console.error("Error:", error);
-  }
-  return (
-    <div className="relative max-w-3xl mx-auto mt-10 p-6 bg-white border rounded-xl shadow-md flex items-center gap-6">
-      <EditProfileDialogForm user={userData} />
-
-      <AvatarEditable user={userData} />
-
-      {/* Info del usuario */}
-      <div className="flex flex-col">
-        <h2 className="text-2xl font-bold text-gray-900">
-          {session.user.name}
-        </h2>
-        <p className="text-gray-600">{session.user.email}</p>
-
-        <UserDescription description={userData?.description} />
-      </div>
-    </div>
-  );
+  if (!session?.user) redirect("/login");
+  // Redirige usando el username
+  redirect(`/profile/${session.user.name}`);
 }
