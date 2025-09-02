@@ -66,7 +66,7 @@ export default function CreateResourceWizard() {
                 {steps.map((step, index) => (
                     <div
                         key={step.id}
-                        className={`sm:h-3 h-2 w-20 rounded-full ${index <= currentStep ? "bg-persian-green" : "bg-muted"
+                        className={` h-2 w-20 rounded-full ${index <= currentStep ? "bg-persian-green" : "bg-muted"
                             }`}
                     />
                 ))}
@@ -88,7 +88,7 @@ export default function CreateResourceWizard() {
                     {currentStep === steps.length - 1 ? "Finalizar" : "Siguiente"}
                 </Button>
             </div>
-            {/*<ModeToggle />*/}
+            {/* <ModeToggle />*/}
         </div>
     )
 }

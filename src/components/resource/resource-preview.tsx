@@ -65,15 +65,15 @@ export default function ResourcePreview({ attachment, className }: Props) {
     // --- FILES ---
     if (isFile) {
         if (mimeType?.startsWith("image/")) {
-            return <img src={previewUrl} alt="preview" className={cn("w-full h-full rounded-md object-contain", className)} />
+            return <img src={previewUrl} alt="preview" className={cn("w-full h-full rounded-md object-contain border p-2", className)} />
         }
         if (mimeType?.startsWith("audio/")) {
-            return <audio src={previewUrl} controls className={cn("w-full h-full rounded-md", className)} />
+            return <audio src={previewUrl} controls className={cn("w-full h-full rounded-md border object-contain p-2", className)} />
         }
         if (mimeType?.startsWith("video/")) {
-            return <video src={previewUrl} controls className={cn("w-full h-full rounded-md", className)} />
+            return <video src={previewUrl} controls className={cn("w-full h-full rounded-md border object-contain p-2", className)} />
         }
-        return <iframe src={previewUrl} className={cn("w-full h-full rounded-md ", className)} title="file-preview" />
+        return <iframe src={previewUrl} className={cn("w-full h-full rounded-md object-contain border p-2", className)} title="file-preview" />
     }
 
     // --- URLs ---
@@ -81,16 +81,16 @@ export default function ResourcePreview({ attachment, className }: Props) {
         const lowerUrl = previewUrl.toLowerCase()
 
         if (/\.(jpg|jpeg|png|gif|webp|svg)$/.test(lowerUrl)) {
-            return <img src={previewUrl} alt="preview" className={cn("max-h-full rounded-md object-contain", className)} />
+            return <img src={previewUrl} alt="preview" className={cn("max-h-full border rounded-md object-contain", className)} />
         }
         if (/\.(mp3|wav|ogg)$/.test(lowerUrl)) {
-            return <audio src={previewUrl} controls className={cn("w-full max-h-full rounded-md", className)} />
+            return <audio src={previewUrl} controls className={cn("w-full max-h-full border rounded-md object-contain", className)} />
         }
         if (/\.(mp4|webm|ogg)$/.test(lowerUrl)) {
-            return <video src={previewUrl} controls className={cn("w-full max-h-full rounded-md", className)} />
+            return <video src={previewUrl} controls className={cn("w-full max-h-full border rounded-md object-contain", className)} />
         }
         if (/\.(pdf|doc|docx|ppt|pptx|xls|xlsx)$/.test(lowerUrl)) {
-            return <iframe src={previewUrl} className={cn("w-full h-full border rounded-md", className)} title="doc-preview" />
+            return <iframe src={previewUrl} className={cn("w-full h-full border rounded-md object-contain ", className)} title="doc-preview" />
         }
 
         // Manejar URLs de YouTube
