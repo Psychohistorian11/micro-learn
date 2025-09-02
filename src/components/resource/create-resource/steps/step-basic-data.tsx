@@ -31,7 +31,6 @@ export default function StepBasicData({ data, onUpdate }: Props) {
         }
     }
 
-    // limpiar memory leaks cuando se cambia imagen
     useEffect(() => {
         return () => {
             if (imagePreview) URL.revokeObjectURL(imagePreview)
@@ -40,8 +39,7 @@ export default function StepBasicData({ data, onUpdate }: Props) {
 
 
     return (
-        <div className="flex flex-col gap-6">
-            {/* Editable title */}
+        <div className="flex flex-col gap-6 h-full justify-center">
             <div className="w-full">
 
                 <input
@@ -95,7 +93,6 @@ export default function StepBasicData({ data, onUpdate }: Props) {
                 </label>
             </div>
 
-            {/* Resource type */}
             <div className="flex flex-col gap-2">
                 <Label>Tipo de recurso</Label>
                 <SelectTypeResource
@@ -104,7 +101,6 @@ export default function StepBasicData({ data, onUpdate }: Props) {
                 />
             </div>
 
-            {/* Is public */}
             <div className="flex items-center gap-3">
                 <Switch
                     id="isPublic"

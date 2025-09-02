@@ -1,13 +1,14 @@
 import { AreaDTO } from "@/interface/area"
-import prisma from "./prismadb"
 
-
-/*export async function fetchAreas(): Promise<Area[]> {
+export async function fetchAreas(): Promise<AreaDTO[]> {
   try {
-    return await prisma.area.findMany()
+    const res = await fetch("/api/areas")
+    if (!res.ok) throw new Error("Error fetching areas")
+
+    return await res.json()
   } catch (err) {
     console.error("Error fetching areas:", err)
     return []
   }
 }
-*/
+

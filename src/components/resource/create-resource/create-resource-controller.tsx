@@ -6,7 +6,8 @@ import StepBasicData from "./steps/step-basic-data"
 import StepAttachment from "./steps/step-attachment"
 import StepAreas from "./steps/step-areas"
 import StepMyCommunities from "./steps/step-my-communities"
-import { ModeToggle } from "@/components/ui/mode-toggle"
+import StepSummary from "./steps/step-summary"
+import { useState } from "react"
 
 
 type ResourceData = {
@@ -25,13 +26,14 @@ const steps = [
     { id: 2, name: "attachment", component: StepAttachment },
     { id: 3, name: "areas", component: StepAreas },
     { id: 4, name: "myCommunities", component: StepMyCommunities },
+    { id: 5, name: "summary", component: StepSummary }
 ]
 
-export default function CreateResourceWizard() {
-    const [currentStep, setCurrentStep] = React.useState(0)
+export default function CreateResourceController() {
+    const [currentStep, setCurrentStep] = useState(0)
 
     // Estado centralizado del recurso
-    const [data, setData] = React.useState<ResourceData>({
+    const [data, setData] = useState<ResourceData>({
         title: "",
         description: "",
         isPublic: false,
@@ -66,13 +68,13 @@ export default function CreateResourceWizard() {
                 {steps.map((step, index) => (
                     <div
                         key={step.id}
-                        className={` h-2 w-20 rounded-full ${index <= currentStep ? "bg-persian-green" : "bg-muted"
+                        className={` h-2 w-20 rounded-full ${index <= currentStep ? step.id === 5 ? "bg-tiffany-blue" : "bg-persian-green" : "bg-muted"
                             }`}
                     />
                 ))}
             </div>
 
-            <div className="w-full">
+            <div className="w-full flex flex-col h-full">
                 <StepComponent data={data} onUpdate={updateData} />
             </div>
 

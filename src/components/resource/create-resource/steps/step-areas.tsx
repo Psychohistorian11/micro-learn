@@ -2,53 +2,63 @@
 "use client"
 
 import { useEffect, useState } from "react"
-//import { fetchAreas} from "@/lib/area-service"
+import { fetchAreas } from "@/lib/area-service"
 import AreaCard from "../../area-card"
 import { AreaDTO } from "@/interface/area"
+import { Skeleton } from "@/components/ui/skeleton"
 
-export default function StepAreas() {
+type Props = {
+    data: { areas: string[] }
+    onUpdate: (newData: { areas: string[] }) => void
+}
+
+export default function StepAreas({ data, onUpdate }: Props) {
     const [areas, setAreas] = useState<AreaDTO[]>([])
-    const [selectedAreas, setSelectedAreas] = useState<AreaDTO[]>([])
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        //fetchAreas().then(setAreas)
+        fetchAreas().then(res => {
+            setAreas(res)
+            setLoading(false)
+        })
     }, [])
 
     const toggleArea = (area: AreaDTO) => {
-        if (selectedAreas.some(a => a.id === area.id)) {
-            setSelectedAreas(selectedAreas.filter(a => a.id !== area.id))
+        let newAreas: string[]
+        if (data.areas.includes(area.id)) {
+            newAreas = data.areas.filter(id => id !== area.id)
         } else {
-            setSelectedAreas([...selectedAreas, area])
+            newAreas = [...data.areas, area.id]
         }
+        onUpdate({ areas: newAreas })
     }
 
     return (
-        <div className="flex flex-col gap-6">
-            <h2 className="text-lg font-semibold">Selecciona las áreas relacionadas</h2>
+        <div className="flex flex-col gap-6 h-full justify-center">
+            <h2 className="text-2xl font-serif">Selecciona las áreas relacionadas</h2>
 
-            {/* Grid de áreas */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                {areas.map(area => (
-                    <AreaCard
-                        key={area.id}
-                        area={area}
-                        selected={selectedAreas.some(a => a.id === area.id)}
-                        onClick={() => toggleArea(area)}
-                    />
-                ))}
+            <div className="flex flex-wrap gap-3">
+                {loading
+                    ? Array.from({ length: 20 }).map((_, i) => {
+                        const randomWidth = Math.floor(Math.random() * (140 - 60 + 1)) + 60 // entre 60 y 140px
+                        return (
+                            <Skeleton
+                                key={i}
+                                className="h-5 rounded-sm"
+                                style={{ width: `${randomWidth}px` }}
+                            />
+                        )
+                    })
+                    : areas.map(area => (
+                        <AreaCard
+                            key={area.id}
+                            area={area}
+                            selected={data.areas.includes(area.id)}
+                            onClick={() => toggleArea(area)}
+                        />
+                    ))}
+
             </div>
-
-            {/* Áreas seleccionadas */}
-            {selectedAreas.length > 0 && (
-                <div>
-                    <h3 className="text-md font-medium mb-2">Áreas seleccionadas:</h3>
-                    <div className="flex flex-wrap gap-2">
-                        {selectedAreas.map(area => (
-                            <AreaCard key={area.id} area={area} selected />
-                        ))}
-                    </div>
-                </div>
-            )}
         </div>
     )
 }

@@ -1,7 +1,9 @@
-
+// components/area-card.tsx
 import { AreaDTO } from "@/interface/area"
 import { iconsMap } from "@/lib/icons-map"
 import { cn } from "@/lib/utils"
+import { IconCloud } from "@tabler/icons-react"
+import { IconClipboardList } from "@tabler/icons-react"
 
 type Props = {
     area: AreaDTO
@@ -10,18 +12,29 @@ type Props = {
 }
 
 export default function AreaCard({ area, selected, onClick }: Props) {
+
     const Icon = iconsMap[area.icon]
+    console.log("Icon: ", Icon)
+
 
     return (
         <button
             onClick={onClick}
             className={cn(
-                "flex items-center gap-2 px-3 py-2 rounded-xl border shadow-sm transition hover:shadow-md",
-                selected ? "bg-gray-100 border-gray-400" : "bg-white"
+                "  flex items-center gap-2 rounded-sm cursor-pointer border shadow-sm transition-all hover:shadow-md p-1.5",
+                selected ? "border-persian-green border-2" : "border-gray-800"
             )}
+            style={{
+                width: 'fit-content',
+                whiteSpace: 'nowrap'
+            }}
         >
-            {Icon ? <Icon color={area.color} size={20} /> : <span>❓</span>}
-            <span style={{ color: area.color }} className="font-medium">
+            {Icon ? (
+                <Icon size={16} color={area.color} />
+            ) : (
+                <IconCloud size={16} />
+            )}
+            <span className="text-xs font-medium">
                 {area.name}
             </span>
         </button>

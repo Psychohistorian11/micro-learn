@@ -25,3 +25,22 @@ export async function POST(request: NextRequest) {
 
   return NextResponse.json(newAreas);
 }
+
+
+export async function GET() {
+  try {
+    const areas = await prismadb.area.findMany({
+      select: {
+        id: true,
+        name: true,
+        color: true,
+        icon: true
+      }
+    })
+    return NextResponse.json(areas)
+  } catch (err) {
+    console.error("Error fetching areas:", err)
+    return NextResponse.json({ error: "Error fetching areas" }, { status: 500 })
+  }
+}
+

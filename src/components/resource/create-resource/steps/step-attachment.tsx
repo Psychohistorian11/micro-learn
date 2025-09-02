@@ -71,7 +71,7 @@ export default function StepAttachment({ data, onUpdate }: Props) {
     const isUrl = hasAttachment && typeof data.attachment === 'string'
 
     return (
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-6  h-full justify-center">
             {/* título */}
             <div>
                 <Label className="text-2xl font-serif">
