@@ -14,7 +14,7 @@ export function ResourceList({ resources }: { resources: ResourceDTO[] }) {
   console.log("resources", resources);
 
   return (
-    <div className="flex flex-col items-center gap-6">
+    <div className="w-full flex flex-col items-center gap-6">
       {resources.map((res: any, index: number) => (
         <ResourceCard key={res.id ?? index} resource={res} />
       ))}

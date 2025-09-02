@@ -32,10 +32,12 @@ export default async function ProfilePage({
   const isOwner = !!session?.user && session.user.name == params.username;
 
   return (
-    <div className="mx-auto max-w-5xl px-4 md:px-6 py-8 space-y-8">
-      <ProfileHeader user={user} isOwner={isOwner} />
+    <div className="p-6 flex flex-col justify-center items-center h-full">
+      <div className="flex flex-col justify-between w-full max-w-3xl h-full p-4 gap-4">
+        <ProfileHeader user={user} isOwner={isOwner} />
 
-      <ResourceList resources={resources} />
+        <ResourceList resources={resources} />
+      </div>
     </div>
   );
 }

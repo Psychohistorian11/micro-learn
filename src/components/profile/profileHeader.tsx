@@ -21,7 +21,7 @@ export function ProfileHeader({
   isOwner: boolean;
 }) {
   return (
-    <div className="relative z-0 rounded-2xl border bg-card shadow-sm p-6 flex gap-6 items-start">
+    <div className="border rounded-2xl bg-card shadow-sm p-6 flex gap-6 ">
       {/* Avatar */}
       <div className="shrink-0">
         {isOwner ? (
@@ -32,7 +32,7 @@ export function ProfileHeader({
               src={user.profilePicture ?? undefined}
               alt={user.username ?? "User"}
             />
-            <AvatarFallback className="rounded-xl text-lg font-bold">
+            <AvatarFallback className="rounded-xl text-lg font-serif">
               {user.username?.substring(0, 2).toUpperCase()}
             </AvatarFallback>
           </Avatar>
@@ -40,10 +40,10 @@ export function ProfileHeader({
       </div>
 
       {/* Info */}
-      <div className="flex-1 min-w-0">
-        <div className="flex items-start justify-between gap-3">
+      <div className="flex-1 min-w-0 ">
+        <div className="flex items-start justify-between ">
           <div className="min-w-0">
-            <h1 className="text-2xl font-extrabold leading-tight truncate">
+            <h1 className="text-2xl font-serif leading-tight truncate">
               {user.username ?? "usuario"}
             </h1>
             <p className="text-sm text-muted-foreground truncate">
@@ -52,7 +52,7 @@ export function ProfileHeader({
           </div>
 
           {isOwner && (
-            <div className="relative">
+            <div className="relative self-start -mt-4">
               <EditProfileDialogForm user={user} />
             </div>
           )}
@@ -60,7 +60,7 @@ export function ProfileHeader({
 
         {/* Descripción */}
         {user.description && (
-          <div className="mt-3 text-[15px] text-muted-foreground">
+          <div className="mt-3 text-sm text-muted-foreground">
             <p className="whitespace-pre-line">{user.description}</p>
           </div>
         )}

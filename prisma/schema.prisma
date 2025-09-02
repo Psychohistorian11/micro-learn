@@ -76,6 +76,8 @@ model Resource {
 model Area {
   id        String     @id @default(uuid())
   name      String     @unique
+  color     String     @default("")
+  icon      String     @default("")
   resources Resource[] @relation("ResourceAreas")
 }
 
