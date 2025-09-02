@@ -13,7 +13,7 @@ type ResourceData = {
     title: string
     description: string
     isPublic: boolean
-    attachment?: File | null
+    attachment?: File | string | null
     image?: File | null
     type: string,
     areas: string[]
@@ -76,7 +76,7 @@ export default function CreateResourceWizard() {
                 <StepComponent data={data} onUpdate={updateData} />
             </div>
 
-            <div className="flex justify-between w-full mt-6">
+            <div className="flex flex-col-reverse gap-4 sm:flex sm:flex-row sm:justify-between  w-full mt-6">
                 <Button
                     variant="outline"
                     onClick={prevStep}
@@ -88,7 +88,7 @@ export default function CreateResourceWizard() {
                     {currentStep === steps.length - 1 ? "Finalizar" : "Siguiente"}
                 </Button>
             </div>
-            <ModeToggle />
+            {/*<ModeToggle />*/}
         </div>
     )
 }

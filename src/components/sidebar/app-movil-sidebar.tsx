@@ -53,7 +53,7 @@ export function AppMobileSidebar() {
                                     className={cn(
                                         "relative flex flex-col items-center text-xs transition-all duration-300 ease-in-out p-3 pt-1",
                                         isActive
-                                            ? "text-tiffany-blue scale-110"
+                                            ? "text-persian-green scale-110"
                                             : "text-muted-foreground hover:text-foreground hover:scale-105"
                                     )}
                                 >
