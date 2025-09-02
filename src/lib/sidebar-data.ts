@@ -10,16 +10,20 @@ export const data = {
   user: {
     name: "shadcn",
     email: "m@example.com",
-    avatar:
-      "https://static.vecteezy.com/system/resources/previews/005/544/718/non_2x/profile-icon-design-free-vector.jpg",
+    avatar: "",
   },
   navMain: [
     { title: "Home", url: "/", icon: IconHomeFilled, isActive: true },
-    { title: "Search", url: "/Search", icon: IconSearch, isActive: true },
-    { title: "Create", url: "/Create", icon: IconLibraryPlus, isActive: false },
+    { title: "Search", url: "/search", icon: IconSearch, isActive: true },
+    {
+      title: "Create",
+      url: "/create-resource",
+      icon: IconLibraryPlus,
+      isActive: false,
+    },
     {
       title: "Communities",
-      url: "/Communities",
+      url: "/communities",
       icon: IconUsers,
       isActive: false,
     },
