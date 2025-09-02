@@ -1,9 +1,10 @@
-import { Area } from "@/lib/area-service"
+
+import { AreaDTO } from "@/interface/area"
 import { iconsMap } from "@/lib/icons-map"
 import { cn } from "@/lib/utils"
 
 type Props = {
-    area: Area
+    area: AreaDTO
     selected?: boolean
     onClick?: () => void
 }

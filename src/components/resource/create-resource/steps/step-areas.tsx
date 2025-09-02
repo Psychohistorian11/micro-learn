@@ -4,17 +4,17 @@
 import { useEffect, useState } from "react"
 //import { fetchAreas} from "@/lib/area-service"
 import AreaCard from "../../area-card"
-import { Area } from "@/interface/area"
+import { AreaDTO } from "@/interface/area"
 
 export default function StepAreas() {
-    const [areas, setAreas] = useState<Area[]>([])
-    const [selectedAreas, setSelectedAreas] = useState<Area[]>([])
+    const [areas, setAreas] = useState<AreaDTO[]>([])
+    const [selectedAreas, setSelectedAreas] = useState<AreaDTO[]>([])
 
     useEffect(() => {
         //fetchAreas().then(setAreas)
     }, [])
 
-    const toggleArea = (area: Area) => {
+    const toggleArea = (area: AreaDTO) => {
         if (selectedAreas.some(a => a.id === area.id)) {
             setSelectedAreas(selectedAreas.filter(a => a.id !== area.id))
         } else {
