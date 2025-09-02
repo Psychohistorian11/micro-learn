@@ -1,32 +1,11 @@
-import SignOutGoogleButton from "@/components/auth/signuot-google-button";
+// app/(app)/profile/page.tsx
+import { redirect } from "next/navigation";
 import { auth } from "../../../../auth";
 
-const ProfilePage = async () => {
+export default async function MyProfileRedirect() {
   const session = await auth();
-  console.log("full session: ", session)
 
-  return (
-    <>
-
-      <div className="p-6">
-        <h1 className="text-2xl font-bold">Profile</h1>
-      </div>
-      <div className="bg-gray-100 rounded-lg p-4 text-center mb-6">
-        <p className="text-gray-600">Signed in as:</p>
-        <p className="font-medium text-black">{session?.user?.email}</p>
-        <p className="text-black">eoooooo: {session?.user?.id}</p>
-      </div>
-      <div>
-        <SignOutGoogleButton />
-      </div>
-
-
-
-      <div className="flex justify-center">
-        <SignOutGoogleButton />
-      </div>
-    </>
-  );
-};
-
-export default ProfilePage;
+  if (!session?.user) redirect("/login");
+  // Redirige usando el username
+  redirect(`/profile/${session.user.name}`);
+}
