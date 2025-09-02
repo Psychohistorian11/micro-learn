@@ -18,7 +18,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 <div className="hidden sm:flex w-full">
                     <AppDesktopSidebar />
                     <SidebarInset>
-                        <header className="bg-background sticky top-0 flex shrink-0 items-center gap-2 border-b p-4">
+                        <header className="bg-background sticky top-0 flex shrink-0 items-center gap-2 border-b p-4 z-50">
                             <SidebarTrigger className="-ml-1" />
                             <Separator
                                 orientation="vertical"
@@ -31,10 +31,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
                 {/* Mobile Bottom Navigation */}
                 <div className="sm:hidden w-full flex flex-col min-h-dvh">
-                    <div className="flex-1 overflow-auto">
-
-                        {children}
-                    </div>
+                    <div className="flex-1 overflow-auto">{children}</div>
                     <AppMobileSidebar />
                 </div>
             </SessionProvider>

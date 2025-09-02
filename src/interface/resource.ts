@@ -32,13 +32,11 @@ export class ResourceDTO {
   @IsString()
   authorId: string;
 
-  @IsString({ each: true })
   @IsOptional()
-  areas?: string[]; // IDs de áreas
+  areas?: { id: string; name: string }[];
 
-  @IsString({ each: true })
   @IsOptional()
-  communities?: string[]; // IDs de comunidades
+  communities?: { id: string; name: string }[];
 }
 
 export class ResourceCreateDTO {
@@ -110,4 +108,6 @@ export class ResourceUpdateDTO {
   @IsOptional()
   communities?: string[]; // IDs de comunidades
 }
+
+export { ResourceType };
 //ResourceResponseDTO en  /lib/prisma-selects.ts

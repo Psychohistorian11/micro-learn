@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { useRouter } from "next/navigation"
-import { useSession } from "next-auth/react"
+import * as React from "react";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
-import { Command } from "lucide-react"
-import { NavUser } from "@/components/ui/nav-user"
-import { Label } from "@/components/ui/label"
+import { Command } from "lucide-react";
+import { NavUser } from "@/components/ui/nav-user";
+import { Label } from "@/components/ui/label";
 import {
   Sidebar,
   SidebarContent,
@@ -19,9 +19,9 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "@/components/ui/sidebar"
-import { Switch } from "@/components/ui/switch"
-import { data } from "@/lib/sidebar-data"
+} from "@/components/ui/sidebar";
+import { Switch } from "@/components/ui/switch";
+import { data } from "@/lib/sidebar-data";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -31,32 +31,32 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
+} from "@/components/ui/alert-dialog";
 
-export function AppDesktopSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const router = useRouter()
-  const { data: session } = useSession()
-  const [activeItem, setActiveItem] = React.useState(data.navMain[0])
-  const [mails, setMails] = React.useState(data.mails)
-  const { setOpen } = useSidebar()
-  const [showDialog, setShowDialog] = React.useState(false)
+export function AppDesktopSidebar({
+  ...props
+}: React.ComponentProps<typeof Sidebar>) {
+  const router = useRouter();
+  const { data: session } = useSession();
+  const [activeItem, setActiveItem] = React.useState(data.navMain[0]);
+  const [mails, setMails] = React.useState(data.mails);
+  const { setOpen } = useSidebar();
+  const [showDialog, setShowDialog] = React.useState(false);
 
   function handleClick(item: (typeof data.navMain)[0]) {
     if (item.title === "Create") {
       if (session?.user.id) {
-        setActiveItem(item)
-        router.push(item.url)
+        setActiveItem(item);
+        router.push(item.url);
       } else {
-        setShowDialog(true)
+        setShowDialog(true);
       }
     } else {
-      router.push(item.url)
-      setActiveItem(item)
-      const mail = data.mails.sort(() => Math.random() - 0.5)
-      setMails(
-        mail.slice(0, Math.max(5, Math.floor(Math.random() * 10) + 1))
-      )
-      setOpen(true)
+      router.push(item.url);
+      setActiveItem(item);
+      const mail = data.mails.sort(() => Math.random() - 0.5);
+      setMails(mail.slice(0, Math.max(5, Math.floor(Math.random() * 10) + 1)));
+      setOpen(true);
     }
   }
 
@@ -172,8 +172,8 @@ export function AppDesktopSidebar({ ...props }: React.ComponentProps<typeof Side
             </AlertDialogCancel>
             <AlertDialogAction
               onClick={() => {
-                setShowDialog(false)
-                router.push("/login")
+                setShowDialog(false);
+                router.push("/login");
               }}
             >
               Ir a login
@@ -182,5 +182,5 @@ export function AppDesktopSidebar({ ...props }: React.ComponentProps<typeof Side
         </AlertDialogContent>
       </AlertDialog>
     </>
-  )
+  );
 }
