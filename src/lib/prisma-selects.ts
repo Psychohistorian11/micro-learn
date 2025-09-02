@@ -11,7 +11,7 @@ export const resourceSelect = {
   createdAt: true,
   updatedAt: true,
   areas: {
-    select: { id: true }, // porque en el DTO son string[]
+    select: { id: true, name: true }, // porque en el DTO son string[]
   },
   communities: {
     select: { id: true },

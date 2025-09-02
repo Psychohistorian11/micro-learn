@@ -1,0 +1,30 @@
+* el tema base es oscuro, pero se puede variar a claro; los principales colores son 
+
+--color-night: #131515;
+    --color-jet: #2b2c28;
+    --color-persian-green: #339989;
+    --color-tiffany-blue: #7de2d1;
+    --color-snow: #fffafb;
+
+* mostramos conteos 
+
+* los tipos posibles de resource son:
+
+enum ResourceType {
+  Video
+  Podcast
+  Slides
+  Infography
+  Text
+}
+
+ten en cuenta esto al momento de mostrar un archivo, 
+que dependiendo del tipo muestre una imagen (link), video (de youtube), slides (link canva o ppt)
+Infography (link) y text (txt, docx)
+
+* mostremos conteos, no tengo endpoint aún, solamente el que devuelve todos los recursos de un usuario
+
+* line clamp sí está activado
+
+* mejor que sea en modo lista, puesto que grid puede dar importancia a dos recursos a la vez, 
+importante que sea responsive

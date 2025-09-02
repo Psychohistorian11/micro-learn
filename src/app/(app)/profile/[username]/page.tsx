@@ -1,11 +1,7 @@
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Pencil } from "lucide-react";
-import UserDescription from "@/components/profile/userDescription";
-import { EditProfileDialogForm } from "@/components/profile/editProfileDialog-form";
-import { AvatarEditable } from "@/components/profile/avatarEditable";
+// app/(app)/profile/[username]/page.tsx
+import { ProfileHeader } from "@/components/profile/profileHeader";
 import { auth } from "../../../../../auth";
-import { ModeToggle } from "@/components/ui/mode-toggle";
+import { ResourceList } from "@/components/resources/resourceList";
 
 export default async function ProfilePage({
   params,
@@ -14,61 +10,32 @@ export default async function ProfilePage({
 }) {
   const session = await auth();
 
-  if (!session?.user) {
-    return <p className="text-center text-gray-500">No hay sesión activa</p>;
-  }
+  // 1) Traer usuario por username
+  const userRes = await fetch(
+    `${process.env.NEXTAUTH_URL}/api/user/username/${encodeURIComponent(
+      params.username
+    )}`,
+    { cache: "no-store", headers: { "Content-Type": "application/json" } }
+  );
+  if (!userRes.ok) return <p className="p-6">Usuario no encontrado</p>;
+  const user = await userRes.json();
 
-  let userData: any = null;
-  try {
-    const response = await fetch(
-      `${process.env.NEXTAUTH_URL}/api/user/username/${params.username}`, // 👈 endpoint nuevo
-      {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-        cache: "no-store",
-      }
-    );
+  // 2) Traer recursos del autor
+  const resourcesRes = await fetch(
+    `${process.env.NEXTAUTH_URL}/api/user/${encodeURIComponent(
+      user.id
+    )}/resources`,
+    { cache: "no-store", headers: { "Content-Type": "application/json" } }
+  );
+  const resources: [] = resourcesRes.ok ? await resourcesRes.json() : [];
 
-    if (response.ok) {
-      userData = await response.json();
-    } else {
-      return <p className="text-center text-red-500">Error al cargar perfil</p>;
-    }
-  } catch {
-    return <p className="text-center text-red-500">Error de conexión</p>;
-  }
-
-  const isOwner = session.user.name == params.username;
+  const isOwner = !!session?.user && session.user.name == params.username;
 
   return (
-    <>
-      <ModeToggle />
-      <div className="relative max-w-3xl mx-auto mt-10 p-6 bg-white border rounded-xl shadow-md flex items-center gap-6">
-        {isOwner ? (
-          <>
-            <EditProfileDialogForm user={userData} />
-            <AvatarEditable user={userData} />
-          </>
-        ) : (
-          <Avatar className="h-28 w-28 rounded-lg">
-            <AvatarImage
-              src={userData?.profilePicture ?? undefined}
-              alt={userData?.name ?? "User"}
-            />
-            <AvatarFallback className="rounded-lg text-lg font-bold">
-              {userData?.username?.substring(0, 2).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
-        )}
+    <div className="mx-auto max-w-5xl px-4 md:px-6 py-8 space-y-8">
+      <ProfileHeader user={user} isOwner={isOwner} />
 
-        <div className="flex flex-col">
-          <h2 className="text-2xl font-bold text-gray-900">
-            {userData?.username}
-          </h2>
-          <p className="text-gray-600">{userData?.email}</p>
-          <UserDescription description={userData?.description} />
-        </div>
-      </div>
-    </>
+      <ResourceList resources={resources} />
+    </div>
   );
 }
