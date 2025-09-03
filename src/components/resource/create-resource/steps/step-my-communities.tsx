@@ -8,13 +8,9 @@ import { useRouter } from "next/navigation"
 import { Label } from "@/components/ui/label"
 import { CommunityDTO } from "@/interface/community"
 import { Plus, Check } from "lucide-react"
+import ResourceProps from "@/interface/resource"
 
-type Props = {
-    data: { communities: string[] }
-    onUpdate: (newData: { communities: string[] }) => void
-}
-
-export default function StepMyCommunities({ data, onUpdate }: Props) {
+export default function StepMyCommunities({ data, onUpdate }: ResourceProps) {
     const { data: session } = useSession()
     const [communities, setCommunities] = useState<CommunityDTO[]>([])
     const [loading, setLoading] = useState(true)
@@ -45,17 +41,16 @@ export default function StepMyCommunities({ data, onUpdate }: Props) {
     }, [session?.user?.id])
 
     const toggleCommunity = (id: string) => {
-        if (data.communities.includes(id)) {
-            // Quitar
-            onUpdate({
-                communities: data.communities.filter((c) => c !== id),
-            })
+        let newCommunities: string[]
+
+        if (data.communities?.includes(id)) {
+            newCommunities = data.communities.filter((c) => c !== id)
         } else {
-            // Agregar
-            onUpdate({
-                communities: [...data.communities, id],
-            })
+            newCommunities = [...(data.communities ?? []), id]
         }
+
+        // igual que en StepAreas: si no queda ninguna, lo ponemos como undefined
+        onUpdate({ communities: newCommunities.length > 0 ? newCommunities : undefined })
     }
 
     return (
@@ -97,7 +92,7 @@ export default function StepMyCommunities({ data, onUpdate }: Props) {
             {!loading && communities.length > 0 && (
                 <div className="flex flex-col gap-4">
                     {communities.map((community) => {
-                        const selected = data.communities.includes(community.id)
+                        const selected = data.communities?.includes(community.id) ?? false
                         return (
                             <div
                                 key={community.id}

@@ -8,18 +8,10 @@ import StepAreas from "./steps/step-areas"
 import StepMyCommunities from "./steps/step-my-communities"
 import StepSummary from "./steps/step-summary"
 import { useState } from "react"
+import { ResourceCreateDTO } from "@/interface/resource"
+import { useSession } from "next-auth/react"
 
 
-type ResourceData = {
-    title: string
-    description: string
-    isPublic: boolean
-    attachment?: File | string | null
-    image?: File | null
-    type: string,
-    areas: string[]
-    communities: string[]
-}
 
 const steps = [
     { id: 1, name: "basicData", component: StepBasicData },
@@ -30,23 +22,24 @@ const steps = [
 ]
 
 export default function CreateResourceController() {
+    const { data: session } = useSession()
     const [currentStep, setCurrentStep] = useState(0)
 
-    // Estado centralizado del recurso
-    const [data, setData] = useState<ResourceData>({
+    const [data, setData] = useState<ResourceCreateDTO>({
+        authorId: session!.user.id,
         title: "",
         description: "",
         isPublic: false,
-        attachment: null,
-        image: null,
-        type: "",
-        areas: [],
-        communities: [],
+        attachment: "",
+        image: "",
+        type: "Text",
+        areas: [""],
+        communities: [""],
     })
 
     const StepComponent = steps[currentStep].component
 
-    const updateData = (newData: Partial<ResourceData>) => {
+    const updateData = (newData: Partial<ResourceCreateDTO>) => {
         setData((prev) => ({ ...prev, ...newData }))
     }
 
@@ -90,7 +83,6 @@ export default function CreateResourceController() {
                     {currentStep === steps.length - 1 ? "Finalizar" : "Siguiente"}
                 </Button>
             </div>
-            {/* <ModeToggle />*/}
         </div>
     )
 }

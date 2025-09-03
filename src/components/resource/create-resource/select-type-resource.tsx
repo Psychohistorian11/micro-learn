@@ -25,11 +25,11 @@ export function SelectTypeResource({ value, onChange }: Props) {
       <SelectContent>
         <SelectGroup>
           <SelectLabel>Tipos</SelectLabel>
-          <SelectItem value="video">Video</SelectItem>
-          <SelectItem value="podcast">Podcast</SelectItem>
-          <SelectItem value="article">Artículo</SelectItem>
-          <SelectItem value="slides">Presentación</SelectItem>
-          <SelectItem value="other">Otro</SelectItem>
+          <SelectItem value="Video">Video</SelectItem>
+          <SelectItem value="Podcast">Podcast</SelectItem>
+          <SelectItem value="Slides">Diapositivas</SelectItem>
+          <SelectItem value="Infography">Infografía</SelectItem>
+          <SelectItem value="Text">Texto</SelectItem>
         </SelectGroup>
       </SelectContent>
     </Select>
