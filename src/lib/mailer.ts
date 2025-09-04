@@ -16,14 +16,14 @@ export async function sendOTPEmail(to: string, otp: string) {
   <div style="background-color:#131515; padding:40px; font-family:Arial, sans-serif; color:#fffafb;">
     <table width="100%" cellspacing="0" cellpadding="0" style="max-width:600px; margin:0 auto; background:#2b2c28; border-radius:12px; overflow:hidden;">
       <tr>
-        <td style="padding:20px; text-align:center; background-color:#339989; color:#fffafb; font-size:22px; font-weight:bold;">
+        <td style="padding:20px; text-align:center; background-color:#339989; color:#fffafb; font-size:22px; font-weight:bold; font-family:Arial, sans-serif;">
           MicroLearn
         </td>
       </tr>
       <tr>
         <td style="padding:30px; text-align:center; color:#fffafb;">
           <h2 style="margin:0 0 20px; font-size:20px;">Código de verificación</h2>
-          <p style="margin:0 0 30px; font-size:16px; color:#7de2d1;">
+          <p style="margin:0 0 30px; font-size:16px; color:#fffafb;">
             Usa el siguiente código para continuar con tu proceso de seguridad. 
             Este código expira en 5 minutos.
           </p>
@@ -36,7 +36,7 @@ export async function sendOTPEmail(to: string, otp: string) {
         </td>
       </tr>
       <tr>
-        <td style="padding:15px; text-align:center; background:#131515; font-size:12px; color:#7de2d1;">
+        <td style="padding:15px; text-align:center; background:#131515; font-size:12px; color:#fffafb;">
           © ${new Date().getFullYear()} MicroLearn. Todos los derechos reservados.
         </td>
       </tr>
