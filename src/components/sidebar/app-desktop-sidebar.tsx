@@ -134,7 +134,7 @@ export function AppDesktopSidebar({
           </SidebarHeader>
           <SidebarContent>
             <SidebarGroup className="px-0">
-              <SidebarGroupContent>
+              {/*<SidebarGroupContent>
                 {mails.map((mail) => (
                   <a
                     href="#"
@@ -151,7 +151,7 @@ export function AppDesktopSidebar({
                     </span>
                   </a>
                 ))}
-              </SidebarGroupContent>
+              </SidebarGroupContent>*/}
             </SidebarGroup>
           </SidebarContent>
         </Sidebar>
