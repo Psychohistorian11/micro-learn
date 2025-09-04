@@ -32,11 +32,17 @@ export class ResourceDTO {
   @IsString()
   authorId: string;
 
+  @IsString()
+  updatedAt: Date;
+
+  @IsString()
+  createdAt: Date;
+
   @IsOptional()
   areas?: { id: string; name: string }[];
 
   @IsOptional()
-  communities?: { id: string; name: string }[];
+  communities?: { id: string }[];
 }
 
 export class ResourceCreateDTO {

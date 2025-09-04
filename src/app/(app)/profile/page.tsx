@@ -4,7 +4,7 @@ import { auth } from "../../../../auth";
 
 export default async function MyProfileRedirect() {
   const session = await auth();
-
+  console.log("session", session);
   if (!session?.user) redirect("/login");
   // Redirige usando el username
   redirect(`/profile/${session.user.name}`);

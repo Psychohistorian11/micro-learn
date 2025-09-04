@@ -132,16 +132,6 @@ export function EditProfileDialogForm({ user }: { user?: any }) {
           </div>
 
           <DialogFooter className="flex items-center justify-between">
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={() => {
-                window.location.href = "/reset-password";
-              }}
-            >
-              Change password
-            </Button>
-
             <div className="flex gap-2">
               <Button type="submit">Save changes</Button>
             </div>

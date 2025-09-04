@@ -21,16 +21,14 @@ export default function LogInForm() {
   } = useForm();
 
   const onSubmit = handleSubmit(async (data) => {
-
-    const email = data.email
-    const password = data.password
+    const email = data.email;
+    const password = data.password;
 
     try {
       const res = await signIn("credentials", {
         redirect: false,
         email,
         password,
-
       });
 
       if (res.ok) {
@@ -76,7 +74,6 @@ export default function LogInForm() {
             onSubmit={onSubmit}
             className=" w-full items-center flex flex-col justify-center"
           >
-
             <div className="gap-2 flex flex-col w-full">
               <Input
                 placeholder="Correo electrónico"
@@ -108,8 +105,10 @@ export default function LogInForm() {
             </div>
             <div>
               <Button
+                type="button"
                 variant="link"
                 className="text-xs mt-2 mb-2 text-persian-green cursor-pointer"
+                onClick={() => router.push("/reset-password")}
               >
                 ¿Olvidaste tu contraseña?
               </Button>
