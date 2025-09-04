@@ -1,7 +1,7 @@
 // app/(app)/profile/[username]/page.tsx
-import { ProfileHeader } from "@/components/profile/profileHeader";
+import { ProfileHeader } from "@/components/profile/profile-header";
 import { auth } from "../../../../../auth";
-import { ResourceList } from "@/components/resources/resourceList";
+import { ResourceList } from "@/components/resource/resource-list";
 
 export default async function ProfilePage({
   params,
@@ -34,7 +34,7 @@ export default async function ProfilePage({
 
   return (
     <div className="p-6 flex flex-col justify-center items-center h-full">
-      <div className="flex flex-col justify-between w-full max-w-3xl h-full p-4 gap-4">
+      <div className="flex flex-col justify-between w-full max-w-3xl h-full  gap-4">
         <ProfileHeader user={user} isOwner={isOwner} />
 
         <ResourceList resources={resources} />

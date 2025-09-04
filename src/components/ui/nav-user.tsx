@@ -93,10 +93,10 @@ export function NavUser({
               </DropdownMenuItem>*/}
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            {/* <DropdownMenuItem>
               <LogOut />
               Cerrar sesión
-            </DropdownMenuItem>
+            </DropdownMenuItem> */}
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>

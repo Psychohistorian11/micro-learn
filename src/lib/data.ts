@@ -35,14 +35,14 @@ export const navigationBarData = {
   ],
 
   mails: [
-    {
+    /*{
       name: "William Smith",
       email: "williamsmith@example.com",
       subject: "Meeting Tomorrow",
       date: "09:34 AM",
       teaser:
         "Hi team, just a reminder about our meeting tomorrow at 10 AM.\nPlease come prepared with your project updates.",
-    },
+    },*/
   ],
 };
 
