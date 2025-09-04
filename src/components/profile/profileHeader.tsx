@@ -22,7 +22,6 @@ export function ProfileHeader({
 }) {
   return (
     <div className="border rounded-2xl bg-card shadow-sm p-6 flex gap-6 ">
-      {/* Avatar */}
       <div className="shrink-0">
         {isOwner ? (
           <AvatarEditable user={user} />
@@ -39,7 +38,6 @@ export function ProfileHeader({
         )}
       </div>
 
-      {/* Info */}
       <div className="flex-1 min-w-0 ">
         <div className="flex items-start justify-between ">
           <div className="min-w-0">
@@ -58,7 +56,6 @@ export function ProfileHeader({
           )}
         </div>
 
-        {/* Descripción */}
         {user.description && (
           <div className="mt-3 text-sm text-muted-foreground">
             <p className="whitespace-pre-line">{user.description}</p>

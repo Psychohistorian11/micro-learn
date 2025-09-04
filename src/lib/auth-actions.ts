@@ -1,6 +1,6 @@
 "use server";
 
-import { signIn, signOut } from "../../auth";
+import { auth, signIn, signOut } from "../../auth";
 
 
 export async function handleGoogle() {
@@ -16,4 +16,9 @@ export async function handleSignOut() {
     await signOut({
         redirectTo: "/",
     });
+}
+
+export async function getAuth() {
+    const session = await auth()
+    return session
 }

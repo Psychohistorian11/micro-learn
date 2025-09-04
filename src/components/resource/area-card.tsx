@@ -3,7 +3,6 @@ import { AreaDTO } from "@/interface/area"
 import { iconsMap } from "@/lib/icons-map"
 import { cn } from "@/lib/utils"
 import { IconCloud } from "@tabler/icons-react"
-import { IconClipboardList } from "@tabler/icons-react"
 
 type Props = {
     area: AreaDTO
@@ -14,8 +13,6 @@ type Props = {
 export default function AreaCard({ area, selected, onClick }: Props) {
 
     const Icon = iconsMap[area.icon]
-    console.log("Icon: ", Icon)
-
 
     return (
         <button

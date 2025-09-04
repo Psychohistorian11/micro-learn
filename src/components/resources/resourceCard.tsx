@@ -88,17 +88,13 @@ export function ResourceCard({ resource }: { resource: ResourceDTO }) {
 
   return (
     <div className="bg-[--color-jet] border border-[--color-persian-green] rounded-xl shadow-md flex flex-col overflow-hidden min-h-[250px] w-full">
-      {/* Preview */}
       <div className="p-3">{renderPreview()}</div>
 
-      {/* Contenido */}
       <div className="flex flex-col gap-3 p-4">
-        {/* Tipo y Privacidad */}
         <span className="text-md rounded-md bg-[--color-persian-green] text-[--color-snow]">
           {resource.type}
         </span>
 
-        {/* Título y descripción */}
         <div>
           <div className="flex justify-between items-center">
             <h3 className="text-2xl font-serif text-[--color-snow]">
@@ -115,7 +111,6 @@ export function ResourceCard({ resource }: { resource: ResourceDTO }) {
           </p>
         </div>
 
-        {/* Áreas y Comunidades */}
         <div className="flex flex-wrap gap-2 mt-2">
           {resource.areas?.map((area) => {
             const bg = getColorById(area.id);

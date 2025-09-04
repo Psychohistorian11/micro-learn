@@ -12,3 +12,23 @@ export async function fetchAreas(): Promise<AreaDTO[]> {
   }
 }
 
+export async function fetchAreasByIds(ids: string[]): Promise<AreaDTO[]> {
+  try {
+    const response = await fetch('/api/areas/by-ids', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ ids }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Error fetching areas by IDs');
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error('Error in fetchAreasByIds:', error);
+    throw error;
+  }
+}

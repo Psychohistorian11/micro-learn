@@ -3,7 +3,7 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
 import { useRouter } from "next/navigation"
-import { data } from "@/lib/sidebar-data"
+import { navigationBarData } from "@/lib/data"
 import { NavUser } from "../ui/nav-user"
 import {
     AlertDialog,
@@ -22,11 +22,11 @@ export function AppMobileSidebar() {
     const router = useRouter()
     const { data: session } = useSession()
     const [active, setActive] = React.useState(
-        data.navMain.find((item) => item.isActive) || data.navMain[0]
+        navigationBarData.navMain.find((item) => item.isActive) || navigationBarData.navMain[0]
     )
     const [showDialog, setShowDialog] = React.useState(false)
 
-    async function handleClick(item: (typeof data.navMain)[0]) {
+    async function handleClick(item: (typeof navigationBarData.navMain)[0]) {
         if (item.title === "Create") {
             if (session?.user?.id) {
                 setActive(item)
@@ -44,7 +44,7 @@ export function AppMobileSidebar() {
         <>
             <nav className="sticky bottom-0 left-0 w-full bg-background md:hidden mt-auto">
                 <ul className="flex items-center justify-around h-14">
-                    {data.navMain.map((item) => {
+                    {navigationBarData.navMain.map((item) => {
                         const isActive = active?.title === item.title
                         return (
                             <li key={item.title}>
@@ -72,7 +72,7 @@ export function AppMobileSidebar() {
                         )
                     })}
 
-                    <NavUser user={data.user} />
+                    <NavUser user={navigationBarData.user} />
                 </ul>
             </nav>
 

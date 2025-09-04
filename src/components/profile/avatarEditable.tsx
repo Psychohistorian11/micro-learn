@@ -100,7 +100,6 @@ export function AvatarEditable({ user }: { user?: any }) {
         className="hidden"
       />
 
-      {/* Diálogo de confirmación */}
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="sm:max-w-[400px]">
           <DialogHeader>

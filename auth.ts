@@ -54,6 +54,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           });
         }
 
+        user.id = existingUser?.id
+
         return true;
       } catch (err) {
         console.error("Error registrando usuario con Google", err);

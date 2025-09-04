@@ -88,7 +88,6 @@ export function EditProfileDialogForm({ user }: { user?: any }) {
           </DialogHeader>
 
           <div className="grid gap-6 py-6">
-            {/* Username */}
             <div className="grid gap-2">
               <Label htmlFor="username">Username</Label>
               <Input
@@ -105,7 +104,6 @@ export function EditProfileDialogForm({ user }: { user?: any }) {
               <FieldError errors={errors} field="username" />
             </div>
 
-            {/* Descripción */}
             <div className="grid gap-2">
               <Label htmlFor="description">Description</Label>
               <Textarea

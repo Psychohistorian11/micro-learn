@@ -5,13 +5,19 @@ import { fetchAreas } from "@/lib/area-service"
 import AreaCard from "../../area-card"
 import { AreaDTO } from "@/interface/area"
 import { Skeleton } from "@/components/ui/skeleton"
-import ResourceProps from "@/interface/resource"
+import { UseFormReturn } from "react-hook-form"
+import { ResourceCreateDTO } from "@/interface/resource"
 
+type Props = {
+    form: UseFormReturn<ResourceCreateDTO>
+}
 
-
-export default function StepAreas({ data, onUpdate }: ResourceProps) {
+export default function StepAreas({ form }: Props) {
+    const { watch, setValue } = form
     const [areas, setAreas] = useState<AreaDTO[]>([])
     const [loading, setLoading] = useState(true)
+
+    const selectedAreas = watch("areas") ?? []
 
     useEffect(() => {
         fetchAreas().then(res => {
@@ -23,13 +29,13 @@ export default function StepAreas({ data, onUpdate }: ResourceProps) {
     const toggleArea = (area: AreaDTO) => {
         let newAreas: string[]
 
-        if (data.areas?.includes(area.id)) {
-            newAreas = data.areas.filter(id => id !== area.id)
+        if (selectedAreas.includes(area.id)) {
+            newAreas = selectedAreas.filter(id => id !== area.id)
         } else {
-            newAreas = [...(data.areas ?? []), area.id]
+            newAreas = [...selectedAreas, area.id]
         }
 
-        onUpdate({ areas: newAreas.length > 0 ? newAreas : undefined })
+        setValue("areas", newAreas, { shouldValidate: false })
     }
 
     return (
@@ -52,7 +58,7 @@ export default function StepAreas({ data, onUpdate }: ResourceProps) {
                         <AreaCard
                             key={area.id}
                             area={area}
-                            selected={data.areas?.includes(area.id) ?? false}
+                            selected={selectedAreas.includes(area.id)}
                             onClick={() => toggleArea(area)}
                         />
                     ))}

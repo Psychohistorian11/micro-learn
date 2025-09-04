@@ -7,14 +7,22 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { useRouter } from "next/navigation"
 import { Label } from "@/components/ui/label"
 import { CommunityDTO } from "@/interface/community"
-import { Plus, Check } from "lucide-react"
-import ResourceProps from "@/interface/resource"
+import { UseFormReturn } from "react-hook-form"
+import { ResourceCreateDTO } from "@/interface/resource"
+import CommunityCard from "../../community-card"
 
-export default function StepMyCommunities({ data, onUpdate }: ResourceProps) {
+type Props = {
+    form: UseFormReturn<ResourceCreateDTO>
+}
+
+export default function StepMyCommunities({ form }: Props) {
     const { data: session } = useSession()
     const [communities, setCommunities] = useState<CommunityDTO[]>([])
     const [loading, setLoading] = useState(true)
     const router = useRouter()
+
+    const { watch, setValue } = form
+    const selectedCommunities = watch("communities") ?? []
 
     useEffect(() => {
         if (!session?.user?.id) return
@@ -43,21 +51,21 @@ export default function StepMyCommunities({ data, onUpdate }: ResourceProps) {
     const toggleCommunity = (id: string) => {
         let newCommunities: string[]
 
-        if (data.communities?.includes(id)) {
-            newCommunities = data.communities.filter((c) => c !== id)
+        if (selectedCommunities.includes(id)) {
+            newCommunities = selectedCommunities.filter((c) => c !== id)
         } else {
-            newCommunities = [...(data.communities ?? []), id]
+            newCommunities = [...selectedCommunities, id]
         }
 
-        // igual que en StepAreas: si no queda ninguna, lo ponemos como undefined
-        onUpdate({ communities: newCommunities.length > 0 ? newCommunities : undefined })
+        setValue("communities", newCommunities.length > 0 ? newCommunities : undefined, {
+            shouldValidate: true,
+        })
     }
 
     return (
         <div className="flex flex-col gap-6">
             <h2 className="text-2xl font-serif">Mis comunidades</h2>
 
-            {/* Loading state */}
             {loading && (
                 <div className="flex flex-col gap-4">
                     {Array.from({ length: 4 }).map((_, i) => (
@@ -75,7 +83,6 @@ export default function StepMyCommunities({ data, onUpdate }: ResourceProps) {
                 </div>
             )}
 
-            {/* Empty state */}
             {!loading && communities.length === 0 && (
                 <div className="gap-4 flex flex-col items-start text-center">
                     <Label>No perteneces a ninguna comunidad todavía.</Label>
@@ -88,55 +95,16 @@ export default function StepMyCommunities({ data, onUpdate }: ResourceProps) {
                 </div>
             )}
 
-            {/* Communities list */}
             {!loading && communities.length > 0 && (
-                <div className="flex flex-col gap-4">
-                    {communities.map((community) => {
-                        const selected = data.communities?.includes(community.id) ?? false
-                        return (
-                            <div
-                                key={community.id}
-                                className="flex items-center justify-between gap-4 p-3 border rounded-md shadow-sm hover:shadow-md transition"
-                            >
-                                <div className="flex items-center gap-4">
-                                    <img
-                                        src={community.image}
-                                        alt={community.title}
-                                        className="rounded-full object-cover w-12 h-12"
-                                    />
-                                    <div className="flex flex-col">
-                                        <span className="font-medium text-persian-green">
-                                            {community.title}
-                                        </span>
-                                        <span className="text-sm text-gray-600">
-                                            {community.description}
-                                        </span>
-                                    </div>
-                                </div>
-
-                                {/* Botón publicar */}
-                                <Button
-                                    variant={selected ? "default" : "outline"}
-                                    className={
-                                        selected
-                                            ? "bg-persian-green  hover:bg-persian-green/90"
-                                            : "border-persian-green text-persian-green hover:bg-persian-green/10"
-                                    }
-                                    onClick={() => toggleCommunity(community.id)}
-                                >
-                                    {selected ? (
-                                        <>
-                                            <Check className="w-4 h-4 mr-2" /> Seleccionada
-                                        </>
-                                    ) : (
-                                        <>
-                                            <Plus className="w-4 h-4 mr-2" /> Publicar aquí
-                                        </>
-                                    )}
-                                </Button>
-                            </div>
-                        )
-                    })}
+                <div className="flex flex-col gap-3">
+                    {communities.map((community) => (
+                        <CommunityCard
+                            key={community.id}
+                            community={community}
+                            selected={selectedCommunities.includes(community.id)}
+                            onClick={() => toggleCommunity(community.id)}
+                        />
+                    ))}
                 </div>
             )}
         </div>

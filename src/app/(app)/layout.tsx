@@ -14,7 +14,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             style={{ "--sidebar-width": "350px" } as React.CSSProperties}
         >
             <SessionProvider>
-                {/* Desktop Sidebar Navigation */}
                 <div className="hidden sm:flex w-full">
                     <AppDesktopSidebar />
                     <SidebarInset>
@@ -29,7 +28,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                     </SidebarInset>
                 </div>
 
-                {/* Mobile Bottom Navigation */}
                 <div className="sm:hidden w-full flex flex-col min-h-dvh">
                     <div className="flex-1 overflow-auto">{children}</div>
                     <AppMobileSidebar />

@@ -1,22 +1,31 @@
 "use client"
 
-import { useState, useRef, useCallback } from "react"
+import { useState, useRef, useCallback, ChangeEvent } from "react"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { IconEye, IconLink, IconUpload, IconX, IconLoader2 } from "@tabler/icons-react"
 import ResourcePreviewSheet from "../resource-preview-sheet"
 import { uploadFile } from "@/lib/storage"
-import ResourceProps from "@/interface/resource"
+import { UseFormReturn } from "react-hook-form"
+import { ResourceCreateDTO } from "@/interface/resource"
 
+type Props = {
+    form: UseFormReturn<ResourceCreateDTO>
+}
 
-export default function StepAttachment({ data, onUpdate }: ResourceProps) {
+export default function StepAttachment({ form }: Props) {
+    const { watch, setValue, register, formState: { errors } } = form
+
     const [isDragging, setIsDragging] = useState(false)
-    const [urlInput, setUrlInput] = useState("")
-    const fileInputRef = useRef<HTMLInputElement>(null)
     const [isPreviewOpen, setIsPreviewOpen] = useState(false)
     const [isUploading, setIsUploading] = useState(false)
     const [fileName, setFileName] = useState("")
+    const fileInputRef = useRef<HTMLInputElement>(null)
+
+    const attachment = watch("attachment")
+    const hasAttachment = !!attachment
+    const isUrl = hasAttachment && typeof attachment === "string"
 
     const handleFileUpload = async (file: File) => {
         try {
@@ -26,7 +35,7 @@ export default function StepAttachment({ data, onUpdate }: ResourceProps) {
             const filePath = `attachments/${Date.now()}-${file.name}`
             const url = await uploadFile("resources", filePath, file)
 
-            onUpdate({ attachment: url })
+            setValue("attachment", url, { shouldValidate: true })
         } catch (err) {
             console.error("Error subiendo archivo:", err)
         } finally {
@@ -34,15 +43,14 @@ export default function StepAttachment({ data, onUpdate }: ResourceProps) {
         }
     }
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files?.[0]) {
             handleFileUpload(e.target.files[0])
         }
     }
 
     const handleRemoveAttachment = () => {
-        onUpdate({ attachment: '' })
-        setUrlInput("")
+        setValue("attachment", "", { shouldValidate: true })
         setFileName("")
         if (fileInputRef.current) {
             fileInputRef.current.value = ""
@@ -72,30 +80,19 @@ export default function StepAttachment({ data, onUpdate }: ResourceProps) {
         }
     }, [])
 
-    const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setUrlInput(e.target.value)
-    }
-
-    const hasAttachment = data.attachment !== null && data.attachment !== undefined && data.attachment !== ""
-    const isUrl = hasAttachment && typeof data.attachment === "string"
-
     return (
         <div className="flex flex-col gap-6 h-full justify-center">
-            {/* título */}
             <div>
-                <Label className="text-2xl font-serif">
-                    {data.title}
-                </Label>
+                <Label className="text-2xl font-serif">Adjuntar recurso</Label>
             </div>
 
-            {/* Zona drag & drop */}
             <div className="flex flex-col sm:flex-row gap-6 flex-wrap justify-between sm:justify-center">
                 <label
                     htmlFor="attachment"
                     className={`flex-1 sm:h-48 flex flex-col items-center justify-center
-                        border-2 border-dashed rounded-xl 
-                        cursor-pointer transition text-center p-3
-                        ${hasAttachment
+            border-2 border-dashed rounded-xl 
+            cursor-pointer transition text-center p-3
+            ${hasAttachment
                             ? "border-persian-green bg-persian-green/10 text-persian-green"
                             : isDragging
                                 ? "border-persian-green bg-persian-green/10"
@@ -114,7 +111,7 @@ export default function StepAttachment({ data, onUpdate }: ResourceProps) {
                         <div className="flex flex-col items-center gap-2">
                             <IconLink className="h-10 w-10 text-persian-green" />
                             <span className="text-sm font-medium text-persian-green break-all">
-                                {data.attachment}
+                                {attachment}
                             </span>
                             <div className="flex gap-2 mt-2">
                                 <Button
@@ -157,41 +154,41 @@ export default function StepAttachment({ data, onUpdate }: ResourceProps) {
                 </label>
             </div>
 
-            {/* Separador */}
-            <div className="flex items-center my-4 w-full">
+            <div className="flex items-center w-full">
                 <div className="flex-grow border-t border-gray-200 dark:border-gray-800"></div>
                 <span className="mx-4 text-sm text-muted-foreground">O</span>
                 <div className="flex-grow border-t border-gray-200 dark:border-gray-800"></div>
             </div>
 
-            {/* Input URL */}
-            <div className="space-y-2">
+            <div className="space-y-2 w-full">
                 <Label>Importación por URL</Label>
                 <div className="relative">
                     <IconLink className="absolute left-3 top-1.5 h-5 w-5 text-muted-foreground" />
                     <Input
                         type="url"
-                        placeholder="https://ejemplo.com/archivo.pdf"
-                        value={isUrl ? (data.attachment as string) : urlInput}
-                        onChange={handleUrlChange}
+                        placeholder="https://mirecurso.com/archivo.pdf"
                         className="pl-10 placeholder:text-sm text-sm"
                         disabled={isUploading || (hasAttachment && !isUrl)}
-                        onBlur={() => {
-                            if (urlInput.trim() && !hasAttachment) {
-                                onUpdate({ attachment: urlInput.trim() })
+                        {...register("attachment", {
+                            required: "Debes adjuntar un archivo o ingresar una URL", // ← Agregar esto
+                            pattern: {
+                                value: /^(https?:\/\/[^\s$.?#].[^\s]*)$/i,
+                                message: "Debe ser un enlace válido (http o https)"
                             }
-                        }}
+                        })}
                     />
                 </div>
+                {errors.attachment && (
+                    <p className="text-sm text-red-500">{errors.attachment.message as string}</p>
+                )}
             </div>
 
-            {/* Preview */}
             <ResourcePreviewSheet
                 open={isPreviewOpen}
                 onClose={() => setIsPreviewOpen(false)}
-                attachment={data.attachment}
-                title={data.title}
-                description={data.description}
+                attachment={attachment}
+                title={watch("title")}
+                description={watch("description")}
             />
         </div>
     )
