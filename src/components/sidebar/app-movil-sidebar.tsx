@@ -3,7 +3,7 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
 import { useRouter } from "next/navigation"
-import { data } from "@/lib/sidebar-data"
+import { navigationBarData } from "@/lib/data"
 import { NavUser } from "../ui/nav-user"
 import {
     AlertDialog,
@@ -18,21 +18,17 @@ import {
 
 import { useSession } from "next-auth/react"
 
-
 export function AppMobileSidebar() {
     const router = useRouter()
     const { data: session } = useSession()
     const [active, setActive] = React.useState(
-        data.navMain.find((item) => item.isActive) || data.navMain[0]
+        navigationBarData.navMain.find((item) => item.isActive) || navigationBarData.navMain[0]
     )
     const [showDialog, setShowDialog] = React.useState(false)
 
-
-    async function handleClick(item: (typeof data.navMain)[0]) {
+    async function handleClick(item: (typeof navigationBarData.navMain)[0]) {
         if (item.title === "Create") {
-
             if (session?.user?.id) {
-                console.log("session: ", session)
                 setActive(item)
                 router.push(item.url)
             } else {
@@ -46,9 +42,9 @@ export function AppMobileSidebar() {
 
     return (
         <>
-            <nav className="fixed bottom-0 left-0 z-50 w-full border-t bg-background md:hidden">
+            <nav className="sticky bottom-0 left-0 w-full bg-background md:hidden mt-auto">
                 <ul className="flex items-center justify-around h-14">
-                    {data.navMain.map((item) => {
+                    {navigationBarData.navMain.map((item) => {
                         const isActive = active?.title === item.title
                         return (
                             <li key={item.title}>
@@ -57,16 +53,14 @@ export function AppMobileSidebar() {
                                     className={cn(
                                         "relative flex flex-col items-center text-xs transition-all duration-300 ease-in-out p-3 pt-1",
                                         isActive
-                                            ? "text-tiffany-blue scale-110"
+                                            ? "text-persian-green scale-110"
                                             : "text-muted-foreground hover:text-foreground hover:scale-105"
                                     )}
                                 >
-                                    {/* efecto "burbujita" debajo del ícono cuando está activo */}
                                     {isActive && (
-                                        <span className="absolute bottom-1 h-1.5 w-1.5 rounded-full bg-tiffany-blue animate-bounce" />
+                                        <span className="absolute bottom-1 h-1.5 w-1.5 rounded-full bg-persian-green animate-bounce" />
                                     )}
 
-                                    {/* ícono con transición de tamaño */}
                                     <item.icon
                                         className={cn(
                                             "h-5 w-5 transition-all duration-300 ease-in-out",
@@ -78,12 +72,10 @@ export function AppMobileSidebar() {
                         )
                     })}
 
-                    <NavUser user={data.user} />
+                    <NavUser user={navigationBarData.user} />
                 </ul>
             </nav>
 
-
-            {/* AlertDialog solo si no hay sesión */}
             <AlertDialog open={showDialog} onOpenChange={setShowDialog}>
                 <AlertDialogContent>
                     <AlertDialogHeader>

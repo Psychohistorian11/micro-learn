@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import ProfilePictureUploader from "../profile/profilePictureUploader";
+import ProfilePictureUploader from "./profile-picture-up-loader";
 
 const ProfileButtons = ({ userId }: { userId: string }) => {
   const [showProfile, setShowProfile] = useState(false);

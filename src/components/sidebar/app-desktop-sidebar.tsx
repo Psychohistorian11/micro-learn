@@ -21,7 +21,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { Switch } from "@/components/ui/switch";
-import { data } from "@/lib/sidebar-data";
+import { navigationBarData } from "@/lib/data";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -38,12 +38,12 @@ export function AppDesktopSidebar({
 }: React.ComponentProps<typeof Sidebar>) {
   const router = useRouter();
   const { data: session } = useSession();
-  const [activeItem, setActiveItem] = React.useState(data.navMain[0]);
-  const [mails, setMails] = React.useState(data.mails);
+  const [activeItem, setActiveItem] = React.useState(navigationBarData.navMain[0]);
+  const [mails, setMails] = React.useState(navigationBarData.mails);
   const { setOpen } = useSidebar();
   const [showDialog, setShowDialog] = React.useState(false);
 
-  function handleClick(item: (typeof data.navMain)[0]) {
+  function handleClick(item: (typeof navigationBarData.navMain)[0]) {
     if (item.title === "Create") {
       if (session?.user.id) {
         setActiveItem(item);
@@ -54,7 +54,7 @@ export function AppDesktopSidebar({
     } else {
       router.push(item.url);
       setActiveItem(item);
-      const mail = data.mails.sort(() => Math.random() - 0.5);
+      const mail = navigationBarData.mails.sort(() => Math.random() - 0.5);
       setMails(mail.slice(0, Math.max(5, Math.floor(Math.random() * 10) + 1)));
       setOpen(true);
     }
@@ -93,7 +93,7 @@ export function AppDesktopSidebar({
             <SidebarGroup>
               <SidebarGroupContent className="px-1.5 md:px-0">
                 <SidebarMenu>
-                  {data.navMain.map((item) => (
+                  {navigationBarData.navMain.map((item) => (
                     <SidebarMenuItem key={item.title}>
                       <SidebarMenuButton
                         tooltip={{
@@ -115,7 +115,7 @@ export function AppDesktopSidebar({
           </SidebarContent>
 
           <SidebarFooter>
-            <NavUser user={data.user} />
+            <NavUser user={navigationBarData.user} />
           </SidebarFooter>
         </Sidebar>
 
@@ -134,7 +134,7 @@ export function AppDesktopSidebar({
           </SidebarHeader>
           <SidebarContent>
             <SidebarGroup className="px-0">
-              <SidebarGroupContent>
+              {/*<SidebarGroupContent>
                 {mails.map((mail) => (
                   <a
                     href="#"
@@ -151,13 +151,12 @@ export function AppDesktopSidebar({
                     </span>
                   </a>
                 ))}
-              </SidebarGroupContent>
+              </SidebarGroupContent>*/}
             </SidebarGroup>
           </SidebarContent>
         </Sidebar>
       </Sidebar>
 
-      {/* AlertDialog */}
       <AlertDialog open={showDialog} onOpenChange={setShowDialog}>
         <AlertDialogContent>
           <AlertDialogHeader>

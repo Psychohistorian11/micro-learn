@@ -1,7 +1,7 @@
 "use client";
 
 import { ResourceDTO } from "@/interface/resource";
-import { ResourceCard } from "./resourceCard";
+import { ResourceCard } from "./resource-card";
 
 export function ResourceList({ resources }: { resources: ResourceDTO[] }) {
   if (!resources.length) {

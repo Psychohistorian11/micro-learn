@@ -1,21 +1,25 @@
 import {
-  IsBoolean,
-  IsOptional,
-  IsString,
-  IsUUID,
-  IsEnum,
+
+    IsString,
+    IsUUID,
 } from "class-validator";
-import { ResourceType } from "@prisma/client";
 
 export class AreaDTO {
-  @IsUUID()
-  id: string;
+    @IsUUID()
+    id: string;
 
-  @IsString()
-  name: string;
+    @IsString()
+    name: string;
+
+    @IsString()
+    color: string;
+
+    @IsString()
+    icon: string;
+
 }
 
 export class AreaCreateDTO {
-  @IsString({ each: true })
-  names: string[];
+    @IsString({ each: true })
+    names: string[];
 }

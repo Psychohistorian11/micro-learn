@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { uploadProfilePicture } from "./uploadProfilePicture";
+import { uploadProfilePicture } from "./upload-profile-picture";
 
 type ProfilePictureUploaderProps = {
   userId: string;

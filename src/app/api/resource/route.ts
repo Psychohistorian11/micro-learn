@@ -87,7 +87,7 @@ export async function PATCH(request: NextRequest) {
       type: dto.type ?? existingResource.type,
       updatedAt: new Date(),
       areas: dto.areas
-        ? { set: dto.areas.map((id) => ({ id })) } 
+        ? { set: dto.areas.map((id) => ({ id })) }
         : undefined,
 
       communities: dto.communities

@@ -71,12 +71,12 @@ export function AvatarEditable({ user }: { user?: any }) {
   return (
     <div className="flex flex-col items-center gap-2">
       <div
-        className="relative cursor-pointer group"
+        className="relative cursor-pointer group w-full sm:w-auto justify-center flex"
         onClick={() => fileInputRef.current?.click()}
       >
-        <Avatar className="h-24 w-24 rounded-lg">
+        <Avatar className="w-full sm:w-auto h-auto sm:h-30  rounded-lg">
           <AvatarImage src={current ?? undefined} alt={user?.name ?? "User"} />
-          <AvatarFallback className="h-24 w-24 rounded-lg">
+          <AvatarFallback className="w-full sm:w-auto h-full rounded-lg">
             {user?.username?.substring(0, 2).toUpperCase()}
           </AvatarFallback>
         </Avatar>
@@ -100,7 +100,6 @@ export function AvatarEditable({ user }: { user?: any }) {
         className="hidden"
       />
 
-      {/* Diálogo de confirmación */}
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="sm:max-w-[400px]">
           <DialogHeader>

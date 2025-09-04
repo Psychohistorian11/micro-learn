@@ -1,8 +1,8 @@
 "use client";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { EditProfileDialogForm } from "@/components/profile/editProfileDialog-form";
-import { AvatarEditable } from "@/components/profile/avatarEditable";
+import { EditProfileDialogForm } from "@/components/profile/edit-profile-dialog-form";
+import { AvatarEditable } from "@/components/profile/avatar-editable";
 
 type User = {
   id: string;
@@ -21,26 +21,24 @@ export function ProfileHeader({
   isOwner: boolean;
 }) {
   return (
-    <div className="border rounded-2xl bg-card shadow-sm p-6 flex gap-6 ">
-      {/* Avatar */}
-      <div className="shrink-0">
+    <div className="w-full rounde bg-card shadow-sm p-6 flex flex-col sm:flex-row gap-6 ">
+      <div className="shrink-0 w-full sm:w-auto">
         {isOwner ? (
           <AvatarEditable user={user} />
         ) : (
-          <Avatar className="h-24 w-24 rounded-xl">
-            <AvatarImage
+          <Avatar className="rounded-xl ">
+            <AvatarImage className="w-full"
               src={user.profilePicture ?? undefined}
               alt={user.username ?? "User"}
             />
-            <AvatarFallback className="rounded-xl text-lg font-serif">
+            <AvatarFallback className="rounded-xl text-lg font-serif w-full">
               {user.username?.substring(0, 2).toUpperCase()}
             </AvatarFallback>
           </Avatar>
         )}
       </div>
 
-      {/* Info */}
-      <div className="flex-1 min-w-0 ">
+      <div className="flex-1 min-w-0  ">
         <div className="flex items-start justify-between ">
           <div className="min-w-0">
             <h1 className="text-2xl font-serif leading-tight truncate">
@@ -58,7 +56,6 @@ export function ProfileHeader({
           )}
         </div>
 
-        {/* Descripción */}
         {user.description && (
           <div className="mt-3 text-sm text-muted-foreground">
             <p className="whitespace-pre-line">{user.description}</p>

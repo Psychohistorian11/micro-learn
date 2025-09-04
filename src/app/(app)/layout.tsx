@@ -2,39 +2,39 @@ import { AppDesktopSidebar } from "@/components/sidebar/app-desktop-sidebar";
 import { AppMobileSidebar } from "@/components/sidebar/app-movil-sidebar";
 import { Separator } from "@/components/ui/separator";
 import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
+    SidebarInset,
+    SidebarProvider,
+    SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { SessionProvider } from "next-auth/react";
+import { ReactNode } from "react";
 
-export default function AppLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <SidebarProvider
-      style={{ "--sidebar-width": "350px" } as React.CSSProperties}
-    >
-      <SessionProvider>
-        {/* Desktop Sidebar Navigation */}
-        <div className="hidden sm:flex w-full">
-          <AppDesktopSidebar />
-          <SidebarInset>
-            <header className="bg-background sticky top-0 flex shrink-0 items-center gap-2 border-b p-4 z-50">
-              <SidebarTrigger className="-ml-1" />
-              <Separator
-                orientation="vertical"
-                className="mr-2 data-[orientation=vertical]:h-4 w-full"
-              />
-            </header>
-            <main className="flex-1">{children}</main>
-          </SidebarInset>
-        </div>
+export default function AppLayout({ children }: { children: ReactNode }) {
+    return (
+        <SidebarProvider
+            style={{ "--sidebar-width": "350px" } as React.CSSProperties}
+        >
+            <SessionProvider>
+                <div className="w-full flex flex-col sm:flex-row min-h-dvh">
+                    {/* sidebar desktop */}
+                    <div className="hidden sm:flex">
+                        <AppDesktopSidebar />
+                    </div>
 
-        {/* Mobile Bottom Navigation */}
-        <div className="sm:hidden w-full flex flex-col min-h-dvh">
-          <div className="flex-1 overflow-auto">{children}</div>
-          <AppMobileSidebar />
-        </div>
-      </SessionProvider>
-    </SidebarProvider>
-  );
+                    {/* contenido */}
+                    <div className="flex-1 flex flex-col">
+                        <header className="hidden sm:flex ...">
+                            <SidebarTrigger />
+                            <Separator orientation="vertical" />
+                        </header>
+                        <main className="flex-1">{children}</main>
+                        {/* sidebar mobile */}
+                        <div className="sm:hidden">
+                            <AppMobileSidebar />
+                        </div>
+                    </div>
+                </div>
+            </SessionProvider>
+        </SidebarProvider>
+    );
 }

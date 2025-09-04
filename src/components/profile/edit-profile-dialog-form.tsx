@@ -56,11 +56,11 @@ export function EditProfileDialogForm({ user }: { user?: any }) {
         if (response.status == 409) {
           setError("username", { type: "value", message: error.message });
         } else {
-          setServerError("Error. Por favor intenta de nuevo.");
+          setServerError("Error. Por favor, intenta de nuevo.");
         }
       }
     } catch (error) {
-      setServerError("Error. Por favor intenta de nuevo.");
+      setServerError("Error. Por favor, intenta de nuevo.");
     }
   });
 
@@ -80,17 +80,16 @@ export function EditProfileDialogForm({ user }: { user?: any }) {
       <DialogContent className="sm:max-w-[500px]">
         <form onSubmit={onSubmit}>
           <DialogHeader>
-            <DialogTitle>Edit profile</DialogTitle>
+            <DialogTitle>Editar perfil</DialogTitle>
             <DialogDescription>
-              Update your personal information. Click save when you&apos;re
-              done.
+              Actualiza tu información personal. Haz clic en guardar cuando
+              termines.
             </DialogDescription>
           </DialogHeader>
 
           <div className="grid gap-6 py-6">
-            {/* Username */}
             <div className="grid gap-2">
-              <Label htmlFor="username">Username</Label>
+              <Label htmlFor="username">Nombre de usuario</Label>
               <Input
                 id="username"
                 type="text"
@@ -105,9 +104,8 @@ export function EditProfileDialogForm({ user }: { user?: any }) {
               <FieldError errors={errors} field="username" />
             </div>
 
-            {/* Descripción */}
             <div className="grid gap-2">
-              <Label htmlFor="description">Description</Label>
+              <Label htmlFor="description">Descripción</Label>
               <Textarea
                 id="description"
                 defaultValue={user?.description ?? ""}
@@ -131,9 +129,11 @@ export function EditProfileDialogForm({ user }: { user?: any }) {
             )}
           </div>
 
-          <DialogFooter className="flex items-center justify-between">
-            <div className="flex gap-2">
-              <Button type="submit">Save changes</Button>
+          <DialogFooter className="flex items-center justify-between w-full ">
+
+
+            <div className="flex gap-2 w-full sm:justify-end">
+              <Button type="submit" className="w-full flex sm:flex-row sm:justify-end sm:w-auto">Guardar cambios</Button>
             </div>
           </DialogFooter>
         </form>
