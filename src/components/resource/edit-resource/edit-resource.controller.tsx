@@ -111,7 +111,7 @@ export function EditResourceSheet({ resource, open, onOpenChange }: Props) {
                                     key={c.id}
                                     className="px-3 py-1 rounded-full bg-persian-green/20 text-persian-green text-sm"
                                 >
-                                    {c.name}
+                                    {c.id}
                                 </span>
                             ))}
                             {(!resource.communities || resource.communities.length === 0) && (
