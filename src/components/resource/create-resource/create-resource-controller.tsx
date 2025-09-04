@@ -81,7 +81,7 @@ export default function CreateResourceController() {
 
             await createResource(filteredData)
 
-            router.push("/resources?created=true")
+            //router.push("/resources?created=true")
         } catch (error) {
             console.error("Error creating resource:", error)
         } finally {

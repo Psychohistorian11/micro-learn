@@ -22,6 +22,7 @@ export default function StepSummary({ form }: Props) {
     const [loading, setLoading] = useState(true)
 
     const data = form.getValues()
+    console.log("data: ", data)
 
     useEffect(() => {
         const fetchSelectedAreas = async () => {
