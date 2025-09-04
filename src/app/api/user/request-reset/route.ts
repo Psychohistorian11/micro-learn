@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { sendMail } from "@/lib/mailer";
+import { sendOTPEmail } from "@/lib/mailer";
 import { generateOTP } from "@/lib/otp-actions";
 
 export async function POST(req: Request) {
@@ -9,12 +9,7 @@ export async function POST(req: Request) {
 
   const code = await generateOTP(email);
 
-  await sendMail(
-    email,
-    "Código de recuperación de contraseña",
-    `Tu código OTP es: ${code}`,
-    `<p>Tu código OTP es: <b>${code}</b></p>`
-  );
+  await sendOTPEmail(email, code);
 
   return NextResponse.json({ message: "OTP enviado al correo" });
 }
