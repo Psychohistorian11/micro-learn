@@ -5,35 +5,22 @@ import { cn } from "@/lib/utils"
 import { useRouter } from "next/navigation"
 import { navigationBarData } from "@/lib/data"
 import { NavUser } from "../ui/nav-user"
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
-
-import { useSession } from "next-auth/react"
+import { AuthAlertDialog } from "@/components/ui/custom/auth-alert-dialog"
+import { useAuthGuard } from "@/hooks/use-auth-guard"
 
 export function AppMobileSidebar() {
     const router = useRouter()
-    const { data: session } = useSession()
+    const { requireAuth, showDialog, handleLoginRedirect, closeDialog } = useAuthGuard()
     const [active, setActive] = React.useState(
         navigationBarData.navMain.find((item) => item.isActive) || navigationBarData.navMain[0]
     )
-    const [showDialog, setShowDialog] = React.useState(false)
 
     async function handleClick(item: (typeof navigationBarData.navMain)[0]) {
         if (item.title === "Create") {
-            if (session?.user?.id) {
+            requireAuth(() => {
                 setActive(item)
                 router.push(item.url)
-            } else {
-                setShowDialog(true)
-            }
+            }, "Necesitas estar logueado para crear un recurso.")
         } else {
             setActive(item)
             router.push(item.url)
@@ -76,30 +63,12 @@ export function AppMobileSidebar() {
                 </ul>
             </nav>
 
-            <AlertDialog open={showDialog} onOpenChange={setShowDialog}>
-                <AlertDialogContent>
-                    <AlertDialogHeader>
-                        <AlertDialogTitle>Inicia sesión</AlertDialogTitle>
-                        <AlertDialogDescription>
-                            Necesitas estar logueado para crear un recurso.
-                        </AlertDialogDescription>
-                    </AlertDialogHeader>
-
-                    <AlertDialogFooter>
-                        <AlertDialogCancel onClick={() => setShowDialog(false)}>
-                            Cancelar
-                        </AlertDialogCancel>
-                        <AlertDialogAction className="bg-persian-green"
-                            onClick={() => {
-                                setShowDialog(false)
-                                router.push("/login")
-                            }}
-                        >
-                            Ir a login
-                        </AlertDialogAction>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialog>
+            <AuthAlertDialog
+                open={showDialog}
+                onOpenChange={closeDialog}
+                onLogin={handleLoginRedirect}
+                description="Necesitas estar logueado para crear un recurso."
+            />
         </>
     )
 }

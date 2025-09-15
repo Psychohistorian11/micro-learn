@@ -80,7 +80,7 @@ export function EditProfileDialogForm({ user }: { user?: any }) {
       <DialogContent className="sm:max-w-[500px]">
         <form onSubmit={onSubmit}>
           <DialogHeader>
-            <DialogTitle>Editar perfil</DialogTitle>
+            <DialogTitle className="font-serif text-2xl">Editar perfil</DialogTitle>
             <DialogDescription>
               Actualiza tu información personal. Haz clic en guardar cuando
               termines.
@@ -133,7 +133,7 @@ export function EditProfileDialogForm({ user }: { user?: any }) {
 
 
             <div className="flex gap-2 w-full sm:justify-end">
-              <Button type="submit" className="w-full flex sm:flex-row sm:justify-end sm:w-auto">Guardar cambios</Button>
+              <Button type="submit" className="w-full flex sm:flex-row sm:justify-end sm:w-auto bg-persian-green">Guardar cambios</Button>
             </div>
           </DialogFooter>
         </form>

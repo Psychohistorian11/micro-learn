@@ -12,7 +12,7 @@ import ResourcePreview from "../resource-preview"
 type Props = {
     open: boolean
     onClose: () => void
-    attachment?: File | string | null
+    attachment: string
     title?: string
     description?: string
 }
@@ -43,7 +43,7 @@ export default function ResourcePreviewSheet({
 
                 <div className=" p-4 h-full">
                     <ResourcePreview
-                        attachment={attachment ?? null}
+                        attachment={attachment}
                         className="rounded-md"
                     />
                 </div>

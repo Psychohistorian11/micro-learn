@@ -1,20 +1,20 @@
-"use client"
+"use client";
 
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet"
-import { Button } from "@/components/ui/button"
-import { useForm } from "react-hook-form"
-import { useState } from "react"
-import { ResourceCreateDTO, ResourceDTO } from "@/interface/resource"
-import { navigationCreateResouceData } from "@/lib/data"
-import StepBasicData from "../create-resource/steps/step-basic-data"
-import StepAttachment from "../create-resource/steps/step-attachment"
-
+import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
+import { useForm } from "react-hook-form";
+import { useState } from "react";
+import { ResourceCreateDTO, ResourceDTO } from "@/interface/resource";
+import { navigationCreateResouceData } from "@/lib/data";
+import StepBasicData from "../create-resource/steps/step-basic-data";
+import StepAttachment from "../create-resource/steps/step-attachment";
+import { editResource } from "@/lib/services/resource-service";
 
 type Props = {
-    resource: ResourceDTO
-    open: boolean
-    onOpenChange: (open: boolean) => void
-}
+    resource: ResourceDTO;
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
+};
 
 export function EditResourceSheet({ resource, open, onOpenChange }: Props) {
     const form = useForm<ResourceCreateDTO>({
@@ -25,56 +25,52 @@ export function EditResourceSheet({ resource, open, onOpenChange }: Props) {
             attachment: resource.attachment,
             image: resource.image,
             isPublic: resource.isPublic,
-            areas: resource.areas?.map(a => a.id) ?? [],
-            communities: resource.communities?.map(c => c.id) ?? [],
+            areas: resource.areas?.map((a) => a.id) ?? [],
+            communities: resource.communities?.map((c) => c.id) ?? [],
             authorId: resource.authorId,
         },
-    })
+    });
 
+    const [isSaving, setIsSaving] = useState(false);
 
-    const [isSaving, setIsSaving] = useState(false)
-
-    const onSubmit = async (data: any) => {
+    const onSubmit = async (data: ResourceCreateDTO) => {
         try {
-            setIsSaving(true)
+            setIsSaving(true);
 
-            const requiredFields = navigationCreateResouceData
-                .flatMap(step => step.fieldsToValidate)
+            const requiredFields = navigationCreateResouceData.flatMap(
+                (step) => step.fieldsToValidate
+            );
 
-            for (const field of requiredFields) {
-                if (!data[field] || (Array.isArray(data[field]) && data[field].length === 0)) {
-                    form.setError(field as any, {
+            for (const field of requiredFields as (keyof ResourceCreateDTO)[]) {
+                const value = data[field];
+                if (!value || (Array.isArray(value) && value.length === 0)) {
+                    form.setError(field, {
                         type: "manual",
                         message: `El campo ${field} es obligatorio`,
-                    })
-                    throw new Error(`Campo faltante: ${field}`)
+                    });
+                    throw new Error(`Campo faltante: ${String(field)}`);
                 }
             }
 
-            console.log("Actualizando recurso con:", data)
+            console.log("Actualizando recurso con:", data);
 
-            // TODO: llamada al backend
-            // await updateResource(resource.id, data)
+            await editResource(resource.id, data);
 
-            onOpenChange(false)
+            onOpenChange(false);
+            // Aquí también podrías refrescar la lista o invalidar cache
         } catch (err) {
-            console.error("Error al actualizar:", err)
+            console.error("Error al actualizar:", err);
         } finally {
-            setIsSaving(false)
+            setIsSaving(false);
         }
-    }
+    };
 
     return (
         <Sheet open={open} onOpenChange={onOpenChange}>
-
             <SheetContent className="sm:max-w-3xl w-full overflow-y-auto px-4 sm:px-20">
-                <SheetTitle></SheetTitle>
+                <SheetTitle>Editar recurso</SheetTitle>
 
-
-                <form
-                    onSubmit={form.handleSubmit(onSubmit)}
-                    className="flex flex-col gap-8 py-6"
-                >
+                <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-8 py-6">
                     {/* Datos básicos */}
                     <StepBasicData form={form} />
 
@@ -85,7 +81,7 @@ export function EditResourceSheet({ resource, open, onOpenChange }: Props) {
                     <div className="flex flex-col gap-3">
                         <h3 className="font-medium">Áreas</h3>
                         <div className="flex flex-wrap gap-2">
-                            {resource.areas?.map(area => (
+                            {resource.areas?.map((area) => (
                                 <span
                                     key={area.id}
                                     className="px-3 py-1 rounded-full bg-persian-green/20 text-persian-green text-sm"
@@ -106,7 +102,7 @@ export function EditResourceSheet({ resource, open, onOpenChange }: Props) {
                     <div className="flex flex-col gap-3">
                         <h3 className="font-medium">Comunidades</h3>
                         <div className="flex flex-wrap gap-2">
-                            {resource.communities?.map(c => (
+                            {resource.communities?.map((c) => (
                                 <span
                                     key={c.id}
                                     className="px-3 py-1 rounded-full bg-persian-green/20 text-persian-green text-sm"
@@ -125,23 +121,15 @@ export function EditResourceSheet({ resource, open, onOpenChange }: Props) {
 
                     {/* Botones */}
                     <div className="flex justify-end gap-3">
-                        <Button
-                            type="button"
-                            variant="ghost"
-                            onClick={() => onOpenChange(false)}
-                        >
+                        <Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>
                             Cancelar
                         </Button>
-                        <Button
-                            type="submit"
-                            className="bg-persian-green"
-                            disabled={isSaving}
-                        >
+                        <Button type="submit" className="bg-persian-green" disabled={isSaving}>
                             {isSaving ? "Guardando..." : "Guardar cambios"}
                         </Button>
                     </div>
                 </form>
             </SheetContent>
         </Sheet>
-    )
+    );
 }

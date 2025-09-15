@@ -1,51 +1,48 @@
-// components/community-card.tsx
-import { CommunityDTO } from "@/interface/community"
-import { cn } from "@/lib/utils"
-import { Check } from "lucide-react"
+"use client";
 
-type Props = {
-    community: CommunityDTO
-    selected?: boolean
-    onClick?: () => void
+import { CommunityDTO } from "@/interface/community";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { cn } from "@/lib/utils";
+
+interface CommunityCardProps {
+    community: CommunityDTO;
+    selected?: boolean;
+    onClick?: () => void;
 }
 
-export default function CommunityCard({ community, selected, onClick }: Props) {
+export function CommunityCard({
+    community,
+    selected = false,
+    onClick
+}: CommunityCardProps) {
     return (
-        <button
-            onClick={onClick}
+        <div
             className={cn(
-                "flex items-center gap-3 p-3 rounded-md border shadow-sm transition-all hover:shadow-md w-full",
-                selected
-                    ? "border-persian-green border-2 bg-persian-green/5"
-                    : "border-gray-800"
+                "flex items-start gap-4 p-4 border rounded-lg transition-colors",
+                onClick && "cursor-pointer hover:bg-accent/50",
+                selected && "ring-2 ring-primary bg-primary/5"
             )}
+            onClick={onClick}
         >
-            <img
-                src={community.image}
-                alt={community.title}
-                className="rounded-full object-cover w-10 h-10"
-            />
+            <Avatar className="w-16 h-16 rounded-lg">
+                <AvatarImage
+                    src={community.image}
+                    alt={community.title}
+                    className="object-cover"
+                />
+                <AvatarFallback className="rounded-lg text-lg font-serif">
+                    {community.title.substring(0, 2).toUpperCase()}
+                </AvatarFallback>
+            </Avatar>
 
-            <div className="flex flex-col items-start flex-1">
-                <span className={cn(
-                    "font-medium text-sm",
-                    selected ? "text-persian-green" : "text-gray-800"
-                )}>
+            <div className="flex-1 min-w-0">
+                <h3 className="font-semibold text-lg leading-tight mb-1">
                     {community.title}
-                </span>
-                <span className="text-xs text-gray-600 text-left">
+                </h3>
+                <p className="text-sm text-muted-foreground line-clamp-2">
                     {community.description}
-                </span>
+                </p>
             </div>
-
-            <div className={cn(
-                "flex items-center justify-center w-5 h-5 rounded-full border",
-                selected
-                    ? "bg-persian-green border-persian-green text-white"
-                    : "border-gray-800"
-            )}>
-                {selected && <Check size={14} />}
-            </div>
-        </button>
-    )
+        </div>
+    );
 }

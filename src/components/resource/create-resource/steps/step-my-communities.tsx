@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label"
 import { CommunityDTO } from "@/interface/community"
 import { UseFormReturn } from "react-hook-form"
 import { ResourceCreateDTO } from "@/interface/resource"
-import CommunityCard from "../../community-card"
+import { CommunityCard } from "../../community-card"
 
 type Props = {
     form: UseFormReturn<ResourceCreateDTO>

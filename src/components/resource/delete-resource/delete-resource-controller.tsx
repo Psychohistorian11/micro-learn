@@ -14,6 +14,8 @@ import {
 } from "@/components/ui/alert-dialog";
 import { IconTrash } from "@tabler/icons-react";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { deleteResource } from "@/lib/services/resource-service";
 
 export function DeleteResourceController({ resource }: { resource: ResourceDTO }) {
     const [isDeleting, setIsDeleting] = useState(false);
@@ -22,11 +24,9 @@ export function DeleteResourceController({ resource }: { resource: ResourceDTO }
         try {
             setIsDeleting(true);
 
-            // Aquí iría tu llamada real al backend
-            console.log("Eliminando recurso:", resource.id);
+            await deleteResource(resource.id);
 
-            // TODO: await deleteResource(resource.id)
-
+            console.log("Recurso eliminado:", resource.id);
         } catch (error) {
             console.error("Error eliminando recurso:", error);
         } finally {
@@ -37,12 +37,12 @@ export function DeleteResourceController({ resource }: { resource: ResourceDTO }
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
-                <button
+                <Button
                     className="p-2 rounded-full bg-[--color-snow] text-[--color-night] hover:bg-red-500 hover:text-[--color-snow] transition"
                     aria-label="Eliminar recurso"
                 >
                     <IconTrash size={18} />
-                </button>
+                </Button>
             </AlertDialogTrigger>
 
             <AlertDialogContent>

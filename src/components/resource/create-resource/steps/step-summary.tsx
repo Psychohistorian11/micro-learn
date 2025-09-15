@@ -8,9 +8,11 @@ import { useState, useEffect } from "react"
 import { UseFormReturn } from "react-hook-form"
 import { ResourceCreateDTO } from "@/interface/resource"
 import { AreaDTO } from "@/interface/area"
-import { fetchAreasByIds } from "@/lib/area-service"
+import { fetchAreasByIds } from "@/lib/services/area-service"
 import { Skeleton } from "@/components/ui/skeleton"
 import AreaCard from "../../area-card"
+import { CommunityDTO } from "@/interface/community"
+import { CommunityCard } from "../../community-card"
 
 type Props = {
     form: UseFormReturn<ResourceCreateDTO>
@@ -19,10 +21,10 @@ type Props = {
 export default function StepSummary({ form }: Props) {
     const [isPreviewOpen, setIsPreviewOpen] = useState(false)
     const [areas, setAreas] = useState<AreaDTO[]>([])
+    const [communities, setCommunities] = useState<CommunityDTO[]>([])
     const [loading, setLoading] = useState(true)
 
     const data = form.getValues()
-    console.log("data: ", data)
 
     useEffect(() => {
         const fetchSelectedAreas = async () => {
@@ -41,13 +43,40 @@ export default function StepSummary({ form }: Props) {
             }
         }
 
+        const fetchSelectedCommunities = async () => {
+            if (data.communities && data.communities.length > 0) {
+                try {
+                    setLoading(true)
+                    //const communitiesData = await fetchCommunitiesByIds(data.communities)
+                    //setCommunities(communitiesData)
+                    setCommunities([
+                        {
+                            id: "1234567689",
+                            title: "Pythonhunters",
+                            description: "Comunidad para auténticos lovers a Python",
+                            image: "https://placehold.co/100x100?text=Python",
+                        },
+
+                    ])
+                } catch (error) {
+                    console.error("Error fetching communities:", error)
+                } finally {
+                    setLoading(false)
+                }
+            } else {
+                setLoading(false)
+            }
+        }
+
         fetchSelectedAreas()
-    }, [data.areas])
+        fetchSelectedCommunities()
+    }, [data.areas, data.communities])
 
     return (
         <div className="flex flex-col gap-8 h-full justify-center">
             <h2 className="text-2xl font-serif">{data.title || "_"}</h2>
 
+            {/* --- Información principal --- */}
             <div className="flex flex-col gap-2 rounded-md shadow-sm">
                 {data.image ? (
                     <div className="flex sm:flex-row flex-col w-full gap-4 items-start">
@@ -110,7 +139,8 @@ export default function StepSummary({ form }: Props) {
                 )}
             </div>
 
-            <div className="flex flex-col gap-2  rounded-md shadow-sm">
+            {/* --- Áreas --- */}
+            <div className="flex flex-col gap-2 rounded-md shadow-sm">
                 {loading ? (
                     <div className="flex flex-wrap gap-3">
                         {Array.from({ length: 3 }).map((_, i) => {
@@ -139,17 +169,29 @@ export default function StepSummary({ form }: Props) {
                 )}
             </div>
 
-            <div className="flex flex-col gap-2 p-4 border rounded-md shadow-sm">
-                <Label className="text-lg font-medium text-persian-green">Comunidades</Label>
-                {data.communities && data.communities.length > 0 ? (
+            {/* --- Comunidades --- */}
+            <div className="flex flex-col gap-2 rounded-md shadow-sm">
+                {loading ? (
+                    <div className="flex flex-wrap gap-3">
+                        {Array.from({ length: 3 }).map((_, i) => {
+                            const randomWidth = Math.floor(Math.random() * (140 - 60 + 1)) + 60
+                            return (
+                                <Skeleton
+                                    key={i}
+                                    className="h-5 rounded-sm"
+                                    style={{ width: `${randomWidth}px` }}
+                                />
+                            )
+                        })}
+                    </div>
+                ) : communities.length > 0 ? (
                     <div className="flex flex-wrap gap-2">
-                        {data.communities.map((c) => (
-                            <span
-                                key={c}
-                                className="px-3 py-1 text-sm rounded-full bg-persian-green/10 text-persian-green border border-persian-green/30"
-                            >
-                                {c}
-                            </span>
+                        {communities.map((community) => (
+                            <CommunityCard
+                                key={community.id}
+                                community={community}
+                                selected={true}
+                            />
                         ))}
                     </div>
                 ) : (

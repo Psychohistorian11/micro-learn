@@ -22,8 +22,8 @@ export default function AppLayout({ children }: { children: ReactNode }) {
                     </div>
 
                     {/* contenido */}
-                    <div className="flex-1 flex flex-col">
-                        <header className="hidden sm:flex ...">
+                    <div className="flex-1 flex flex-col ">
+                        <header className="hidden sm:flex p-2 border-b-1">
                             <SidebarTrigger />
                             <Separator orientation="vertical" />
                         </header>

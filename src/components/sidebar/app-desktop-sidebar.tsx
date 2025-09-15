@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
 
 import { Command } from "lucide-react";
 import { NavUser } from "@/components/ui/nav-user";
@@ -22,35 +21,24 @@ import {
 } from "@/components/ui/sidebar";
 import { Switch } from "@/components/ui/switch";
 import { navigationBarData } from "@/lib/data";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+import { AuthAlertDialog } from "@/components/ui/custom/auth-alert-dialog";
+import { useAuthGuard } from "@/hooks/use-auth-guard";
 
 export function AppDesktopSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
   const router = useRouter();
-  const { data: session } = useSession();
+  const { requireAuth, showDialog, handleLoginRedirect, closeDialog } = useAuthGuard();
   const [activeItem, setActiveItem] = React.useState(navigationBarData.navMain[0]);
   const [mails, setMails] = React.useState(navigationBarData.mails);
   const { setOpen } = useSidebar();
-  const [showDialog, setShowDialog] = React.useState(false);
 
   function handleClick(item: (typeof navigationBarData.navMain)[0]) {
     if (item.title === "Create") {
-      if (session?.user.id) {
+      requireAuth(() => {
         setActiveItem(item);
         router.push(item.url);
-      } else {
-        setShowDialog(true);
-      }
+      }, "Necesitas estar logueado para crear un recurso.");
     } else {
       router.push(item.url);
       setActiveItem(item);
@@ -138,7 +126,7 @@ export function AppDesktopSidebar({
                 {mails.map((mail) => (
                   <a
                     href="#"
-                    key={mail.email}
+                    key={mail.email}0
                     className="hover:bg-sidebar-accent hover:text-sidebar-accent-foreground flex flex-col items-start gap-2 border-b p-4 text-sm leading-tight whitespace-nowrap last:border-b-0"
                   >
                     <div className="flex w-full items-center gap-2">
@@ -157,29 +145,12 @@ export function AppDesktopSidebar({
         </Sidebar>
       </Sidebar>
 
-      <AlertDialog open={showDialog} onOpenChange={setShowDialog}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Inicia sesión</AlertDialogTitle>
-            <AlertDialogDescription>
-              Necesitas estar logueado para crear un recurso.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel onClick={() => setShowDialog(false)}>
-              Cancelar
-            </AlertDialogCancel>
-            <AlertDialogAction
-              onClick={() => {
-                setShowDialog(false);
-                router.push("/login");
-              }}
-            >
-              Ir a login
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <AuthAlertDialog
+        open={showDialog}
+        onOpenChange={closeDialog}
+        onLogin={handleLoginRedirect}
+        description="Necesitas estar logueado para crear un recurso."
+      />
     </>
   );
 }

@@ -1,16 +1,17 @@
 // app/(app)/profile/[username]/page.tsx
+import { Suspense } from "react";
 import { ProfileHeader } from "@/components/profile/profile-header";
+import { ProfileSkeleton, ResourceListSkeleton } from "@/components/profile/profile-skeleton";
 import { auth } from "../../../../../auth";
 import { ResourceList } from "@/components/resource/resource-list";
 
-export default async function ProfilePage({
-  params,
+async function ProfileContent({
+  username,
+  session,
 }: {
-  params: Promise<{ username: string }>;
+  username: string;
+  session: any;
 }) {
-  const session = await auth();
-  const { username } = await params;
-
   // 1) Traer usuario por username
   const userRes = await fetch(
     `${process.env.NEXTAUTH_URL}/api/user/username/${encodeURIComponent(
@@ -18,7 +19,18 @@ export default async function ProfilePage({
     )}`,
     { cache: "no-store", headers: { "Content-Type": "application/json" } }
   );
-  if (!userRes.ok) return <p className="p-6">Usuario no encontrado</p>;
+
+  if (!userRes.ok) {
+    return (
+      <div className="p-6 flex flex-col justify-center items-center h-full">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-destructive mb-2">Usuario no encontrado</h2>
+          <p className="text-muted-foreground">El usuario que buscas no existe o ha sido eliminado.</p>
+        </div>
+      </div>
+    );
+  }
+
   const user = await userRes.json();
 
   // 2) Traer recursos del autor
@@ -33,12 +45,34 @@ export default async function ProfilePage({
   const isOwner = !!session?.user && session.user.name == username;
 
   return (
-    <div className="p-6 flex flex-col justify-center items-center h-full">
-      <div className="flex flex-col justify-between w-full max-w-3xl h-full  gap-4">
-        <ProfileHeader user={user} isOwner={isOwner} />
+    <div className="flex flex-col justify-between w-full max-w-3xl h-full gap-4">
+      <ProfileHeader user={user} isOwner={isOwner} />
+      <ResourceList resources={resources} />
+    </div>
+  );
+}
 
-        <ResourceList resources={resources} />
-      </div>
+
+export default async function ProfilePage({
+  params,
+}: {
+  params: Promise<{ username: string }>;
+}) {
+  const session = await auth();
+  const { username } = await params;
+
+  return (
+    <div className="p-6 flex flex-col justify-center items-center h-full">
+      <Suspense
+        fallback={
+          <div className="flex flex-col  w-full max-w-3xl h-full gap-4">
+            <ProfileSkeleton />
+            <ResourceListSkeleton />
+          </div>
+        }
+      >
+        <ProfileContent username={username} session={session} />
+      </Suspense>
     </div>
   );
 }

@@ -8,7 +8,7 @@ import { getAuth } from "@/lib/auth-actions"
 import { navigationCreateResouceData } from "@/lib/data"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
-import { createResource } from "@/lib/resource-service"
+import { createResource } from "@/lib/services/resource-service"
 import { useRouter } from "next/navigation" // Importar useRouter
 
 export default function CreateResourceController() {
@@ -38,7 +38,6 @@ export default function CreateResourceController() {
             const auth = await getAuth()
             setSession(auth)
             if (auth?.user?.id) {
-                console.log("rey: ", auth.user.id)
                 setValue("authorId", auth.user.id)
             }
         }

@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { fetchAreas } from "@/lib/area-service"
+import { fetchAreas } from "@/lib/services/area-service"
 import AreaCard from "../../area-card"
 import { AreaDTO } from "@/interface/area"
 import { Skeleton } from "@/components/ui/skeleton"
