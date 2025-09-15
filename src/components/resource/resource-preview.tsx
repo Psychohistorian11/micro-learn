@@ -4,7 +4,7 @@ import { useMemo } from "react"
 import { cn } from "@/lib/utils"
 
 type Props = {
-    attachment: string | null
+    attachment?: string | null
     className?: string
 }
 

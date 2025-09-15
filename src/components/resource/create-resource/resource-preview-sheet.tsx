@@ -12,7 +12,7 @@ import ResourcePreview from "../resource-preview"
 type Props = {
     open: boolean
     onClose: () => void
-    attachment: string
+    attachment?: string
     title?: string
     description?: string
 }
