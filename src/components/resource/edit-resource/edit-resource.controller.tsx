@@ -9,6 +9,9 @@ import { navigationCreateResouceData } from "@/lib/data";
 import StepBasicData from "../create-resource/steps/step-basic-data";
 import StepAttachment from "../create-resource/steps/step-attachment";
 import { editResource } from "@/lib/services/resource-service";
+import AreaCard from "../area-card";
+import { IconEdit } from "@tabler/icons-react";
+import { Icon } from "lucide-react";
 
 type Props = {
     resource: ResourceDTO;
@@ -67,40 +70,41 @@ export function EditResourceSheet({ resource, open, onOpenChange }: Props) {
 
     return (
         <Sheet open={open} onOpenChange={onOpenChange}>
-            <SheetContent className="sm:max-w-3xl w-full overflow-y-auto px-4 sm:px-20">
-                <SheetTitle>Editar recurso</SheetTitle>
-
+            <SheetTitle className="px-4 pt-6 text-2xl font-serif"></SheetTitle>
+            <SheetContent className="sm:max-w-1/3 w-full overflow-y-auto px-4 sm:p-6">
                 <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-8 py-6">
-                    {/* Datos básicos */}
                     <StepBasicData form={form} />
-
-                    {/* Attachment */}
                     <StepAttachment form={form} />
 
-                    {/* Áreas */}
                     <div className="flex flex-col gap-3">
-                        <h3 className="font-medium">Áreas</h3>
+                        <div className="flex justify-between items-center ">
+                            <h3 className="font-serif text-2xl">Áreas</h3>
+                            <Button type="button" variant="outline" size="sm" >
+                                <IconEdit className=" h-4 w-4" />
+                            </Button>
+
+                        </div>
                         <div className="flex flex-wrap gap-2">
-                            {resource.areas?.map((area) => (
-                                <span
-                                    key={area.id}
-                                    className="px-3 py-1 rounded-full bg-persian-green/20 text-persian-green text-sm"
-                                >
-                                    {area.name}
-                                </span>
-                            ))}
-                            {(!resource.areas || resource.areas.length === 0) && (
-                                <span className="text-sm text-muted-foreground">Sin áreas asignadas</span>
+                            {resource.areas?.length ? (
+                                resource.areas.map((area) => (
+                                    <AreaCard key={area.id} area={area} selected={true} />
+                                ))
+                            ) : (
+                                <span className="text-sm text-muted-foreground">Ninguna</span>
                             )}
                         </div>
-                        <Button type="button" variant="outline" size="sm">
-                            Editar áreas
-                        </Button>
+
                     </div>
 
                     {/* Comunidades */}
                     <div className="flex flex-col gap-3">
-                        <h3 className="font-medium">Comunidades</h3>
+                        <div className="flex justify-between items-center ">
+                            <h3 className="font-serif text-2xl">Comunidades</h3>
+                            <Button type="button" variant="outline" size="sm">
+                                <IconEdit className=" h-4 w-4" />
+                            </Button>
+
+                        </div>
                         <div className="flex flex-wrap gap-2">
                             {resource.communities?.map((c) => (
                                 <span
@@ -114,9 +118,7 @@ export function EditResourceSheet({ resource, open, onOpenChange }: Props) {
                                 <span className="text-sm text-muted-foreground">Sin comunidades asignadas</span>
                             )}
                         </div>
-                        <Button type="button" variant="outline" size="sm">
-                            Editar comunidades
-                        </Button>
+
                     </div>
 
                     {/* Botones */}

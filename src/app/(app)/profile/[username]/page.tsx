@@ -24,8 +24,8 @@ async function ProfileContent({
     return (
       <div className="p-6 flex flex-col justify-center items-center h-full">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-destructive mb-2">Usuario no encontrado</h2>
-          <p className="text-muted-foreground">El usuario que buscas no existe o ha sido eliminado.</p>
+          <h2 className="text-2xl sm:text-3xl font-serif text-destructive mb-2">Usuario no encontrado</h2>
+          <p >El usuario que buscas no existe o ha sido eliminado.</p>
         </div>
       </div>
     );
@@ -45,9 +45,9 @@ async function ProfileContent({
   const isOwner = !!session?.user && session.user.name == username;
 
   return (
-    <div className="flex flex-col justify-between w-full max-w-3xl h-full gap-4">
+    <div className="flex flex-col sm:items-start w-full max-w-3xl h-full gap-4 ">
       <ProfileHeader user={user} isOwner={isOwner} />
-      <ResourceList resources={resources} />
+      <ResourceList resources={resources} isOwner={isOwner} />
     </div>
   );
 }

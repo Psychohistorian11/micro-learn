@@ -170,7 +170,7 @@ export default function StepSummary({ form }: Props) {
             </div>
 
             {/* --- Comunidades --- */}
-            <div className="flex flex-col gap-2 rounded-md shadow-sm">
+            <div className="flex flex-col gap-2 rounded-md shadow-sm border">
                 {loading ? (
                     <div className="flex flex-wrap gap-3">
                         {Array.from({ length: 3 }).map((_, i) => {
@@ -185,7 +185,7 @@ export default function StepSummary({ form }: Props) {
                         })}
                     </div>
                 ) : communities.length > 0 ? (
-                    <div className="flex flex-wrap gap-2">
+                    <div className=" gap-2">
                         {communities.map((community) => (
                             <CommunityCard
                                 key={community.id}

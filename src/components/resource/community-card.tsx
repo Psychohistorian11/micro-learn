@@ -18,9 +18,9 @@ export function CommunityCard({
     return (
         <div
             className={cn(
-                "flex items-start gap-4 p-4 border rounded-lg transition-colors",
+                "flex items-start gap-4 p-2 border rounded-lg transition-colors",
                 onClick && "cursor-pointer hover:bg-accent/50",
-                selected && "ring-2 ring-primary bg-primary/5"
+                selected && "border-2 border-tiffany-blue ring-primary bg-tiffany-blue/5"
             )}
             onClick={onClick}
         >
@@ -36,7 +36,7 @@ export function CommunityCard({
             </Avatar>
 
             <div className="flex-1 min-w-0">
-                <h3 className="font-semibold text-lg leading-tight mb-1">
+                <h3 className="font-serif text-lg leading-tight mb-1">
                     {community.title}
                 </h3>
                 <p className="text-sm text-muted-foreground line-clamp-2">

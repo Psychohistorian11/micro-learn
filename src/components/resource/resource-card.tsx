@@ -11,26 +11,24 @@ import { Button } from "@/components/ui/button";
 import AreaCard from "./area-card";
 import ResourcePreview from "./resource-preview";
 
-export function ResourceCard({ resource }: { resource: ResourceDTO }) {
-
-
+export function ResourceCard({
+  resource,
+  isOwner,
+}: {
+  resource: ResourceDTO;
+  isOwner: boolean;
+}) {
   const [isEditSheetOpen, setIsEditSheetOpen] = useState(false);
   const [isPreviewSheetOpen, setIsPreviewSheetOpen] = useState(false);
 
-
-  const handleEdit = () => {
-    setIsEditSheetOpen(true);
-  };
-
-  const handlePreview = () => {
-    setIsPreviewSheetOpen(true);
-  };
-
+  const handleEdit = () => setIsEditSheetOpen(true);
+  const handlePreview = () => setIsPreviewSheetOpen(true);
 
   return (
     <>
       <div className="rounded bg-card shadow-sm p-4 w-full">
         <div className="flex items-start gap-4">
+          {/* Imagen / preview */}
           <div className="w-60 h-60 flex-shrink-0 overflow-hidden group relative rounded-md border bg-card">
             {resource.image ? (
               <Button
@@ -40,7 +38,7 @@ export function ResourceCard({ resource }: { resource: ResourceDTO }) {
                 <img
                   src={resource.image}
                   alt={resource.title}
-                  className="w-full h-full  transition-transform"
+                  className="w-full h-full transition-transform"
                 />
                 <div className="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/30 transition-colors duration-300">
                   <Play className="h-10 w-10 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -63,12 +61,14 @@ export function ResourceCard({ resource }: { resource: ResourceDTO }) {
               </Button>
             ) : (
               <div className="w-full h-full bg-muted flex items-center justify-center">
-                <span className="text-muted-foreground text-xs">{resource.type}</span>
+                <span className="text-muted-foreground text-xs">
+                  {resource.type}
+                </span>
               </div>
             )}
           </div>
 
-
+          {/* Info */}
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between mb-2">
               <div className="flex-1 min-w-0">
@@ -87,18 +87,20 @@ export function ResourceCard({ resource }: { resource: ResourceDTO }) {
                 </div>
               </div>
 
-              <div className="flex gap-1">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={handleEdit}
-                  className=" right-3 rounded-full hover:bg-gray-700 bg-transparent"
-                  aria-label="Editar recurso"
-                >
-                  <Pencil className="h-5 w-5 text-gray-600 hover:text-white" />
-                </Button>
-                <DeleteResourceController resource={resource} />
-              </div>
+              {isOwner && (
+                <div className="flex gap-1">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={handleEdit}
+                    className="rounded-full hover:bg-gray-700 bg-transparent"
+                    aria-label="Editar recurso"
+                  >
+                    <Pencil className="h-5 w-5 text-gray-600 hover:text-white" />
+                  </Button>
+                  <DeleteResourceController resource={resource} />
+                </div>
+              )}
             </div>
 
             <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
@@ -106,27 +108,20 @@ export function ResourceCard({ resource }: { resource: ResourceDTO }) {
             </p>
 
             <div className="flex flex-wrap gap-2 mb-3">
-              {resource.areas!.length! > 0 ? (
-                <div className="flex flex-wrap gap-2">
-                  {resource.areas!.map((area) => (
-                    <AreaCard
-                      key={area.id}
-                      area={area}
-                      selected={true}
-                    />
-                  ))}
-                </div>
+              {resource.areas?.length ? (
+                resource.areas.map((area) => (
+                  <AreaCard key={area.id} area={area} selected={true} />
+                ))
               ) : (
                 <span className="text-sm text-muted-foreground">Ninguna</span>
               )}
             </div>
+
             <div className="w-60">
-
               {resource.communities && resource.communities.length > 0 && (
-
                 <ResourceCommunitiesSheet
                   resourceId={resource.id}
-                  communityIds={resource.communities.map(c => c.id)}
+                  communityIds={resource.communities.map((c) => c.id)}
                 >
                   <Button variant="outline" size="sm" className="w-full">
                     <Users className="h-4 w-4 mr-2" />
@@ -139,11 +134,14 @@ export function ResourceCard({ resource }: { resource: ResourceDTO }) {
         </div>
       </div>
 
-      <EditResourceSheet
-        resource={resource}
-        open={isEditSheetOpen}
-        onOpenChange={setIsEditSheetOpen}
-      />
+      {/* Sheets */}
+      {isOwner && (
+        <EditResourceSheet
+          resource={resource}
+          open={isEditSheetOpen}
+          onOpenChange={setIsEditSheetOpen}
+        />
+      )}
 
       <ResourcePreviewSheet
         open={isPreviewSheetOpen}

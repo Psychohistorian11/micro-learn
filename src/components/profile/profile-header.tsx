@@ -26,15 +26,18 @@ export function ProfileHeader({
         {isOwner ? (
           <AvatarEditable user={user} />
         ) : (
-          <Avatar className="rounded-xl ">
-            <AvatarImage className="w-full"
-              src={user.profilePicture ?? undefined}
-              alt={user.username ?? "User"}
-            />
-            <AvatarFallback className="rounded-xl text-lg font-serif w-full">
-              {user.username?.substring(0, 2).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
+          <div className="w-full sm:w-30 h-30 mx-auto">
+            <Avatar className=" rounded-lg w-full h-full">
+              <AvatarImage className="w-full h-full"
+                src={user.profilePicture ?? undefined}
+                alt={user.username ?? "User"}
+              />
+              <AvatarFallback className="rounded-xl text-lg font-serif w-full">
+                {user.username?.substring(0, 2).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+          </div>
+
         )}
       </div>
 
