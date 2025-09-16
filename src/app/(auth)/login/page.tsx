@@ -9,7 +9,6 @@ export default function LoginPage() {
                 </div>
 
             </div>
-            {/*falta incluir el padding del padre: cuando el hijo este listo */}
             <div className=" md:basis-1/3 w-full p-8">
                 <LogInForm />
             </div>

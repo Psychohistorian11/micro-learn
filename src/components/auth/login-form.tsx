@@ -7,7 +7,6 @@ import { ModeToggle } from "../ui/mode-toggle";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { User, UserLoginDTO } from "@/interface/user";
 import FieldError from "../ui/custom/field-error";
 import SignInGoogleButton from "./signin-google-button";
 import { signIn } from "next-auth/react";
@@ -22,20 +21,18 @@ export default function LogInForm() {
   } = useForm();
 
   const onSubmit = handleSubmit(async (data) => {
-
-    const email = data.email
-    const password = data.password
+    const email = data.email;
+    const password = data.password;
 
     try {
       const res = await signIn("credentials", {
         redirect: false,
         email,
         password,
-
       });
 
       if (res.ok) {
-        router.push("/home");
+        router.push("/");
       }
     } catch (error) {
       setServerError("Failed to connect to the server.");
@@ -108,8 +105,10 @@ export default function LogInForm() {
             </div>
             <div>
               <Button
+                type="button"
                 variant="link"
                 className="text-xs mt-2 mb-2 text-persian-green cursor-pointer"
+                onClick={() => router.push("/reset-password")}
               >
                 ¿Olvidaste tu contraseña?
               </Button>

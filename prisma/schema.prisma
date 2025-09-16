@@ -14,6 +14,14 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+model OtpCode {
+  id        Int      @id @default(autoincrement())
+  email     String
+  code      String
+  expiresAt DateTime
+  used      Boolean  @default(false)
+}
+
 model User {
   id             String @id @default(uuid())
   email          String @unique
@@ -33,7 +41,7 @@ model User {
 }
 
 model Community {
-  id          String  @id @default(cuid())
+  id          String @id @default(cuid())
   title       String
   image       String  @default("") // TODO: default image
   description String  @default("") 
@@ -76,6 +84,8 @@ model Resource {
 model Area {
   id        String     @id @default(uuid())
   name      String     @unique
+  color     String     @default("")
+  icon      String     @default("")
   resources Resource[] @relation("ResourceAreas")
 }
 

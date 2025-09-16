@@ -6,7 +6,6 @@ export default function SignUpPage() {
             <div className=" flex p-8 md:w-1/3 item justify-center">
                 <SignUpForm />
             </div>
-
         </div>
     );
 }   

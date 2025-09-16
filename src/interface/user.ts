@@ -34,6 +34,27 @@ export class UserCreateDTO {
   password: string;
 }
 
+export class UserUpdateDTO {
+  @IsString()
+  id: string;
+
+  @IsOptional()
+  @IsString()
+  username?: string;
+
+  @IsOptional()
+  @IsString()
+  password?: string;
+
+  @IsOptional()
+  @IsString()
+  profilePicture?: string;
+
+  @IsOptional()
+  @IsString()
+  description?: string;
+}
+
 export class UserLoginDTO {
   @IsEmail()
   email: string;

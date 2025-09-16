@@ -9,7 +9,7 @@ export default function SignInGoogleButton() {
     return (
         <div className="text-center w-full">
             <Button
-                onClick={() => signIn("google", { redirectTo: '/home' })}
+                onClick={() => signIn("google", { redirectTo: '/' })}
                 className="w-full cursor-pointer text-sm"
                 size="sm"
                 variant="outline"

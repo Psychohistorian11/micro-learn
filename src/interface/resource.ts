@@ -6,6 +6,7 @@ import {
   IsEnum,
 } from "class-validator";
 import { ResourceType } from "@prisma/client";
+import { AreaDTO } from "./area";
 
 export class ResourceDTO {
   @IsUUID()
@@ -32,13 +33,18 @@ export class ResourceDTO {
   @IsString()
   authorId: string;
 
-  @IsString({ each: true })
-  @IsOptional()
-  areas?: string[]; // IDs de áreas
+  @IsString()
+  updatedAt: Date;
+
+  @IsString()
+  createdAt: Date;
 
   @IsString({ each: true })
   @IsOptional()
-  communities?: string[]; // IDs de comunidades
+  areas?: AreaDTO[];
+
+  @IsOptional()
+  communities?: { id: string }[];
 }
 
 export class ResourceCreateDTO {
@@ -109,5 +115,13 @@ export class ResourceUpdateDTO {
   @IsString({ each: true })
   @IsOptional()
   communities?: string[]; // IDs de comunidades
+}
+
+export { ResourceType };
+//ResourceResponseDTO en  /lib/prisma-selects.ts
+
+export default interface ResourceProps {
+  data: ResourceCreateDTO
+  onUpdate: (values: Partial<ResourceCreateDTO>) => void
 }
   //ResourceResponseDTO en  /lib/prisma-selects.ts

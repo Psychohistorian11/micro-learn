@@ -3,10 +3,8 @@ import { plainToInstance } from "class-transformer";
 import { validate } from "class-validator";
 import bcrypt from "bcryptjs";
 import prismadb from "@/lib/prismadb";
-import { User, UserLoginDTO, UserResponseDTO } from "@/interface/user";
-import jwt from "jsonwebtoken";
+import { UserLoginDTO } from "@/interface/user";
 
-const JWT_SECRET = process.env.JWT_SECRET as string;
 
 export async function POST(request: NextRequest) {
   try {
@@ -45,22 +43,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const payload = {
-      sub: existingUser.id,
-      name: existingUser.username ?? existingUser.email,
-    };
-
-    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
-
     const user = {
       id: existingUser.id,
       username: existingUser.username ?? existingUser.email.split("@")[0],
       email: existingUser.email,
       profilePicture: existingUser.profilePicture ?? "",
-      role: existingUser.role ?? "student",
     };
 
-    return NextResponse.json({ token, user });
+    return NextResponse.json({ user });
   } catch (error) {
     console.error("Error creating user: ", error);
     return NextResponse.json(
