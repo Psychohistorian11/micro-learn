@@ -41,7 +41,7 @@ model User {
 }
 
 model Community {
-  id          String @id @default(cuid())
+  id          String @id @default(uuid())
   title       String
   image       String  @default("") // TODO: default image
   description String  @default("") 
@@ -54,7 +54,7 @@ model Community {
 }
 
 model User_Community {
-  id          String        @id @default(cuid())
+  id          String        @id @default(uuid())
   user        User          @relation(fields: [userId], references: [id])
   userId      String
   community   Community     @relation(fields: [communityId], references: [id])
@@ -75,7 +75,7 @@ model Resource {
   author   User   @relation("UserResources", fields: [authorId], references: [id])
 
   communities Resource_Community[]
-  areas       Area[]               @relation("ResourceAreas")
+  areas       Resource_Area[]           
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -86,7 +86,16 @@ model Area {
   name      String     @unique
   color     String     @default("")
   icon      String     @default("")
-  resources Resource[] @relation("ResourceAreas")
+  resources Resource_Area[]
+}
+
+model Resource_Area {
+  id         String    @id @default(uuid())
+  resource   Resource  @relation(fields: [resourceId], references: [id])
+  resourceId String
+  area       Area      @relation(fields: [areaId], references: [id])
+  areaId     String
+
 }
 
 model Resource_Community {

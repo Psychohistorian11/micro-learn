@@ -109,8 +109,12 @@ export function ResourceCard({
 
             <div className="flex flex-wrap gap-2 mb-3">
               {resource.areas?.length ? (
-                resource.areas.map((area) => (
-                  <AreaCard key={area.id} area={area} selected={true} />
+                resource.areas.map((areaData) => (
+                  <AreaCard
+                    key={areaData.area.id}
+                    area={areaData.area}
+                    selected={true}
+                  />
                 ))
               ) : (
                 <span className="text-sm text-muted-foreground">Ninguna</span>

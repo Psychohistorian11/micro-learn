@@ -6,7 +6,7 @@ import {
   IsEnum,
 } from "class-validator";
 import { ResourceType } from "@prisma/client";
-import { AreaDTO } from "./area";
+import { AreaDTO, AreaWrapperDTO } from "./area";
 
 export class ResourceDTO {
   @IsUUID()
@@ -41,7 +41,7 @@ export class ResourceDTO {
 
   @IsString({ each: true })
   @IsOptional()
-  areas?: AreaDTO[];
+  areas?: AreaWrapperDTO[];
 
   @IsOptional()
   communities?: { id: string }[];

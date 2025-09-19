@@ -1,25 +1,25 @@
-import {
-
-    IsString,
-    IsUUID,
-} from "class-validator";
+import { IsObject, IsString, IsUUID } from "class-validator";
 
 export class AreaDTO {
-    @IsUUID()
-    id: string;
+  @IsUUID()
+  id: string;
 
-    @IsString()
-    name: string;
+  @IsString()
+  name: string;
 
-    @IsString()
-    color: string;
+  @IsString()
+  color: string;
 
-    @IsString()
-    icon: string;
+  @IsString()
+  icon: string;
+}
 
+export class AreaWrapperDTO {
+  @IsObject()
+  area: AreaDTO;
 }
 
 export class AreaCreateDTO {
-    @IsString({ each: true })
-    names: string[];
+  @IsString({ each: true })
+  names: string[];
 }

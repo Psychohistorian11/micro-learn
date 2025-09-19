@@ -10,8 +10,15 @@ export const resourceSelect = {
   authorId: true,
   createdAt: true,
   updatedAt: true,
-  areas: {
-    select: { id: true, name: true }, // porque en el DTO son string[]
+  areas: { // SOLVED: EL ERROR ESTÁ AQUÍ, ANTES SOLO ESTABA EL ID DEL AREA, AHORA SELECCIONA EL ID Y NAME, ESE ES EL ERROR, QUE MANDA UN OBJETO AREA.AREA.ID, mirar en resource-card
+    select: {
+      area: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+    },
   },
   communities: {
     select: { id: true },
