@@ -12,8 +12,8 @@ export class AreaDTO {
 
   @IsString()
   icon: string;
-}
 
+}
 export class AreaWrapperDTO {
   @IsObject()
   area: AreaDTO;
