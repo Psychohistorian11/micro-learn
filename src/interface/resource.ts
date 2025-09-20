@@ -124,4 +124,4 @@ export default interface ResourceProps {
   data: ResourceCreateDTO
   onUpdate: (values: Partial<ResourceCreateDTO>) => void
 }
-  //ResourceResponseDTO en  /lib/prisma-selects.ts
+//ResourceResponseDTO en  /lib/prisma-selects.ts
