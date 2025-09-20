@@ -40,10 +40,14 @@ export async function POST(request: NextRequest) {
       type: dto.type,
       authorId: dto.authorId,
       areas: dto.areas
-        ? { connect: dto.areas.map((id) => ({ id })) }
+        ? { create: dto.areas.map((id) => ({ area: { connect: { id } } })) }
         : undefined,
       communities: dto.communities
-        ? { connect: dto.communities.map((id) => ({ id })) }
+        ? {
+            create: dto.communities.map((id) => ({
+              community: { connect: { id } },
+            })),
+          }
         : undefined,
     },
     select: resourceSelect,
@@ -52,7 +56,7 @@ export async function POST(request: NextRequest) {
   return NextResponse.json(newResource);
 }
 
-export async function PATCH(request: NextRequest) {
+export async function PUT(request: NextRequest) {
   const body = await request.json();
   const dto = plainToInstance(ResourceUpdateDTO, body);
 
@@ -76,25 +80,47 @@ export async function PATCH(request: NextRequest) {
     );
   }
 
-  const updatedResource = await prismadb.resource.update({
-    where: { id: dto.id },
-    data: {
-      title: dto.title ?? existingResource.title,
-      isPublic: dto.isPublic ?? existingResource.isPublic,
-      image: dto.image ?? existingResource.image,
-      description: dto.description ?? existingResource.description,
-      attachment: dto.attachment ?? existingResource.attachment,
-      type: dto.type ?? existingResource.type,
-      updatedAt: new Date(),
-      areas: dto.areas
-        ? { set: dto.areas.map((id) => ({ id })) } // reemplaza con nuevas
-        : undefined, // no cambia nada si no vino en dto
+  const updatedResource = await prismadb.$transaction(async (tx) => {
+    //FINALBOSS_TODO: Esto podría mejorar, comparando con el objeto existente y solo haciendo cambios si es necesario
+    // Borrar relaciones viejas
+    await tx.resource_Area.deleteMany({ where: { resourceId: dto.id } });
+    await tx.resource_Community.deleteMany({ where: { resourceId: dto.id } });
 
-      communities: dto.communities
-        ? { set: dto.communities.map((id) => ({ id })) }
-        : undefined,
-    },
-    select: resourceSelect,
+    // Recrear relaciones
+    if (dto.areas?.length) {
+      await tx.resource_Area.createMany({
+        data: dto.areas.map((areaId) => ({
+          resourceId: dto.id,
+          areaId,
+        })),
+      });
+    }
+
+    if (dto.communities?.length) {
+      await tx.resource_Community.createMany({
+        data: dto.communities.map((communityId) => ({
+          resourceId: dto.id,
+          communityId,
+        })),
+      });
+    }
+
+    // Actualizar el recurso en sí
+    return tx.resource.update({
+      where: { id: dto.id },
+      data: {
+        title: dto.title,
+        description: dto.description,
+        isPublic: dto.isPublic,
+        image: dto.image,
+        attachment: dto.attachment,
+        type: dto.type,
+      },
+      include: {
+        areas: { include: { area: true } },
+        communities: { include: { community: true } },
+      },
+    });
   });
 
   return NextResponse.json(updatedResource);

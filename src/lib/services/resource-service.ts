@@ -30,7 +30,7 @@ export async function editResource(id: string, data: Partial<ResourceCreateDTO>)
         console.log("Updating resource:", id, "with data:", JSON.stringify(data));
 
         const response = await fetch('/api/resource', {
-            method: 'PATCH',
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },

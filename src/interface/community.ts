@@ -44,7 +44,7 @@ export class CommunityUpdateDTO {
   @IsString()
   @IsOptional()
   title?: string;
-
+      
   @IsString()
   @IsOptional()
   image?: string;
