@@ -12,7 +12,6 @@ export class AreaDTO {
 
   @IsString()
   icon: string;
-
 }
 export class AreaWrapperDTO {
   @IsObject()
@@ -20,6 +19,17 @@ export class AreaWrapperDTO {
 }
 
 export class AreaCreateDTO {
-  @IsString({ each: true })
-  names: string[];
+  @IsString()
+  name: string;
+
+  @IsString()
+  color: string;
+
+  @IsString()
+  icon: string;
+}
+
+export class AreasCreateDTO {
+  @IsObject({ each: true })
+  areas: AreaCreateDTO[];
 }

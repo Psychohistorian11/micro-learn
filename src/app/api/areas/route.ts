@@ -1,6 +1,4 @@
-
-import { AreaCreateDTO } from "@/interface/area";
-import { resourceSelect } from "@/lib/prisma-selects";
+import { AreasCreateDTO } from "@/interface/area";
 import prismadb from "@/lib/prismadb";
 import { plainToInstance } from "class-transformer";
 import { validate } from "class-validator";
@@ -8,7 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
-  const dto = plainToInstance(AreaCreateDTO, body);
+  const dto = plainToInstance(AreasCreateDTO, body);
 
   const errors = await validate(dto);
 
@@ -20,12 +18,15 @@ export async function POST(request: NextRequest) {
   }
 
   const newAreas = await prismadb.area.createMany({
-    data: dto.names.map((name) => ({ name })),
+    data: dto.areas.map((area) => ({
+      name: area.name,
+      color: area.color,
+      icon: area.icon,
+    })),
   });
 
   return NextResponse.json(newAreas);
 }
-
 
 export async function GET() {
   try {
@@ -34,13 +35,15 @@ export async function GET() {
         id: true,
         name: true,
         color: true,
-        icon: true
-      }
-    })
-    return NextResponse.json(areas)
+        icon: true,
+      },
+    });
+    return NextResponse.json(areas);
   } catch (err) {
-    console.error("Error fetching areas:", err)
-    return NextResponse.json({ error: "Error fetching areas" }, { status: 500 })
+    console.error("Error fetching areas:", err);
+    return NextResponse.json(
+      { error: "Error fetching areas" },
+      { status: 500 }
+    );
   }
 }
-
