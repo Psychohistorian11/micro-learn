@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { CommunityCard } from "@/components/resource/community-card";
+import { CommunityCard } from "@/components/community/community-card";
 import { fetchCommunitiesByIds } from "@/lib/services/community-service";
 import { CommunityDTO } from "@/interface/community";
 import { Users } from "lucide-react";

@@ -12,7 +12,7 @@ import { fetchAreasByIds } from "@/lib/services/area-service"
 import { Skeleton } from "@/components/ui/skeleton"
 import AreaCard from "../../area-card"
 import { CommunityDTO } from "@/interface/community"
-import { CommunityCard } from "../../community-card"
+import { CommunityCard } from "../../../community/community-card"
 
 type Props = {
     form: UseFormReturn<ResourceCreateDTO>

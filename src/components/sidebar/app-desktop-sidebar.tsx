@@ -22,14 +22,17 @@ import { navigationBarData } from "@/lib/data";
 import { AuthAlertDialog } from "@/components/ui/custom/auth-alert-dialog";
 import { useAuthGuard } from "@/hooks/use-auth-guard";
 import { CommunitiesSection } from "../community/communities-section";
+import { SearchResults } from "../search/search_result";
+import { useState } from "react";
 
 export function AppDesktopSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
   const router = useRouter();
   const { requireAuth, showDialog, handleLoginRedirect, closeDialog } = useAuthGuard();
-  const [activeItem, setActiveItem] = React.useState(navigationBarData.navMain[0]);
-  const [mails, setMails] = React.useState(navigationBarData.mails || []);
+  const [activeItem, setActiveItem] = useState(navigationBarData.navMain[0]);
+  const [query, setQuery] = useState("")
+  const [mails, setMails] = useState(navigationBarData.mails || []);
   const { setOpen } = useSidebar();
 
   function handleClick(item: (typeof navigationBarData.navMain)[0]) {
@@ -80,23 +83,28 @@ export function AppDesktopSidebar({
             <SidebarGroup >
               <SidebarGroupContent className="px-1.5 md:px-0">
                 <SidebarMenu>
-                  {navigationBarData.navMain.slice(0, -1).map((item) => (
-                    <SidebarMenuItem key={item.title}>
-                      <SidebarMenuButton
-                        tooltip={{
-                          children: item.title,
-                          hidden: false,
-                        }}
-                        onClick={() => handleClick(item)}
-                        isActive={activeItem?.title === item.title}
-                        className="px-2.5 md:px-2"
-                      >
-                        <item.icon />
-                        <span>{item.title}</span>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  ))}
+                  {navigationBarData.navMain
+                    .filter((item) =>
+                      item.title === "Home" || item.url === "/create-resource"
+                    )
+                    .map((item) => (
+                      <SidebarMenuItem key={item.title}>
+                        <SidebarMenuButton
+                          tooltip={{
+                            children: item.title,
+                            hidden: false,
+                          }}
+                          onClick={() => handleClick(item)}
+                          isActive={activeItem?.title === item.title}
+                          className="px-2.5 md:px-2"
+                        >
+                          <item.icon />
+                          <span>{item.title}</span>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    ))}
                 </SidebarMenu>
+
 
               </SidebarGroupContent>
             </SidebarGroup>
@@ -117,41 +125,21 @@ export function AppDesktopSidebar({
 
         <Sidebar collapsible="none" className="hidden flex-1 md:flex">
           <SidebarHeader className="gap-3.5 border-b p-4">
-            <div className="flex w-full items-center justify-between">
-              <div className="text-foreground text-base font-medium">
-                {activeItem?.title}
-              </div>
-
-            </div>
-            <SidebarInput placeholder="Type to search..." />
+            <SidebarInput
+              placeholder="Buscar recursos o comunidades..."
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
           </SidebarHeader>
+
           <SidebarContent>
-            <SidebarGroup className="px-0">
-              <SidebarGroupContent>
-                {mails.length > 0 ? (
-                  mails.map((mail) => (
-                    <a
-                      href="#"
-                      key={mail.email}
-                      className="hover:bg-sidebar-accent hover:text-sidebar-accent-foreground flex flex-col items-start gap-2 border-b p-4 text-sm leading-tight whitespace-nowrap last:border-b-0"
-                    >
-                      <div className="flex w-full items-center gap-2">
-                        <span>{mail.name}</span>{" "}
-                        <span className="ml-auto text-xs">{mail.date}</span>
-                      </div>
-                      <span className="font-medium">{mail.subject}</span>
-                      <span className="line-clamp-2 w-[260px] text-xs whitespace-break-spaces">
-                        {mail.teaser}
-                      </span>
-                    </a>
-                  ))
-                ) : (
-                  <div className="p-4 text-center text-muted-foreground text-sm">
-                    No hay contenido disponible
-                  </div>
-                )}
-              </SidebarGroupContent>
-            </SidebarGroup>
+            {query ? (
+              <SearchResults query={query} />
+            ) : (
+              <div className="p-4 text-center text-muted-foreground text-sm">
+                Escribe para buscar
+              </div>
+            )}
           </SidebarContent>
         </Sidebar>
       </Sidebar>
