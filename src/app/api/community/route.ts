@@ -31,6 +31,7 @@ export async function POST(request: NextRequest) {
       title: dto.title,
       image: dto.image ?? undefined,
       description: dto.description,
+      avatar: dto.avatar ?? undefined,
       users: {
         create: {
           user: {
@@ -76,10 +77,10 @@ export async function PATCH(request: NextRequest) {
       title: dto.title ?? undefined,
       image: dto.image ?? undefined,
       description: dto.description ?? undefined,
+      avatar: dto.avatar ?? undefined,
     },
     select: communitySelect,
   });
 
   return NextResponse.json(updatedCommunity);
 }
-

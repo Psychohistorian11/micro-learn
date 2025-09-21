@@ -41,6 +41,7 @@ export const communitySelect = {
   id: true,
   title: true,
   image: true,
+  avatar: true,
   description: true,
   users: {
     select: { id: true, role: true },

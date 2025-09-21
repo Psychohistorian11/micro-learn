@@ -11,6 +11,9 @@ export class CommunityDTO {
   image: string;
 
   @IsString()
+  avatar: string;
+
+  @IsString()
   description: string;
 
   @IsString({ each: true })
@@ -33,6 +36,10 @@ export class CommunityCreateDTO {
   @IsString()
   image?: string;
 
+  @IsOptional()
+  @IsString()
+  avatar?: string;
+
   @IsString()
   description: string;
 }
@@ -44,10 +51,14 @@ export class CommunityUpdateDTO {
   @IsString()
   @IsOptional()
   title?: string;
-      
+
   @IsString()
   @IsOptional()
   image?: string;
+
+  @IsString()
+  @IsOptional()
+  avatar?: string;
 
   @IsString()
   @IsOptional()
