@@ -18,7 +18,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { IconUpload, IconX, IconLoader2 } from "@tabler/icons-react";
 import { uploadFile } from "@/lib/storage";
 import { createCommunity } from "@/lib/services/community-service";
-import { CommunityDTO } from "@/interface/community";
+import { CommunityCreateDTO, CommunityDTO } from "@/interface/community";
+import { getAuth } from "@/lib/auth-actions";
 
 interface CreateCommunityDialogProps {
     onCommunityCreated?: (community: CommunityDTO) => void;
@@ -84,21 +85,26 @@ export function CreateCommunityDialog({
     const onSubmit = async (data: CommunityFormData) => {
         try {
             setServerError("");
+            const session = await getAuth()
 
-            const communityData = {
-                title: data.title,
-                description: data.description,
-                image: data.image,
-            };
+            if (session?.user.id) {
 
-            const newCommunity = await createCommunity(communityData);
+                const communityData: CommunityCreateDTO = {
+                    adminId: session?.user.id,
+                    title: data.title,
+                    description: data.description,
+                    image: data.image,
+                };
+                const newCommunity = await createCommunity(communityData);
 
-            // Reset form and close dialog
-            reset();
-            setOpen(false);
+                // Reset form and close dialog
+                reset();
+                setOpen(false);
 
-            // Notify parent component
-            onCommunityCreated?.(newCommunity);
+                // Notify parent component
+                onCommunityCreated?.(newCommunity);
+            }
+
         } catch (error) {
             console.error("Error creating community:", error);
             setServerError("Error al crear la comunidad. Inténtalo de nuevo.");

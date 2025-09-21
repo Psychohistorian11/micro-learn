@@ -17,13 +17,16 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import ResourcePreviewSheet from "../resource/create-resource/resource-preview-sheet";
+import { CommunityPostActions } from "./community-post-actions";
 
 interface CommunityPostsProps {
     posts: ResourceDTO[];
     loading?: boolean;
+    communityId: string;
+    onPostDeleted?: (postId: string) => void;
 }
 
-export function CommunityPosts({ posts, loading = false }: CommunityPostsProps) {
+export function CommunityPosts({ posts, loading = false, communityId, onPostDeleted }: CommunityPostsProps) {
     const [previewPost, setPreviewPost] = useState<ResourceDTO | null>(null);
 
     const handlePreview = (post: ResourceDTO) => {
@@ -123,9 +126,11 @@ export function CommunityPosts({ posts, loading = false }: CommunityPostsProps) 
                                     </div>
                                 </div>
                             </div>
-                            <Button variant="ghost" size="sm">
-                                <MoreHorizontal className="h-4 w-4" />
-                            </Button>
+                            <CommunityPostActions
+                                post={post}
+                                communityId={communityId}
+                                onPostDeleted={onPostDeleted}
+                            />
                         </div>
                     </div>
 

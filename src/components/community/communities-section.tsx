@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { Plus } from "lucide-react";
-import { CommunityDTO } from "@/interface/community";
+import { CommunityCreateDTO, CommunityDTO } from "@/interface/community";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
     SidebarMenu,

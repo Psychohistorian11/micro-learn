@@ -12,6 +12,7 @@ import {
     MoreHorizontal
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { CommunityMemberActions } from "./community-member-actions";
 
 interface Member {
     id: string;
@@ -26,9 +27,11 @@ interface Member {
 interface CommunityMembersProps {
     members: Member[];
     loading?: boolean;
+    communityId: string;
+    onMemberRemoved?: (memberId: string) => void;
 }
 
-export function CommunityMembers({ members, loading = false }: CommunityMembersProps) {
+export function CommunityMembers({ members, loading = false, communityId, onMemberRemoved }: CommunityMembersProps) {
     const getRoleIcon = (role: string) => {
         switch (role) {
             case "admin":
@@ -138,9 +141,11 @@ export function CommunityMembers({ members, loading = false }: CommunityMembersP
                             </div>
                         </div>
 
-                        <Button variant="ghost" size="sm" className="opacity-0 group-hover:opacity-100 transition-opacity">
-                            <UserPlus className="h-3 w-3" />
-                        </Button>
+                        <CommunityMemberActions
+                            member={member}
+                            communityId={communityId}
+                            onMemberRemoved={onMemberRemoved}
+                        />
                     </div>
                 ))}
             </div>

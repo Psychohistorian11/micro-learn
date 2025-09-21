@@ -1,4 +1,4 @@
-import { CommunityDTO } from "@/interface/community";
+import { CommunityCreateDTO, CommunityDTO, CommunityUpdateDTO } from "@/interface/community";
 
 export async function fetchCommunitiesUserById(userId: string): Promise<CommunityDTO[]> {
     try {
@@ -41,7 +41,7 @@ export async function fetchCommunitiesByIds(ids: string[]): Promise<CommunityDTO
     }
 }
 
-export async function createCommunity(data: Omit<CommunityDTO, 'id'>): Promise<CommunityDTO> {
+export async function createCommunity(data: CommunityCreateDTO): Promise<CommunityDTO> {
     console.log("community data: ", data);
     try {
         const response = await fetch('/api/community', {
@@ -120,6 +120,109 @@ export async function fetchCommunityMembers(communityId: string): Promise<any[]>
         return response.json();
     } catch (error) {
         console.error('Error in fetchCommunityMembers:', error);
+        throw error;
+    }
+}
+
+export async function fetchUserCommunityRole(communityId: string, userId: string): Promise<{
+    userId: string;
+    communityId: string;
+    role: string | null;
+}> {
+    try {
+        const response = await fetch(`/api/community/${communityId}/user/${userId}/role`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error('Error fetching user community role');
+        }
+
+        return response.json();
+    } catch (error) {
+        console.error('Error in fetchUserCommunityRole:', error);
+        throw error;
+    }
+}
+
+export async function updateCommunity(data: CommunityUpdateDTO): Promise<CommunityDTO> {
+    try {
+        const response = await fetch(`/api/community/${data.id}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Error updating community');
+        }
+
+        return response.json();
+    } catch (error) {
+        console.error('Error in updateCommunity:', error);
+        throw error;
+    }
+}
+
+export async function deleteCommunity(communityId: string): Promise<void> {
+    try {
+        const response = await fetch(`/api/community/${communityId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Error deleting community');
+        }
+    } catch (error) {
+        console.error('Error in deleteCommunity:', error);
+        throw error;
+    }
+}
+
+export async function removeMemberFromCommunity(communityId: string, userId: string): Promise<void> {
+    try {
+        const response = await fetch(`/api/community/${communityId}/members/${userId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Error removing member from community');
+        }
+    } catch (error) {
+        console.error('Error in removeMemberFromCommunity:', error);
+        throw error;
+    }
+}
+
+export async function deleteCommunityPost(communityId: string, postId: string): Promise<void> {
+    try {
+        const response = await fetch(`/api/community/${communityId}/posts/${postId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Error deleting community post');
+        }
+    } catch (error) {
+        console.error('Error in deleteCommunityPost:', error);
         throw error;
     }
 }

@@ -92,13 +92,7 @@ export function CommunityHeader({
 
                     {/* Action Buttons */}
                     <div className="flex items-center gap-2 pt-2">
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            className="text-persian-green border-persian-green hover:bg-persian-green/10"
-                        >
-                            Crear Post
-                        </Button>
+
                         <Button
                             onClick={isJoined ? onLeave : onJoin}
                             className={`${isJoined

@@ -5,6 +5,7 @@ import { ResourceDTO } from "@/interface/resource";
 import { CommunityHeader } from "./community-header";
 import { CommunityPosts } from "./community-posts";
 import { CommunityMembers } from "./community-members";
+import { CommunitySettingsDialog } from "./community-settings-dialog";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -15,6 +16,8 @@ import {
     Filter,
     SortAsc
 } from "lucide-react";
+import { useCommunityRole } from "@/hooks/use-community-role";
+import { useState } from "react";
 
 interface CommunityPageProps {
     community: CommunityDTO;
@@ -29,6 +32,19 @@ export function CommunityPage({
     members,
     loading = false
 }: CommunityPageProps) {
+    const [currentCommunity, setCurrentCommunity] = useState(community);
+    const [currentPosts, setCurrentPosts] = useState(posts);
+    const [currentMembers, setCurrentMembers] = useState(members);
+
+    const {
+        role,
+        isLoading: roleLoading,
+        isNotMember,
+        canManageSettings,
+        canModerateContent,
+        canManageMembers
+    } = useCommunityRole(community.id);
+
     const handleJoin = () => {
         // TODO: Implement join logic
         console.log("Joining community:", community.id);
@@ -39,14 +55,30 @@ export function CommunityPage({
         console.log("Leaving community:", community.id);
     };
 
+    const handleCommunityUpdated = (updatedCommunity: CommunityDTO) => {
+        setCurrentCommunity(updatedCommunity);
+    };
+
+    const handleCommunityDeleted = () => {
+        // This will be handled by the router redirect in the dialog
+    };
+
+    const handlePostDeleted = (postId: string) => {
+        setCurrentPosts(prev => prev.filter(post => post.id !== postId));
+    };
+
+    const handleMemberRemoved = (memberId: string) => {
+        setCurrentMembers(prev => prev.filter(member => member.id !== memberId));
+    };
+
     return (
         <div className="min-h-screen bg-background">
             {/* Community Header */}
             <CommunityHeader
-                community={community}
-                memberCount={members.length}
-                onlineCount={Math.floor(members.length * 0.1)} // Simulate online count
-                isJoined={false} // TODO: Get from user state
+                community={currentCommunity}
+                memberCount={currentMembers.length}
+                onlineCount={Math.floor(currentMembers.length * 0.1)} // Simulate online count
+                isJoined={!isNotMember}
                 onJoin={handleJoin}
                 onLeave={handleLeave}
             />
@@ -93,7 +125,12 @@ export function CommunityPage({
                                     </div>
 
                                     {/* Posts */}
-                                    <CommunityPosts posts={posts} loading={loading} />
+                                    <CommunityPosts
+                                        posts={currentPosts}
+                                        loading={loading || roleLoading}
+                                        communityId={community.id}
+                                        onPostDeleted={handlePostDeleted}
+                                    />
                                 </TabsContent>
 
                                 <TabsContent value="media" className="mt-6">
@@ -134,7 +171,12 @@ export function CommunityPage({
                     <div className="space-y-6">
                         {/* Members */}
                         <div className="bg-card rounded-lg border p-4">
-                            <CommunityMembers members={members} loading={loading} />
+                            <CommunityMembers
+                                members={currentMembers}
+                                loading={loading || roleLoading}
+                                communityId={community.id}
+                                onMemberRemoved={handleMemberRemoved}
+                            />
                         </div>
 
                         {/* Community Stats */}
@@ -146,22 +188,30 @@ export function CommunityPage({
                             <div className="space-y-3">
                                 <div className="flex justify-between">
                                     <span className="text-sm text-muted-foreground">Miembros</span>
-                                    <span className="text-sm font-medium">{members.length}</span>
+                                    <span className="text-sm font-medium">{currentMembers.length}</span>
                                 </div>
                                 <div className="flex justify-between">
                                     <span className="text-sm text-muted-foreground">Posts</span>
-                                    <span className="text-sm font-medium">{posts.length}</span>
+                                    <span className="text-sm font-medium">{currentPosts.length}</span>
                                 </div>
                                 <div className="flex justify-between">
                                     <span className="text-sm text-muted-foreground">En línea</span>
                                     <span className="text-sm font-medium text-green-500">
-                                        {Math.floor(members.length * 0.1)}
+                                        {Math.floor(currentMembers.length * 0.1)}
                                     </span>
                                 </div>
                                 <div className="flex justify-between">
                                     <span className="text-sm text-muted-foreground">Creada</span>
                                     <span className="text-sm font-medium">Hace 2 años</span>
                                 </div>
+                                {role && (
+                                    <div className="flex justify-between">
+                                        <span className="text-sm text-muted-foreground">Tu rol</span>
+                                        <span className="text-sm font-medium capitalize text-persian-green">
+                                            {role}
+                                        </span>
+                                    </div>
+                                )}
                             </div>
                         </div>
 
@@ -169,18 +219,30 @@ export function CommunityPage({
                         <div className="bg-card rounded-lg border p-4">
                             <h3 className="font-semibold mb-4">Acciones rápidas</h3>
                             <div className="space-y-2">
-                                <Button variant="outline" className="w-full justify-start">
-                                    <MessageSquare className="h-4 w-4 mr-2" />
-                                    Crear post
-                                </Button>
-                                <Button variant="outline" className="w-full justify-start">
-                                    <Users className="h-4 w-4 mr-2" />
-                                    Invitar miembros
-                                </Button>
-                                <Button variant="outline" className="w-full justify-start">
-                                    <Settings className="h-4 w-4 mr-2" />
-                                    Configuración
-                                </Button>
+                                {!isNotMember && (
+                                    <Button variant="outline" className="w-full justify-start">
+                                        <MessageSquare className="h-4 w-4 mr-2" />
+                                        Crear post
+                                    </Button>
+                                )}
+                                {canManageMembers && (
+                                    <Button variant="outline" className="w-full justify-start">
+                                        <Users className="h-4 w-4 mr-2" />
+                                        Invitar miembros
+                                    </Button>
+                                )}
+                                {canManageSettings && (
+                                    <CommunitySettingsDialog
+                                        community={currentCommunity}
+                                        onCommunityUpdated={handleCommunityUpdated}
+                                        onCommunityDeleted={handleCommunityDeleted}
+                                    >
+                                        <Button variant="outline" className="w-full justify-start">
+                                            <Settings className="h-4 w-4 mr-2" />
+                                            Configuración
+                                        </Button>
+                                    </CommunitySettingsDialog>
+                                )}
                             </div>
                         </div>
                     </div>
