@@ -44,10 +44,10 @@ export async function POST(request: NextRequest) {
         : undefined,
       communities: dto.communities
         ? {
-            create: dto.communities.map((id) => ({
-              community: { connect: { id } },
-            })),
-          }
+          create: dto.communities.map((id) => ({
+            community: { connect: { id } },
+          })),
+        }
         : undefined,
     },
     select: resourceSelect,

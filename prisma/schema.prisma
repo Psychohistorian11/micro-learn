@@ -78,27 +78,26 @@ model Resource {
   author   User   @relation("UserResources", fields: [authorId], references: [id])
 
   communities Resource_Community[]
-  areas       Resource_Area[]           
+  areas       Resource_Area[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Area {
-  id        String     @id @default(uuid())
-  name      String     @unique
-  color     String     @default("")
-  icon      String     @default("")
+  id        String          @id @default(uuid())
+  name      String          @unique
+  color     String          @default("")
+  icon      String          @default("")
   resources Resource_Area[]
 }
 
 model Resource_Area {
-  id         String    @id @default(uuid())
-  resource   Resource  @relation(fields: [resourceId], references: [id])
+  id         String   @id @default(uuid())
+  resource   Resource @relation(fields: [resourceId], references: [id])
   resourceId String
-  area       Area      @relation(fields: [areaId], references: [id])
+  area       Area     @relation(fields: [areaId], references: [id])
   areaId     String
-
 }
 
 model Resource_Community {
