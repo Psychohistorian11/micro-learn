@@ -1,8 +1,4 @@
-import {
-  communitySelect,
-  resourceSelect,
-  userSelect,
-} from "@/lib/prisma-selects";
+import { communityBaseSelect } from "@/lib/prisma-selects";
 import prismadb from "@/lib/prismadb";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -11,7 +7,7 @@ export async function GET(request: NextRequest, context: any) {
 
   const community = await prismadb.community.findUnique({
     where: { id: id },
-    select: communitySelect,
+    select: communityBaseSelect,
   });
   return NextResponse.json(community);
 }

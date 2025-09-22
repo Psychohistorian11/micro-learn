@@ -1,13 +1,19 @@
 import { CommunityResourcesCreateDTO } from "@/interface/community-resources";
+import { resourceBaseSelect } from "@/lib/prisma-selects";
 import prismadb from "@/lib/prismadb";
 import { plainToInstance } from "class-transformer";
 import { validate } from "class-validator";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(request: NextRequest) {
+export async function POST(request: NextRequest, context: any) {
   try {
+    const { communityId } = (await context.params) as { communityId: string };
+
     const body = await request.json();
-    const dto = plainToInstance(CommunityResourcesCreateDTO, body);
+    const dto = plainToInstance(CommunityResourcesCreateDTO, {
+      ...body,
+      communityId,
+    });
 
     const errors = await validate(dto);
 
@@ -39,6 +45,17 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const existingPost = await prismadb.resource_Community.findFirst({
+      where: { resourceId: dto.resourceId, communityId: dto.communityId },
+    });
+
+    if (existingPost) {
+      return NextResponse.json(
+        { message: "Resource is already posted in this community" },
+        { status: 409 }
+      );
+    }
+
     const newPost = await prismadb.resource_Community.create({
       data: { resourceId: dto.resourceId, communityId: dto.communityId },
     });
@@ -54,37 +71,26 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET(request: NextRequest, context: any) {
-  const { searchParams } = new URL(request.url);
-  const communityId = searchParams.get("communityId");
-  const userId = searchParams.get("userId");
+  //TODO: Más adelante agregar quey params
+  const { communityId } = (await context.params) as { communityId: string };
 
   if (!communityId) {
     return NextResponse.json(
-      { message: "Community ID is required" },
+      { message: "communityId is required" },
       { status: 400 }
     );
   }
 
-  // Caso 1: si mandan userId -> obtener el membership específico
-  if (userId) {
-    const membership = await prismadb.user_Community.findFirst({
-      where: { communityId, userId },
-    });
-
-    if (!membership) {
-      return NextResponse.json(
-        { message: "User is not part of this community" },
-        { status: 404 }
-      );
-    }
-
-    return NextResponse.json(membership);
-  }
-
-  // Caso 2: si NO mandan userId -> devolver todos los memberships de la comunidad
-  const memberships = await prismadb.user_Community.findMany({
+  const postedResources = await prismadb.resource_Community.findMany({
     where: { communityId },
+    select: {
+      resource: {
+        select: resourceBaseSelect,
+      },
+    },
   });
 
-  return NextResponse.json(memberships);
+  const convertedList = postedResources.map((item) => item.resource);
+
+  return NextResponse.json(convertedList);
 }

@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
         password: hashedPassword,
         profilePicture: "", // TODO: Implement placeholder avatar
         description: "Me encanta aprender!",
-        role: "STUDENT",
+        role: "student",
       },
       select: {
         id: true,

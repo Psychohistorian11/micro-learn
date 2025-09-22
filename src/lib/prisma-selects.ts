@@ -50,3 +50,32 @@ export const communitySelect = {
     select: { id: true },
   },
 };
+
+export const resourceBaseSelect = {
+  id: true,
+  title: true,
+  isPublic: true,
+  image: true,
+  description: true,
+  attachment: true,
+  type: true,
+  authorId: true,
+  createdAt: true,
+  updatedAt: true,
+};
+
+export const userBaseSelect = {
+  id: true,
+  username: true,
+  email: true,
+  profilePicture: true,
+  description: true,
+};
+
+export const communityBaseSelect = {
+  id: true,
+  title: true,
+  image: true,
+  avatar: true,
+  description: true,
+};

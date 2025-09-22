@@ -34,12 +34,14 @@ export default function StepMyCommunities({ form }: Props) {
                     title: "Pythonhunters",
                     description: "Comunidad para auténticos lovers a Python",
                     image: "https://placehold.co/100x100?text=Python",
+                    avatar:"https://placehold.co/100x100?text=Python"
                 },
                 {
                     id: "9876543210",
                     title: "NextJS Masters",
                     description: "Compartimos todo sobre React y Next.js",
                     image: "https://placehold.co/100x100?text=Next",
+                    avatar:"https://placehold.co/100x100?text=Next"
                 },
             ])
             setLoading(false)

@@ -4,9 +4,14 @@ import { plainToInstance } from "class-transformer";
 import { validate } from "class-validator";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(request: NextRequest) {
+export async function POST(request: NextRequest, context: any) {
+  const { communityId } = (await context.params) as { communityId: string };
+
   const body = await request.json();
-  const dto = plainToInstance(CommunityMembershipCreateDTO, body);
+  const dto = plainToInstance(CommunityMembershipCreateDTO, {
+    ...body,
+    communityId,
+  });
 
   const errors = await validate(dto);
 
@@ -34,6 +39,16 @@ export async function POST(request: NextRequest) {
       { status: 404 }
     );
   }
+  const existingMembership = await prismadb.user_Community.findFirst({
+    where: { userId: dto.userId, communityId: dto.communityId },
+  });
+
+  if (existingMembership) {
+    return NextResponse.json(
+      { message: "Membership already exists" },
+      { status: 409 }
+    );
+  }
 
   const newMembership = await prismadb.user_Community.create({
     data: {
@@ -46,3 +61,19 @@ export async function POST(request: NextRequest) {
   return NextResponse.json(newMembership);
 }
 
+export async function GET(request: NextRequest, context: any) {
+  const { communityId } = (await context.params) as { communityId: string };
+
+  if (!communityId) {
+    return NextResponse.json(
+      { message: "communityId is required" },
+      { status: 400 }
+    );
+  }
+
+  const memberships = await prismadb.user_Community.findMany({
+    where: { communityId },
+  });
+
+  return NextResponse.json(memberships);
+}
