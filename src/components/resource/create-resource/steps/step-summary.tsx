@@ -13,6 +13,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import AreaCard from "../../area-card";
 import { CommunityDTO } from "@/interface/community";
 import { CommunityCard } from "../../../community/community-card";
+import { fetchCommunitiesByIds } from "@/lib/services/community-service";
 
 type Props = {
   form: UseFormReturn<ResourceCreateDTO>;
@@ -47,17 +48,8 @@ export default function StepSummary({ form }: Props) {
       if (data.communities && data.communities.length > 0) {
         try {
           setLoading(true);
-          //const communitiesData = await fetchCommunitiesByIds(data.communities)
-          //setCommunities(communitiesData)
-          setCommunities([
-            {
-              id: "1234567689",
-              title: "Pythonhunters",
-              description: "Comunidad para auténticos lovers a Python",
-              image: "https://placehold.co/100x100?text=Python",
-              avatar: "https://placehold.co/100x100?text=Python",
-            },
-          ]);
+          const communitiesData = await fetchCommunitiesByIds(data.communities);
+          setCommunities(communitiesData);
         } catch (error) {
           console.error("Error fetching communities:", error);
         } finally {

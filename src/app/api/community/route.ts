@@ -47,40 +47,4 @@ export async function POST(request: NextRequest) {
   return NextResponse.json(newCommunity);
 }
 
-export async function PATCH(request: NextRequest) {
-  const body = await request.json();
-  const dto = plainToInstance(CommunityUpdateDTO, body);
 
-  const errors = await validate(dto);
-
-  if (errors.length > 0) {
-    return NextResponse.json(
-      { message: "Validation failed", errors },
-      { status: 400 }
-    );
-  }
-
-  const existingCommunity = await prismadb.community.findFirst({
-    where: { id: dto.id },
-  });
-
-  if (!existingCommunity) {
-    return NextResponse.json(
-      { message: "Community not found" },
-      { status: 404 }
-    );
-  }
-
-  const updatedCommunity = await prismadb.community.update({
-    where: { id: dto.id },
-    data: {
-      title: dto.title ?? undefined,
-      image: dto.image ?? undefined,
-      description: dto.description ?? undefined,
-      avatar: dto.avatar ?? undefined,
-    },
-    select: communitySelect,
-  });
-
-  return NextResponse.json(updatedCommunity);
-}

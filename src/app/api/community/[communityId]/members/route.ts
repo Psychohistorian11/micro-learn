@@ -1,4 +1,5 @@
 import { CommunityMembershipCreateDTO } from "@/interface/community-memberships";
+import { userBaseSelect } from "@/lib/prisma-selects";
 import prismadb from "@/lib/prismadb";
 import { plainToInstance } from "class-transformer";
 import { validate } from "class-validator";
@@ -73,7 +74,20 @@ export async function GET(request: NextRequest, context: any) {
 
   const memberships = await prismadb.user_Community.findMany({
     where: { communityId },
+    select: {
+      user: {
+        select: userBaseSelect,
+      },
+      role: true,
+    },
   });
 
-  return NextResponse.json(memberships);
+  const mappedMembers = memberships.map((membership) => {
+    return {
+      ...membership.user,
+      role: membership.role,
+    };
+  });
+
+  return NextResponse.json(mappedMembers);
 }

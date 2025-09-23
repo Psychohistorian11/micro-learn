@@ -1,3 +1,4 @@
+import { userBaseSelect } from "@/lib/prisma-selects";
 import prismadb from "@/lib/prismadb";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -23,6 +24,12 @@ export async function GET(request: NextRequest, context: any) {
 
   const membership = await prismadb.user_Community.findFirst({
     where: { communityId, userId },
+    select: {
+      user: {
+        select: userBaseSelect,
+      },
+      role: true,
+    },
   });
 
   if (!membership) {
@@ -31,6 +38,9 @@ export async function GET(request: NextRequest, context: any) {
       { status: 404 }
     );
   }
-
-  return NextResponse.json(membership);
+  const mappedMembership = {
+    ...membership.user,
+    role: membership.role,
+  };
+  return NextResponse.json(mappedMembership);
 }
