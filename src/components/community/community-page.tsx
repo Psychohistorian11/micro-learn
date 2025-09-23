@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { useCommunityRole } from "@/hooks/use-community-role";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface CommunityPageProps {
     community: CommunityDTO;
@@ -35,6 +36,7 @@ export function CommunityPage({
     const [currentCommunity, setCurrentCommunity] = useState(community);
     const [currentPosts, setCurrentPosts] = useState(posts);
     const [currentMembers, setCurrentMembers] = useState(members);
+    const router = useRouter()
 
     const {
         role,
@@ -119,7 +121,9 @@ export function CommunityPage({
                                                 Más recientes
                                             </Button>
                                         </div>
-                                        <Button className="bg-persian-green hover:bg-persian-green/90">
+                                        <Button
+                                            onClick={() => router.push("/create-resource")}
+                                            className="bg-persian-green hover:bg-persian-green/90">
                                             Crear Post
                                         </Button>
                                     </div>
@@ -220,7 +224,10 @@ export function CommunityPage({
                             <h3 className="font-semibold mb-4">Acciones rápidas</h3>
                             <div className="space-y-2">
                                 {!isNotMember && (
-                                    <Button variant="outline" className="w-full justify-start">
+                                    <Button
+                                        onClick={() => router.push("/create-resource")}
+                                        variant="outline"
+                                        className="w-full justify-start">
                                         <MessageSquare className="h-4 w-4 mr-2" />
                                         Crear post
                                     </Button>

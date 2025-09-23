@@ -17,14 +17,14 @@ export function ResourceCardSearch({
     return (
         <div
             className={cn(
-                "border rounded-lg overflow-hidden transition-colors",
-                onClick && "cursor-pointer hover:bg-accent/50",
+                "flex flex-col sm:flex-row border overflow-hidden shadow-sm transition hover:shadow-md",
+                onClick && "cursor-pointer hover:bg-accent/30",
                 selected && "border-2 border-tiffany-blue bg-tiffany-blue/5"
             )}
             onClick={onClick}
         >
-            {/* Imagen arriba */}
-            <div className="aspect-video w-full bg-muted">
+            {/* Imagen a la izquierda en desktop */}
+            <div className="w-full sm:w-1/3 bg-muted aspect-video sm:aspect-auto flex-shrink-0">
                 {resource.image ? (
                     <img
                         src={resource.image}
@@ -38,12 +38,12 @@ export function ResourceCardSearch({
                 )}
             </div>
 
-            {/* Texto debajo */}
-            <div className="p-3">
-                <h3 className="font-medium text-sm leading-tight mb-1 line-clamp-1">
+            <div className="flex-1 p-4 flex flex-col justify-center">
+                <h3 className="font-semibold text-base mb-2 line-clamp-1 h-6">
                     {resource.title}
                 </h3>
-                <p className="text-xs text-muted-foreground line-clamp-2">
+
+                <p className="text-sm text-muted-foreground line-clamp-3 h-[30px]">
                     {resource.description}
                 </p>
             </div>

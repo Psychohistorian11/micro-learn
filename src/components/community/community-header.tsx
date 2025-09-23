@@ -46,7 +46,7 @@ export function CommunityHeader({
             <div className="relative px-6 pb-4">
                 <div className="flex items-start justify-between">
                     {/* Community Details */}
-                    <div className="flex items-start gap-4 -mt-8">
+                    <div className="flex items-start gap-4 -mt-11">
                         {/* Community Avatar */}
                         <Avatar className="w-16 h-16 border-4 border-background shadow-lg">
                             <AvatarImage
@@ -61,7 +61,7 @@ export function CommunityHeader({
 
                         {/* Community Info */}
                         <div className="pt-2">
-                            <h1 className="text-2xl font-bold font-serif text-foreground mb-1">
+                            <h1 className="text-4xl font-bold font-serif text-foreground">
                                 {community.title}
                             </h1>
                             <p className="text-muted-foreground text-sm mb-3 max-w-2xl">

@@ -13,18 +13,18 @@ interface CommunityCardProps {
 export function CommunityCard({
     community,
     selected = false,
-    onClick
+    onClick,
 }: CommunityCardProps) {
     return (
         <div
             className={cn(
-                "flex items-start gap-4 p-2 border rounded-lg transition-colors",
+                "flex items-start gap-4 p-2 border transition-colors ",
                 onClick && "cursor-pointer hover:bg-accent/50",
                 selected && "border-2 border-tiffany-blue ring-primary bg-tiffany-blue/5"
             )}
             onClick={onClick}
         >
-            <Avatar className="w-16 h-16 rounded-lg">
+            <Avatar className="w-16 h-16 rounded-lg flex-shrink-0">
                 <AvatarImage
                     src={community.image}
                     alt={community.title}
@@ -36,10 +36,13 @@ export function CommunityCard({
             </Avatar>
 
             <div className="flex-1 min-w-0">
-                <h3 className="font-serif text-lg leading-tight mb-1">
+                {/* 🔹 Forzar altura del título */}
+                <h3 className="font-serif text-lg leading-tight mb-1 line-clamp-1 h-6">
                     {community.title}
                 </h3>
-                <p className="text-sm text-muted-foreground line-clamp-2">
+
+                {/* 🔹 Forzar altura de la descripción */}
+                <p className="text-sm text-muted-foreground line-clamp-2 h-10">
                     {community.description}
                 </p>
             </div>

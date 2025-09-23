@@ -68,3 +68,4 @@ export async function deleteResource(id: string): Promise<{ success: boolean }> 
         throw error;
     }
 }
+

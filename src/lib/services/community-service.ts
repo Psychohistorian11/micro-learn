@@ -100,7 +100,7 @@ export async function fetchCommunityById(
   }
 }
 
-export async function fetchCommunityPosts(
+export async function fetchCommunityResources(
   communityId: string
 ): Promise<ResourceDTO[]> {
   try {

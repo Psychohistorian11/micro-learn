@@ -64,7 +64,7 @@ export function AppDesktopSidebar({
           <SidebarHeader>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton size="lg" asChild className="md:h-8 md:p-0">
+                <SidebarMenuButton onClick={() => router.push("/")} size="lg" asChild className="md:h-8 md:p-0">
                   <a>
                     <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
                       <Command className="size-4" />
@@ -109,7 +109,6 @@ export function AppDesktopSidebar({
               </SidebarGroupContent>
             </SidebarGroup>
 
-            {/* Communities Section */}
             <SidebarGroup className="">
               <div className="border border-t-1 mb-2"></div>
               <SidebarGroupContent>
