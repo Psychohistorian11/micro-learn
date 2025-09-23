@@ -57,9 +57,9 @@ model Community {
 
 model User_Community {
   id          String        @id @default(uuid())
-  user        User          @relation(fields: [userId], references: [id])
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String
-  community   Community     @relation(fields: [communityId], references: [id])
+  community   Community     @relation(fields: [communityId], references: [id], onDelete: Cascade)
   communityId String
   role        CommunityRole
 }
@@ -75,7 +75,7 @@ model Resource {
   type        ResourceType
 
   authorId String
-  author   User   @relation("UserResources", fields: [authorId], references: [id])
+  author   User   @relation("UserResources", fields: [authorId], references: [id], onDelete: Cascade)
 
   communities Resource_Community[]
   areas       Resource_Area[]
@@ -94,17 +94,17 @@ model Area {
 
 model Resource_Area {
   id         String   @id @default(uuid())
-  resource   Resource @relation(fields: [resourceId], references: [id])
+  resource   Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
   resourceId String
-  area       Area     @relation(fields: [areaId], references: [id])
+  area       Area     @relation(fields: [areaId], references: [id], onDelete: Cascade)
   areaId     String
 }
 
 model Resource_Community {
   id          String    @id @default(uuid())
-  resource    Resource  @relation(fields: [resourceId], references: [id])
+  resource    Resource  @relation(fields: [resourceId], references: [id], onDelete: Cascade)
   resourceId  String
-  community   Community @relation(fields: [communityId], references: [id])
+  community   Community @relation(fields: [communityId], references: [id], onDelete: Cascade)
   communityId String
 }
 
