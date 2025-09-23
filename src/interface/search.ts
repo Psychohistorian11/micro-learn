@@ -3,7 +3,7 @@ import { IsOptional, IsString, IsUUID } from "class-validator";
 export class SearchDTO {
   @IsOptional()
   @IsString()
-  query_text: string;
+  query: string;
 
   @IsOptional()
   area_ids?: string[];
