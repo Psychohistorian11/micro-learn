@@ -18,22 +18,24 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { navigationBarData } from "@/lib/data";
 import { AuthAlertDialog } from "@/components/ui/custom/auth-alert-dialog";
 import { useAuthGuard } from "@/hooks/use-auth-guard";
 import { CommunitiesSection } from "../community/communities-section-sidebar";
 import { SearchResults } from "../search/search_result";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { navigationBarData } from "@/lib/data";
 
 export function AppDesktopSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
   const router = useRouter();
   const { requireAuth, showDialog, handleLoginRedirect, closeDialog } = useAuthGuard();
-  const [activeItem, setActiveItem] = useState(navigationBarData.navMain[0]);
   const [query, setQuery] = useState("")
-  const [mails, setMails] = useState(navigationBarData.mails || []);
   const { setOpen } = useSidebar();
+  const [mails, setMails] = useState(navigationBarData.mails || []);
+  const [activeItem, setActiveItem] = useState(navigationBarData.navMain[0]);
+
+
 
   function handleClick(item: (typeof navigationBarData.navMain)[0]) {
     if (item.title === "Create") {
@@ -84,10 +86,10 @@ export function AppDesktopSidebar({
               <SidebarGroupContent className="px-1.5 md:px-0">
                 <SidebarMenu>
                   {navigationBarData.navMain
-                    .filter((item) =>
+                    .filter((item: any) =>
                       item.title === "Home" || item.url === "/create-resource"
                     )
-                    .map((item) => (
+                    .map((item: any) => (
                       <SidebarMenuItem key={item.title}>
                         <SidebarMenuButton
                           tooltip={{
@@ -118,7 +120,7 @@ export function AppDesktopSidebar({
           </SidebarContent>
 
           <SidebarFooter>
-            <NavUser user={navigationBarData.user} />
+            <NavUser />
           </SidebarFooter>
         </Sidebar>
 

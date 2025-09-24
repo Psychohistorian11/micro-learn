@@ -1,7 +1,9 @@
 "use client";
 
-import { BadgeCheck, Bell, CreditCard, LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react"; // 👈 hook de next-auth
+import { LogOut } from "lucide-react";
+import { IconUserCircle } from "@tabler/icons-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -20,21 +22,20 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { AuthAlertDialog } from "@/components/ui/custom/auth-alert-dialog";
-import { IconUserCircle } from "@tabler/icons-react";
 import { useAuthGuard } from "@/hooks/use-auth-guard";
+import { handleSignOut } from "@/lib/auth-actions";
 
-export function NavUser({
-  user,
-}: {
-  user: {
-    name: string;
-    email: string;
-    avatar: string;
-  };
-}) {
+export function NavUser() {
   const { isMobile } = useSidebar();
   const router = useRouter();
   const { requireAuth, showDialog, handleLoginRedirect, closeDialog } = useAuthGuard();
+
+  const { data: session, status } = useSession(); // 👈 sesión del usuario
+  const user = session?.user || {
+    name: "Invitado",
+    email: "",
+    image: "",
+  };
 
   const handleProfileClick = () => {
     requireAuth(() => {
@@ -53,8 +54,10 @@ export function NavUser({
                 className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground md:h-8 md:p-0"
               >
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={user.avatar} alt={user.name} />
-                  <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                  <AvatarImage src={user.image || ""} />
+                  <AvatarFallback className="rounded-lg">
+                    {user.name?.[0] ?? "?"}
+                  </AvatarFallback>
                 </Avatar>
               </SidebarMenuButton>
             </DropdownMenuTrigger>
@@ -68,8 +71,10 @@ export function NavUser({
               <DropdownMenuLabel className="p-0 font-normal">
                 <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                   <Avatar className="h-8 w-8 rounded-lg">
-                    <AvatarImage src={user.avatar} alt={user.name} />
-                    <AvatarFallback className="rounded-lg">JF</AvatarFallback>
+                    <AvatarImage src={user.image || ""} />
+                    <AvatarFallback className="rounded-lg">
+                      {user.name?.[0] ?? "?"}
+                    </AvatarFallback>
                   </Avatar>
                   <div className="grid flex-1 text-left text-sm leading-tight">
                     <span className="truncate font-medium">{user.name}</span>
@@ -77,33 +82,24 @@ export function NavUser({
                   </div>
                 </div>
               </DropdownMenuLabel>
-              {/* <DropdownMenuSeparator /> 
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <Sparkles />
-                Login
-              </DropdownMenuItem>
-            </DropdownMenuGroup>*/}
+
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
                 <DropdownMenuItem onClick={handleProfileClick}>
                   <IconUserCircle />
                   Mi perfil
                 </DropdownMenuItem>
-                {/*<DropdownMenuItem>
-                <CreditCard />
-                Facturación
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Bell />
-                Notificaciones
-              </DropdownMenuItem>*/}
               </DropdownMenuGroup>
-              <DropdownMenuSeparator />
-              {/* <DropdownMenuItem>
-              <LogOut />
-              Cerrar sesión
-            </DropdownMenuItem> */}
+
+              {status === "authenticated" && (
+                <>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleSignOut}>
+                    <LogOut />
+                    Cerrar sesión
+                  </DropdownMenuItem>
+                </>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
         </SidebarMenuItem>

@@ -10,6 +10,7 @@ import {
   IconSearch,
   IconUsers,
 } from "@tabler/icons-react";
+import { auth } from "../../auth";
 
 interface Mail {
   name: string;
@@ -20,6 +21,7 @@ interface Mail {
 }
 
 export const navigationBarData = {
+
   user: {
     name: "shadcn",
     email: "m@example.com",
