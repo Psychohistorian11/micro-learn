@@ -69,3 +69,22 @@ export async function deleteResource(id: string): Promise<{ success: boolean }> 
     }
 }
 
+export async function getResources(page: number = 1, limit: number = 10): Promise<ResourceDTO[]> {
+    try {
+        const response = await fetch(`/api/resource?page=${page}&limit=${limit}`, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || "Error fetching resources");
+        }
+
+        return response.json();
+    } catch (error) {
+        console.error("Error in getResources:", error);
+        throw error;
+    }
+}
+

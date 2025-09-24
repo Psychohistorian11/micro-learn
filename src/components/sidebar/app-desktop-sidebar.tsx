@@ -21,7 +21,7 @@ import {
 import { navigationBarData } from "@/lib/data";
 import { AuthAlertDialog } from "@/components/ui/custom/auth-alert-dialog";
 import { useAuthGuard } from "@/hooks/use-auth-guard";
-import { CommunitiesSection } from "../community/communities-section";
+import { CommunitiesSection } from "../community/communities-section-sidebar";
 import { SearchResults } from "../search/search_result";
 import { useState } from "react";
 
