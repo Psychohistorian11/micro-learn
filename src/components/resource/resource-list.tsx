@@ -19,18 +19,19 @@ export function ResourceList({
   }
 
   return (
-    <div className="w-full flex flex-col items-start gap-6">
-      <h2 className="text-2xl font-serif">Recursos</h2>
-      {resources
-        .filter((resource) => resource.isPublic || isOwner)
-        .map((resource) => (
-          <ResourceCard
-            key={resource.id}
-            resource={resource}
-            isOwner={isOwner}
-          />
-        ))}
-
+    <div>
+      <h2 className="text-2xl font-serif pb-2">Recursos</h2>
+      <div className="w-full flex flex-col items-start">
+        {resources
+          .filter((resource) => resource.isPublic || isOwner)
+          .map((resource) => (
+            <ResourceCard
+              key={resource.id}
+              resource={resource}
+              isOwner={isOwner}
+            />
+          ))}
+      </div>
     </div>
   );
 }

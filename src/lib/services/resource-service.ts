@@ -1,11 +1,14 @@
 // lib/resource-service.ts
 import { ResourceCreateDTO, ResourceDTO } from "@/interface/resource";
+import { getBaseUrl } from "../utils";
+
+const baseUrl = getBaseUrl();
 
 export async function createResource(data: ResourceCreateDTO): Promise<ResourceDTO> {
     try {
         console.log("Creating resource with data:", JSON.stringify(data));
 
-        const response = await fetch('/api/resource', {
+        const response = await fetch(`${baseUrl}/api/resource`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -84,6 +87,25 @@ export async function getResources(page: number = 1, limit: number = 10): Promis
         return response.json();
     } catch (error) {
         console.error("Error in getResources:", error);
+        throw error;
+    }
+}
+
+export async function getResourceById(id: string): Promise<ResourceDTO> {
+    try {
+        const response = await fetch(`${baseUrl}/api/resource/${id}`, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || "Error fetching resource");
+        }
+
+        return response.json();
+    } catch (error) {
+        console.error("Error in getResourceById:", error);
         throw error;
     }
 }

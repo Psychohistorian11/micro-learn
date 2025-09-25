@@ -29,7 +29,7 @@ export function ResourceCard({
       <div className="rounded bg-card shadow-sm p-4 w-full">
         <div className="flex items-start gap-4">
           {/* Imagen / preview */}
-          <div className="w-60 h-60 flex-shrink-0 overflow-hidden group relative rounded-md border bg-card">
+          <div className="w-40 h-40 flex-shrink-0 overflow-hidden group relative rounded-md border bg-card">
             {resource.image ? (
               <Button
                 onClick={handlePreview}
