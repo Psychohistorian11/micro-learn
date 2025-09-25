@@ -34,7 +34,6 @@ export default function ResetPasswordForm() {
   // Paso 2: OTP
   const onSubmitOTP = async (data: any) => {
     const response = await verifyOTP(data.email, data.otp);
-    console.log("response", response);
     if (response) {
       setPasswordResetStep(true);
     } else {
@@ -68,10 +67,12 @@ export default function ResetPasswordForm() {
           message: result.error,
         });
       } else {
-        console.log("Otro error:", result.error);
+        setError("password", {
+          type: "unknown",
+          message: result.error,
+        });
       }
     } else {
-      console.log("Contraseña cambiada correctamente");
       redirect("/login");
     }
   });

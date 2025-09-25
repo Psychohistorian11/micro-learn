@@ -3,7 +3,7 @@
 import { CommunityDTO } from "@/interface/community";
 import { CommunityHeader } from "./community-header";
 import { CommunityPosts } from "./community-posts";
-import { CommunityMembers } from "./community-members";
+import { CommunityMembers, Member } from "./community-members";
 import { CommunitySettingsDialog } from "./community-settings-dialog";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -19,11 +19,12 @@ import { useCommunityRole } from "@/hooks/use-community-role";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { PostDTO } from "@/interface/post";
+import { joinCommunity } from "@/lib/services/community-service";
 
 interface CommunityPageProps {
   community: CommunityDTO;
   posts: PostDTO[];
-  members: any[];
+  members: Member[];
   loading?: boolean;
 }
 
@@ -37,8 +38,8 @@ export function CommunityPage({
   const [currentPosts, setCurrentPosts] = useState(posts);
   const [currentMembers, setCurrentMembers] = useState(members);
   const router = useRouter();
-
   const {
+    userId,
     role,
     isLoading: roleLoading,
     isNotMember,
@@ -48,13 +49,15 @@ export function CommunityPage({
   } = useCommunityRole(community.id);
 
   const handleJoin = () => {
-    // TODO: Implement join logic
-    console.log("Joining community:", community.id);
+    if (!userId) {
+      return;
+    }
+    const response = joinCommunity(community.id, userId);
+    router.refresh();
   };
 
   const handleLeave = () => {
     // TODO: Implement leave logic
-    console.log("Leaving community:", community.id);
   };
 
   const handleCommunityUpdated = (updatedCommunity: CommunityDTO) => {

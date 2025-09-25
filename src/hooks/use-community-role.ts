@@ -6,6 +6,7 @@ import { CommunityRole } from "@prisma/client";
 import { fetchUserCommunityRole } from "@/lib/services/community-service";
 
 interface UseCommunityRoleReturn {
+  userId: string | null;
   role: CommunityRole | null;
   isLoading: boolean;
   isAdmin: boolean;
@@ -53,17 +54,18 @@ export function useCommunityRole(communityId: string): UseCommunityRoleReturn {
     fetchRole();
   }, [communityId, session?.user?.id]);
 
-  const isAdmin = role === "Admin";
-  const isModerator = role === "Mod";
-  const isParticipant = role === "Member";
+  const isAdmin = role == CommunityRole.Admin;
+  const isModerator = role == CommunityRole.Mod;
+  const isParticipant = role == CommunityRole.Member;
   const isNotMember = role === null;
 
   // Permission checks
   const canManageSettings = isAdmin;
   const canModerateContent = isAdmin || isModerator;
   const canManageMembers = isAdmin || isModerator;
-
+  
   return {
+    userId: session?.user?.id || null,
     role,
     isLoading,
     isAdmin,

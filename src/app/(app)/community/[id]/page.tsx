@@ -11,6 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PostDTO } from "@/interface/post";
+import { Member } from "@/components/community/community-members";
 
 // Mock data for development
 const mockCommunity: CommunityDTO = {
@@ -153,7 +154,7 @@ async function CommunityContent({ communityId }: { communityId: string }) {
   // TODO: Replace with actual API calls
   const community = await fetchCommunityById(communityId);
   const posts: PostDTO[] = await fetchCommunityResources(communityId);
-  const members = await fetchCommunityMembers(communityId);
+  const members: Member[] = await fetchCommunityMembers(communityId);
   return (
     <CommunityPage
       community={community}

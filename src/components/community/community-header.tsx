@@ -24,7 +24,6 @@ export function CommunityHeader({
   onLeave,
   loading,
 }: CommunityHeaderProps) {
-  console.log("isJoined", isJoined);
   return (
     <div className="relative">
       {/* Banner Image */}

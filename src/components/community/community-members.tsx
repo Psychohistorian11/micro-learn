@@ -13,14 +13,11 @@ import {
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { CommunityMemberActions } from "./community-member-actions";
+import { Community, CommunityRole } from "@prisma/client";
+import { UserResponseDTO } from "@/interface/user";
 
-interface Member {
-  id: string;
-  name: string;
-  username: string;
-  avatar?: string;
-  role: "admin" | "moderator" | "member";
-  joinedAt: string;
+export interface Member extends UserResponseDTO {
+  role: CommunityRole;
   isOnline?: boolean;
 }
 
@@ -37,27 +34,36 @@ export function CommunityMembers({
   communityId,
   onMemberRemoved,
 }: CommunityMembersProps) {
-  const getRoleIcon = (role: string) => {
+  const getRoleIcon = (role: CommunityRole) => {
     switch (role) {
-      case "admin":
+      case CommunityRole.Admin:
         return <Crown className="h-3 w-3 text-yellow-500" />;
-      case "moderator":
+      case CommunityRole.Mod:
         return <Shield className="h-3 w-3 text-blue-500" />;
       default:
         return null;
     }
   };
 
-  const getRoleColor = (role: string) => {
+  const getRoleColor = (role: CommunityRole) => {
     switch (role) {
-      case "admin":
+      case CommunityRole.Admin:
         return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400";
-      case "moderator":
+      case CommunityRole.Mod:
         return "bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400";
       default:
         return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400";
     }
   };
+  // Ordena miembros: Admin > Mod > Member TODO: Mostrar primero el usuario logueado
+  const sortedMembers = [...members].sort((a, b) => {
+    const rolePriority = {
+      Admin: 0,
+      Mod: 1,
+      Member: 2,
+    };
+    return rolePriority[a.role] - rolePriority[b.role];
+  });
 
   if (loading) {
     return (
@@ -106,14 +112,17 @@ export function CommunityMembers({
 
       {/* Members List */}
       <div className="space-y-3 max-h-96 overflow-y-auto">
-        {members.map((member) => (
+        {sortedMembers.map((member) => (
           <div
             key={member.id}
             className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted/50 transition-colors group"
           >
             <div className="relative">
               <Avatar className="w-8 h-8">
-                <AvatarImage src={member.avatar} alt={member.username} />
+                <AvatarImage
+                  src={member.profilePicture}
+                  alt={member.username}
+                />
                 <AvatarFallback className="text-xs">
                   {member.username.substring(0, 2).toUpperCase()}
                 </AvatarFallback>
