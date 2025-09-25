@@ -69,7 +69,7 @@ export async function search(query: string, areas: string[]): Promise<any> {
         area_ids: areas,
       }),
     });
-
+    console.log("response", response);
     if (!response.ok) {
       const errorData = await response.json();
       throw new Error(
@@ -85,7 +85,10 @@ export async function search(query: string, areas: string[]): Promise<any> {
 }
 
 // --- Funciones de búsqueda mock ---
-export async function searchResources(query: string): Promise<ResourceDTO[]> {
+export async function searchResources(
+  query: string,
+  areas: string[]
+): Promise<ResourceDTO[]> {
   if (!query) return [];
   const q = query.toLowerCase();
   return new Promise(

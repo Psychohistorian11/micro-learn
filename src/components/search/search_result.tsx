@@ -10,11 +10,14 @@ import { ResourceCardSearch } from "../resource/resource-search-card";
 import { CommunityCard } from "../community/community-card";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export function SearchResults({ query }: { query: string }) {
+type Props = { query: string; areas?: string[] };
+
+export function SearchResults({ query, areas = [] }: Props) {
   const router = useRouter();
   const [resources, setResources] = useState<ResourceDTO[]>([]);
   const [communities, setCommunities] = useState<CommunityDTO[]>([]);
   const [loading, setLoading] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(3);
 
   useEffect(() => {
     let active = true;
@@ -25,10 +28,12 @@ export function SearchResults({ query }: { query: string }) {
     }
 
     setLoading(true);
-    const areas_ids = [""];
+    setVisibleCount(3);
+    const areas_ids = areas && areas.length > 0 ? areas : [];
+    console.log("areas_ids", areas_ids);
     search(query, areas_ids)
       .then((res) => {
-        if (active) {
+        if (res) {
           setResources(res.resources);
           setCommunities(res.communities);
         }
@@ -38,7 +43,7 @@ export function SearchResults({ query }: { query: string }) {
     return () => {
       active = false;
     };
-  }, [query]);
+  }, [query, JSON.stringify(areas)]);
 
   return (
     <div className="flex flex-col gap-10 p-4">
@@ -64,13 +69,23 @@ export function SearchResults({ query }: { query: string }) {
           </div>
         ) : resources.length > 0 ? (
           <div className="flex flex-col gap-4">
-            {resources.map((res) => (
+            {resources.slice(0, visibleCount).map((res) => (
               <ResourceCardSearch
                 key={res.id}
                 resource={res}
                 onClick={() => router.push(`/resource/${res.id}`)}
               />
             ))}
+            {visibleCount < resources.length && (
+              <button
+                className="self-center mt-1 text-sm px-4 py-2 rounded-md border bg-accent hover:bg-accent/80 transition"
+                onClick={() =>
+                  setVisibleCount((v) => Math.min(v + 10, resources.length))
+                }
+              >
+                Ver más
+              </button>
+            )}
           </div>
         ) : (
           <p className="text-sm text-muted-foreground">Sin resultados</p>
@@ -84,10 +99,7 @@ export function SearchResults({ query }: { query: string }) {
         {loading ? (
           <div className="space-y-2 gap-2">
             {[...Array(4)].map((_, i) => (
-              <div
-                key={i}
-                className="border p-2 shadow-sm flex gap-4 "
-              >
+              <div key={i} className="border p-2 shadow-sm flex gap-4 ">
                 <Skeleton className="h-16 w-16 rounded-lg mb-3" />
                 <div className="w-full flex flex-col justify-center items-start">
                   <Skeleton className="h-4 w-3/4 mb-2" />

@@ -22,6 +22,7 @@ import { AuthAlertDialog } from "@/components/ui/custom/auth-alert-dialog";
 import { useAuthGuard } from "@/hooks/use-auth-guard";
 import { CommunitiesSection } from "../community/communities-section-sidebar";
 import { SearchResults } from "../search/search_result";
+import AreasFilter from "../search/areas-filter";
 import { useEffect, useState } from "react";
 import { navigationBarData } from "@/lib/data";
 
@@ -35,6 +36,7 @@ export function AppDesktopSidebar({
   const { setOpen } = useSidebar();
   const [mails, setMails] = useState(navigationBarData.mails || []);
   const [activeItem, setActiveItem] = useState(navigationBarData.navMain[0]);
+  const [selectedAreas, setSelectedAreas] = useState<string[]>([]);
 
   function handleClick(item: (typeof navigationBarData.navMain)[0]) {
     if (item.title === "Create") {
@@ -129,16 +131,20 @@ export function AppDesktopSidebar({
 
         <Sidebar collapsible="none" className="hidden flex-1 md:flex">
           <SidebarHeader className="gap-3.5 border-b p-4">
-            <SidebarInput
-              placeholder="Buscar recursos o comunidades..."
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-            />
+            <div className="flex gap-2">
+              <SidebarInput
+                placeholder="Buscar recursos o comunidades..."
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                className="flex-1"
+              />
+              <AreasFilter selected={selectedAreas} onChange={setSelectedAreas} />
+            </div>
           </SidebarHeader>
 
           <SidebarContent>
             {query ? (
-              <SearchResults query={query} />
+              <SearchResults query={query} areas={selectedAreas} />
             ) : (
               <div className="p-4 text-center text-muted-foreground text-sm">
                 Escribe para buscar

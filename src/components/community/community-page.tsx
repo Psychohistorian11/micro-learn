@@ -19,7 +19,8 @@ import { useCommunityRole } from "@/hooks/use-community-role";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { PostDTO } from "@/interface/post";
-import { joinCommunity } from "@/lib/services/community-service";
+import { joinCommunity, removeMemberFromCommunity } from "@/lib/services/community-service";
+import { useSession } from "next-auth/react";
 
 interface CommunityPageProps {
   community: CommunityDTO;
@@ -37,7 +38,9 @@ export function CommunityPage({
   const [currentCommunity, setCurrentCommunity] = useState(community);
   const [currentPosts, setCurrentPosts] = useState(posts);
   const [currentMembers, setCurrentMembers] = useState(members);
+  const [isJoining, setIsJoining] = useState(false);
   const router = useRouter();
+  const { data: session } = useSession();
   const {
     userId,
     role,
@@ -46,18 +49,58 @@ export function CommunityPage({
     canManageSettings,
     canModerateContent,
     canManageMembers,
+    refreshRole,
   } = useCommunityRole(community.id);
 
-  const handleJoin = () => {
+  const handleJoin = async () => {
+    if (!userId || !session?.user) {
+      return;
+    }
+    
+    try {
+      setIsJoining(true);
+      await joinCommunity(community.id, userId);
+      
+      // Add current user to members list immediately
+      const currentUser: Member = {
+        id: session.user.id,
+        username: session.user.name || session.user.email?.split('@')[0] || 'usuario',
+        email: session.user.email || '',
+        profilePicture: session.user.image || '',
+        role: 'Member',
+        isOnline: true,
+      };
+      
+      setCurrentMembers(prev => [...prev, currentUser]);
+      
+      // Refresh the role to update isJoined state
+      await refreshRole();
+    } catch (error) {
+      console.error('Error joining community:', error);
+    } finally {
+      setIsJoining(false);
+    }
+  };
+
+  const handleLeave = async () => {
     if (!userId) {
       return;
     }
-    const response = joinCommunity(community.id, userId);
-    router.refresh();
-  };
-
-  const handleLeave = () => {
-    // TODO: Implement leave logic
+    
+    try {
+      setIsJoining(true);
+      await removeMemberFromCommunity(community.id, userId);
+      
+      // Remove current user from members list immediately
+      setCurrentMembers(prev => prev.filter(member => member.id !== userId));
+      
+      // Refresh the role to update isJoined state
+      await refreshRole();
+    } catch (error) {
+      console.error('Error leaving community:', error);
+    } finally {
+      setIsJoining(false);
+    }
   };
 
   const handleCommunityUpdated = (updatedCommunity: CommunityDTO) => {
@@ -88,7 +131,7 @@ export function CommunityPage({
         isJoined={!isNotMember}
         onJoin={handleJoin}
         onLeave={handleLeave}
-        loading={loading || roleLoading}
+        loading={loading || roleLoading || isJoining}
       />
 
       {/* Main Content */}

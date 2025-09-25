@@ -17,6 +17,7 @@ interface UseCommunityRoleReturn {
   canModerateContent: boolean;
   canManageMembers: boolean;
   error: string | null;
+  refreshRole: () => Promise<void>;
 }
 
 export function useCommunityRole(communityId: string): UseCommunityRoleReturn {
@@ -25,32 +26,32 @@ export function useCommunityRole(communityId: string): UseCommunityRoleReturn {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const fetchRole = async () => {
+    if (!session?.user?.id || !communityId) {
+      setRole(null);
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      setError(null);
+
+      const response = await fetchUserCommunityRole(
+        communityId,
+        session.user.id
+      );
+      setRole(response.role as CommunityRole);
+    } catch (err) {
+      console.error("Error fetching community role:", err);
+      setError("Error al obtener el rol en la comunidad");
+      setRole(null);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchRole = async () => {
-      if (!session?.user?.id || !communityId) {
-        setRole(null);
-        setIsLoading(false);
-        return;
-      }
-
-      try {
-        setIsLoading(true);
-        setError(null);
-
-        const response = await fetchUserCommunityRole(
-          communityId,
-          session.user.id
-        );
-        setRole(response.role as CommunityRole);
-      } catch (err) {
-        console.error("Error fetching community role:", err);
-        setError("Error al obtener el rol en la comunidad");
-        setRole(null);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     fetchRole();
   }, [communityId, session?.user?.id]);
 
@@ -76,5 +77,6 @@ export function useCommunityRole(communityId: string): UseCommunityRoleReturn {
     canModerateContent,
     canManageMembers,
     error,
+    refreshRole: fetchRole,
   };
 }
