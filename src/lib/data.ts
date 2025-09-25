@@ -10,8 +10,18 @@ import {
   IconSearch,
   IconUsers,
 } from "@tabler/icons-react";
+import { auth } from "../../auth";
+
+interface Mail {
+  name: string;
+  email: string;
+  subject: string;
+  date: string;
+  teaser: string;
+}
 
 export const navigationBarData = {
+
   user: {
     name: "shadcn",
     email: "m@example.com",
@@ -30,20 +40,11 @@ export const navigationBarData = {
       title: "Communities",
       url: "/communities",
       icon: IconUsers,
-      isActive: false,
-    },
+      isActive: true,
+    }
   ],
 
-  mails: [
-    /*{
-      name: "William Smith",
-      email: "williamsmith@example.com",
-      subject: "Meeting Tomorrow",
-      date: "09:34 AM",
-      teaser:
-        "Hi team, just a reminder about our meeting tomorrow at 10 AM.\nPlease come prepared with your project updates.",
-    },*/
-  ],
+  mails: [] as Mail[],
 };
 
 export const navigationCreateResouceData = [

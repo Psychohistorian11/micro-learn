@@ -44,8 +44,10 @@ model Community {
   id          String @id @default(uuid())
   title       String
   image       String  @default("") // TODO: default image
+  avatar      String  @default("") // TODO: default avatar
   description String  @default("") 
-
+  
+  
   users     User_Community[]
   resources Resource_Community[]
 
@@ -55,9 +57,9 @@ model Community {
 
 model User_Community {
   id          String        @id @default(uuid())
-  user        User          @relation(fields: [userId], references: [id])
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String
-  community   Community     @relation(fields: [communityId], references: [id])
+  community   Community     @relation(fields: [communityId], references: [id], onDelete: Cascade)
   communityId String
   role        CommunityRole
 }
@@ -67,42 +69,42 @@ model Resource {
   title       String
   isPublic    Boolean      @default(true)
   image       String       @default("") // TODO: default image
+  avatar      String       @default("") // TODO: default avatar
   description String
   attachment  String
   type        ResourceType
 
   authorId String
-  author   User   @relation("UserResources", fields: [authorId], references: [id])
+  author   User   @relation("UserResources", fields: [authorId], references: [id], onDelete: Cascade)
 
   communities Resource_Community[]
-  areas       Resource_Area[]           
+  areas       Resource_Area[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Area {
-  id        String     @id @default(uuid())
-  name      String     @unique
-  color     String     @default("")
-  icon      String     @default("")
+  id        String          @id @default(uuid())
+  name      String          @unique
+  color     String          @default("")
+  icon      String          @default("")
   resources Resource_Area[]
 }
 
 model Resource_Area {
-  id         String    @id @default(uuid())
-  resource   Resource  @relation(fields: [resourceId], references: [id])
+  id         String   @id @default(uuid())
+  resource   Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
   resourceId String
-  area       Area      @relation(fields: [areaId], references: [id])
+  area       Area     @relation(fields: [areaId], references: [id], onDelete: Cascade)
   areaId     String
-
 }
 
 model Resource_Community {
   id          String    @id @default(uuid())
-  resource    Resource  @relation(fields: [resourceId], references: [id])
+  resource    Resource  @relation(fields: [resourceId], references: [id], onDelete: Cascade)
   resourceId  String
-  community   Community @relation(fields: [communityId], references: [id])
+  community   Community @relation(fields: [communityId], references: [id], onDelete: Cascade)
   communityId String
 }
 
@@ -114,7 +116,7 @@ enum Role {
 enum CommunityRole {
   Admin
   Mod
-  Participant
+  Member
 }
 
 enum ResourceType {

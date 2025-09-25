@@ -18,16 +18,16 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const { query_text, area_ids } = dto;
+  const { query, area_ids } = dto;
 
   const resources = await prismadb.resource.findMany({
     where: {
       OR: [
-        query_text
+        query
           ? {
               OR: [
-                { title: { contains: query_text, mode: "insensitive" } },
-                { description: { contains: query_text, mode: "insensitive" } },
+                { title: { contains: query, mode: "insensitive" } },
+                { description: { contains: query, mode: "insensitive" } },
               ],
             }
           : {},
@@ -44,12 +44,12 @@ export async function POST(request: NextRequest) {
     select: resourceSelect,
   });
 
-  const communities = query_text
+  const communities = query
     ? await prismadb.community.findMany({
         where: {
           OR: [
-            { title: { contains: query_text, mode: "insensitive" } },
-            { description: { contains: query_text, mode: "insensitive" } },
+            { title: { contains: query, mode: "insensitive" } },
+            { description: { contains: query, mode: "insensitive" } },
           ],
         },
       })

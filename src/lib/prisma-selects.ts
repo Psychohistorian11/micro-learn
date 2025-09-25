@@ -10,7 +10,8 @@ export const resourceSelect = {
   authorId: true,
   createdAt: true,
   updatedAt: true,
-  areas: { // SOLVED: EL ERROR ESTÁ AQUÍ, ANTES SOLO ESTABA EL ID DEL AREA, AHORA SELECCIONA EL ID Y NAME, ESE ES EL ERROR, QUE MANDA UN OBJETO AREA.AREA.ID, mirar en resource-card
+  areas: {
+    // SOLVED: EL ERROR ESTÁ AQUÍ, ANTES SOLO ESTABA EL ID DEL AREA, AHORA SELECCIONA EL ID Y NAME, ESE ES EL ERROR, QUE MANDA UN OBJETO AREA.AREA.ID, mirar en resource-card
     select: {
       area: {
         select: {
@@ -34,4 +35,47 @@ export const userSelect = {
   resources: {
     select: { id: true },
   },
+};
+
+export const communitySelect = {
+  id: true,
+  title: true,
+  image: true,
+  avatar: true,
+  description: true,
+  users: {
+    select: { id: true, role: true },
+  },
+  resources: {
+    select: { id: true },
+  },
+};
+
+export const resourceBaseSelect = {
+  id: true,
+  title: true,
+  isPublic: true,
+  image: true,
+  description: true,
+  attachment: true,
+  type: true,
+  authorId: true,
+  createdAt: true,
+  updatedAt: true,
+};
+
+export const userBaseSelect = {
+  id: true,
+  username: true,
+  email: true,
+  profilePicture: true,
+  description: true,
+};
+
+export const communityBaseSelect = {
+  id: true,
+  title: true,
+  image: true,
+  avatar: true,
+  description: true,
 };

@@ -17,14 +17,15 @@ import {
 } from "@/components/ui/alert-dialog"
 
 import { useSession } from "next-auth/react"
+import { useState } from "react"
 
 export function AppMobileSidebar() {
     const router = useRouter()
     const { data: session } = useSession()
-    const [active, setActive] = React.useState(
+    const [active, setActive] = useState(
         navigationBarData.navMain.find((item) => item.isActive) || navigationBarData.navMain[0]
     )
-    const [showDialog, setShowDialog] = React.useState(false)
+    const [showDialog, setShowDialog] = useState(false)
 
 
 
@@ -74,7 +75,7 @@ export function AppMobileSidebar() {
                         )
                     })}
 
-                    <NavUser user={navigationBarData.user} />
+                    <NavUser />
                 </ul>
             </nav>
 
