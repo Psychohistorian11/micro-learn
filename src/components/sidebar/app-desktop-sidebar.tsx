@@ -29,13 +29,12 @@ export function AppDesktopSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
   const router = useRouter();
-  const { requireAuth, showDialog, handleLoginRedirect, closeDialog } = useAuthGuard();
-  const [query, setQuery] = useState("")
+  const { requireAuth, showDialog, handleLoginRedirect, closeDialog } =
+    useAuthGuard();
+  const [query, setQuery] = useState("");
   const { setOpen } = useSidebar();
   const [mails, setMails] = useState(navigationBarData.mails || []);
   const [activeItem, setActiveItem] = useState(navigationBarData.navMain[0]);
-
-
 
   function handleClick(item: (typeof navigationBarData.navMain)[0]) {
     if (item.title === "Create") {
@@ -66,7 +65,12 @@ export function AppDesktopSidebar({
           <SidebarHeader>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton onClick={() => router.push("/")} size="lg" asChild className="md:h-8 md:p-0">
+                <SidebarMenuButton
+                  onClick={() => router.push("/")}
+                  size="lg"
+                  asChild
+                  className="md:h-8 md:p-0"
+                >
                   <a>
                     <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
                       <Command className="size-4" />
@@ -82,12 +86,13 @@ export function AppDesktopSidebar({
           </SidebarHeader>
 
           <SidebarContent>
-            <SidebarGroup >
+            <SidebarGroup>
               <SidebarGroupContent className="px-1.5 md:px-0">
                 <SidebarMenu>
                   {navigationBarData.navMain
-                    .filter((item: any) =>
-                      item.title === "Home" || item.url === "/create-resource"
+                    .filter(
+                      (item: any) =>
+                        item.title === "Home" || item.url === "/create-resource"
                     )
                     .map((item: any) => (
                       <SidebarMenuItem key={item.title}>
@@ -106,8 +111,6 @@ export function AppDesktopSidebar({
                       </SidebarMenuItem>
                     ))}
                 </SidebarMenu>
-
-
               </SidebarGroupContent>
             </SidebarGroup>
 
@@ -132,7 +135,6 @@ export function AppDesktopSidebar({
               onChange={(e) => setQuery(e.target.value)}
             />
           </SidebarHeader>
-
 
           <SidebarContent>
             {query ? (

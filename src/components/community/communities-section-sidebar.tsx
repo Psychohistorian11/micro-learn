@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/sidebar";
 import { CreateCommunityDialog } from "./create-community/create-community-dialog";
 import { fetchCommunitiesUserById } from "@/lib/services/community-service";
+import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 
 export function CommunitiesSection() {
   const { data: session } = useSession();
@@ -59,31 +60,38 @@ export function CommunitiesSection() {
       <SidebarMenu>
         {loading
           ? // Loading skeletons
-          Array.from({ length: 3 }).map((_, i) => (
-            <SidebarMenuItem key={i}>
-              <SidebarMenuButton className="w-full justify-start">
-                <Skeleton className="h-8 w-8 rounded" />
-                <Skeleton className="h-4 flex-1 ml-2" />
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          ))
+            Array.from({ length: 3 }).map((_, i) => (
+              <SidebarMenuItem key={i}>
+                <SidebarMenuButton className="w-full justify-start">
+                  <Skeleton className="h-8 w-8 rounded" />
+                  <Skeleton className="h-4 flex-1 ml-2" />
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))
           : communities.length > 0 &&
-          communities.map((community) => (
-            <SidebarMenuItem key={community.id} className="px-1.5 md:px-0">
-              <SidebarMenuButton
-                onClick={() => handleCommunityClick(community.id)}
-                className="w-full h-full"
-                tooltip={{
-                  children: community.title,
-                  hidden: false,
-                }}
-              >
-                <div className="h-full w-full">
-                  <img src={community.image} className="w-full h-full"></img>
-                </div>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          ))}
+            communities.map((community) => (
+              <SidebarMenuItem key={community.id} className="px-1.5 md:px-0">
+                <SidebarMenuButton
+                  onClick={() => handleCommunityClick(community.id)}
+                  className="w-full h-full"
+                  tooltip={{
+                    children: community.title,
+                    hidden: false,
+                  }}
+                >
+                  <Avatar className="w-full h-full rounded">
+                    <AvatarImage
+                      src={community.image || ""}
+                      alt={community.title}
+                      className="w-full h-full object-cover rounded"
+                    />
+                    <AvatarFallback className="w-full h-full flex items-center justify-center rounded bg-muted text-xs font-medium">
+                      {community.title.substring(0, 2).toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))}
 
         {/* Create Community Button */}
         <SidebarMenuItem>

@@ -6,6 +6,7 @@ import {
 import { getBaseUrl } from "../utils";
 import { ResourceDTO } from "@/interface/resource";
 import { UserResponseDTO } from "@/interface/user";
+import { PostDTO } from "@/interface/post";
 const baseUrl = getBaseUrl();
 export async function fetchCommunitiesUserById(
   userId: string
@@ -102,10 +103,10 @@ export async function fetchCommunityById(
 
 export async function fetchCommunityResources(
   communityId: string
-): Promise<ResourceDTO[]> {
+): Promise<PostDTO[]> {
   try {
     const response = await fetch(
-      `${baseUrl}/api/community/${communityId}/resources`,
+      `${baseUrl}/api/community/${communityId}/resources/post`,
       {
         method: "GET",
         headers: {

@@ -6,11 +6,11 @@ import {
   fetchCommunityById,
   fetchCommunityMembers,
   fetchCommunityResources,
-
 } from "@/lib/services/community-service";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { PostDTO } from "@/interface/post";
 
 // Mock data for development
 const mockCommunity: CommunityDTO = {
@@ -152,7 +152,7 @@ const mockMembers = [
 async function CommunityContent({ communityId }: { communityId: string }) {
   // TODO: Replace with actual API calls
   const community = await fetchCommunityById(communityId);
-  const posts = await fetchCommunityResources(communityId);
+  const posts: PostDTO[] = await fetchCommunityResources(communityId);
   const members = await fetchCommunityMembers(communityId);
   return (
     <CommunityPage
@@ -194,9 +194,7 @@ export default async function CommunityPageRoute({
               <div className="lg:col-span-2 space-y-6">
                 {/* Tabs */}
                 <Tabs defaultValue="posts" className="w-full">
-                  <TabsList className="grid w-full grid-cols-3">
-
-                  </TabsList>
+                  <TabsList className="grid w-full grid-cols-3"></TabsList>
                 </Tabs>
 
                 {/* Sort & Filter */}
@@ -217,7 +215,10 @@ export default async function CommunityPageRoute({
                 {/* Posts Skeletons */}
                 <div className="space-y-4">
                   {[1, 2, 3].map((i) => (
-                    <div key={i} className="bg-card border rounded-lg p-4 space-y-3">
+                    <div
+                      key={i}
+                      className="bg-card border rounded-lg p-4 space-y-3"
+                    >
                       <div className="flex items-center gap-3">
                         <Skeleton className="h-10 w-10 rounded-full" />
                         <div>
