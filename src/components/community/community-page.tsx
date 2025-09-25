@@ -85,6 +85,7 @@ export function CommunityPage({
         isJoined={!isNotMember}
         onJoin={handleJoin}
         onLeave={handleLeave}
+        loading={loading || roleLoading}
       />
 
       {/* Main Content */}

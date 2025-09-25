@@ -161,7 +161,7 @@ export async function fetchUserCommunityRole(
 }> {
   try {
     const response = await fetch(
-      `${baseUrl}/api/community/${communityId}/user/${userId}/role`,
+      `${baseUrl}/api/community/${communityId}/members/${userId}`,
       {
         method: "GET",
         headers: {
