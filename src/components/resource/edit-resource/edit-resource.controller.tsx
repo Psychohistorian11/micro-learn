@@ -11,7 +11,8 @@ import StepAttachment from "../create-resource/steps/step-attachment";
 import { editResource } from "@/lib/services/resource-service";
 import AreaCard from "../area-card";
 import { IconEdit } from "@tabler/icons-react";
-import { Icon } from "lucide-react";
+import { EditAreasDialog } from "./edit-areas-dialog";
+import { EditCommunitiesDialog } from "./edit-communities-dialog";
 
 type Props = {
   resource: ResourceDTO;
@@ -35,6 +36,24 @@ export function EditResourceSheet({ resource, open, onOpenChange }: Props) {
   });
 
   const [isSaving, setIsSaving] = useState(false);
+  const [areasDialogOpen, setAreasDialogOpen] = useState(false);
+  const [communitiesDialogOpen, setCommunitiesDialogOpen] = useState(false);
+  const [currentAreas, setCurrentAreas] = useState<string[]>(
+    resource.areas?.map((a) => a.area.id) ?? []
+  );
+  const [currentCommunities, setCurrentCommunities] = useState<string[]>(
+    resource.communities?.map((c) => c.id) ?? []
+  );
+
+  const handleAreasUpdated = (areaIds: string[]) => {
+    setCurrentAreas(areaIds);
+    form.setValue("areas", areaIds);
+  };
+
+  const handleCommunitiesUpdated = (communityIds: string[]) => {
+    setCurrentCommunities(communityIds);
+    form.setValue("communities", communityIds);
+  };
 
   const onSubmit = async (data: ResourceCreateDTO) => {
     try {
@@ -60,7 +79,6 @@ export function EditResourceSheet({ resource, open, onOpenChange }: Props) {
       await editResource(resource.id, data);
 
       onOpenChange(false);
-      // Aquí también podrías refrescar la lista o invalidar cache
     } catch (err) {
       console.error("Error al actualizar:", err);
     } finally {
@@ -69,82 +87,115 @@ export function EditResourceSheet({ resource, open, onOpenChange }: Props) {
   };
 
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetTitle className="px-4 pt-6 text-2xl font-serif"></SheetTitle>
-      <SheetContent className="sm:max-w-1/3 w-full overflow-y-auto px-4 sm:p-6">
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-col gap-8 py-6"
-        >
-          <StepBasicData form={form} />
-          <StepAttachment form={form} />
+    <>
+      <Sheet open={open} onOpenChange={onOpenChange}>
+        <SheetTitle className="px-4 pt-6 text-2xl font-serif"></SheetTitle>
+        <SheetContent className="sm:max-w-1/3 w-full overflow-y-auto px-4 sm:p-6">
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="flex flex-col gap-8 py-6"
+          >
+            <StepBasicData form={form} />
+            <StepAttachment form={form} />
 
-          <div className="flex flex-col gap-3">
-            <div className="flex justify-between items-center ">
-              <h3 className="font-serif text-2xl">Áreas</h3>
-              <Button type="button" variant="outline" size="sm">
-                <IconEdit className=" h-4 w-4" />
-              </Button>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {resource.areas?.length ? (
-                resource.areas.map((areaData) => (
-                  <AreaCard
-                    key={areaData.area.id}
-                    area={areaData.area}
-                    selected={true}
-                  />
-                ))
-              ) : (
-                <span className="text-sm text-muted-foreground">Ninguna</span>
-              )}
-            </div>
-          </div>
-
-          {/* Comunidades */}
-          <div className="flex flex-col gap-3">
-            <div className="flex justify-between items-center ">
-              <h3 className="font-serif text-2xl">Comunidades</h3>
-              <Button type="button" variant="outline" size="sm">
-                <IconEdit className=" h-4 w-4" />
-              </Button>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {resource.communities?.map((c) => (
-                <span
-                  key={c.id}
-                  className="px-3 py-1 rounded-full bg-persian-green/20 text-persian-green text-sm"
+            <div className="flex flex-col gap-3">
+              <div className="flex justify-between items-center ">
+                <h3 className="font-serif text-2xl">Áreas</h3>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setAreasDialogOpen(true)}
                 >
-                  {c.id}
-                </span>
-              ))}
-              {(!resource.communities || resource.communities.length === 0) && (
-                <span className="text-sm text-muted-foreground">
-                  Sin comunidades asignadas
-                </span>
-              )}
+                  <IconEdit className=" h-4 w-4" />
+                </Button>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {currentAreas.length ? (
+                  currentAreas.map((areaId) => {
+                    const areaData = resource.areas?.find(
+                      (a) => a.area.id === areaId
+                    );
+                    return areaData ? (
+                      <AreaCard
+                        key={areaData.area.id}
+                        area={areaData.area}
+                        selected={true}
+                      />
+                    ) : null;
+                  })
+                ) : (
+                  <span className="text-sm text-muted-foreground">Ninguna</span>
+                )}
+              </div>
             </div>
-          </div>
 
-          {/* Botones */}
-          <div className="flex justify-end gap-3">
-            <Button
-              type="button"
-              variant="ghost"
-              onClick={() => onOpenChange(false)}
-            >
-              Cancelar
-            </Button>
-            <Button
-              type="submit"
-              className="bg-persian-green"
-              disabled={isSaving}
-            >
-              {isSaving ? "Guardando..." : "Guardar cambios"}
-            </Button>
-          </div>
-        </form>
-      </SheetContent>
-    </Sheet>
+            {/* Comunidades */}
+            <div className="flex flex-col gap-3">
+              <div className="flex justify-between items-center ">
+                <h3 className="font-serif text-2xl">Comunidades</h3>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setCommunitiesDialogOpen(true)}
+                >
+                  <IconEdit className=" h-4 w-4" />
+                </Button>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {currentCommunities.length ? (
+                  currentCommunities.map((communityId) => (
+                    <span
+                      key={communityId}
+                      className="px-3 py-1 rounded-full bg-persian-green/20 text-persian-green text-sm"
+                    >
+                      {communityId}
+                    </span>
+                  ))
+                ) : (
+                  <span className="text-sm text-muted-foreground">
+                    Sin comunidades asignadas
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {/* Botones */}
+            <div className="flex justify-end gap-3">
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() => onOpenChange(false)}
+              >
+                Cancelar
+              </Button>
+              <Button
+                type="submit"
+                className="bg-persian-green"
+                disabled={isSaving}
+              >
+                {isSaving ? "Guardando..." : "Guardar cambios"}
+              </Button>
+            </div>
+          </form>
+        </SheetContent>
+      </Sheet>
+
+      {/* Diálogos para editar áreas y comunidades */}
+      <EditAreasDialog
+        open={areasDialogOpen}
+        onOpenChange={setAreasDialogOpen}
+        resource={resource}
+        onAreasUpdated={handleAreasUpdated}
+      />
+
+      <EditCommunitiesDialog
+        open={communitiesDialogOpen}
+        onOpenChange={setCommunitiesDialogOpen}
+        resource={resource}
+        onCommunitiesUpdated={handleCommunitiesUpdated}
+      />
+    </>
   );
 }

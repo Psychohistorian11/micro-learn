@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { fetchUserCommunityRole } from "@/lib/services/community-service";
 
 export type CommunityRole = "admin" | "moderator" | "participant" | null;
 

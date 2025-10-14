@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { CommunityPosts } from "@/components/community/community-posts";
 import { ResourceDTO } from "@/interface/resource";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { getResources } from "@/lib/services/resource-service";
 import { CommunityCard } from "@/components/community/community-card";

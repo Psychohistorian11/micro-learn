@@ -133,6 +133,7 @@ export function AppDesktopSidebar({
             />
           </SidebarHeader>
 
+
           <SidebarContent>
             {query ? (
               <SearchResults query={query} />
