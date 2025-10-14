@@ -1,4 +1,4 @@
-import { IsOptional, IsString, IsUUID } from "class-validator";
+import { IsBoolean, IsOptional, IsString, IsUUID } from "class-validator";
 
 export class CommunityDTO {
   @IsUUID()
@@ -12,6 +12,9 @@ export class CommunityDTO {
 
   @IsString()
   avatar: string;
+
+  @IsBoolean()
+  isPublic?: boolean;
 
   @IsString()
   description: string;
@@ -40,6 +43,10 @@ export class CommunityCreateDTO {
   @IsString()
   avatar?: string;
 
+  @IsOptional()
+  @IsBoolean()
+  isPublic?: boolean;
+
   @IsString()
   description: string;
 }
@@ -59,6 +66,10 @@ export class CommunityUpdateDTO {
   @IsString()
   @IsOptional()
   avatar?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  isPublic?: boolean;
 
   @IsString()
   @IsOptional()

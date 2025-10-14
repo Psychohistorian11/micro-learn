@@ -77,5 +77,6 @@ export const communityBaseSelect = {
   title: true,
   image: true,
   avatar: true,
+  isPublic: true,
   description: true,
 };

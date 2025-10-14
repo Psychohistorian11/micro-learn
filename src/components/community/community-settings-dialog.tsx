@@ -138,7 +138,7 @@ export function CommunitySettingsDialog({
       await deleteCommunity(community.id);
       onCommunityDeleted();
       setOpen(false);
-      router.push("/communities");
+      router.push("/");
     } catch (err: any) {
       console.error("Error deleting community:", err);
       setServerError(

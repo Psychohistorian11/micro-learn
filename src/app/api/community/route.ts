@@ -28,10 +28,7 @@ export async function POST(request: NextRequest) {
 
   const newCommunity = await prismadb.community.create({
     data: {
-      title: dto.title,
-      image: dto.image ?? undefined,
-      description: dto.description,
-      avatar: dto.avatar ?? undefined,
+      ...dto,
       users: {
         create: {
           user: {
@@ -46,5 +43,3 @@ export async function POST(request: NextRequest) {
 
   return NextResponse.json(newCommunity);
 }
-
-

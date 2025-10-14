@@ -46,7 +46,7 @@ model Community {
   image       String  @default("") // TODO: default image
   avatar      String  @default("") // TODO: default avatar
   description String  @default("") 
-  
+  isPublic    Boolean @default(true)
   
   users     User_Community[]
   resources Resource_Community[]
@@ -117,6 +117,7 @@ enum CommunityRole {
   Admin
   Mod
   Member
+  Pending
 }
 
 enum ResourceType {
