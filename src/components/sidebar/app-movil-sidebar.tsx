@@ -45,8 +45,8 @@ export function AppMobileSidebar() {
 
     return (
         <>
-            <nav className="sticky bottom-0 left-0 w-full bg-background md:hidden mt-auto">
-                <ul className="flex items-center justify-around h-14">
+            <nav className="fixed bottom-0 left-0 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-t md:hidden z-50">
+                <ul className="flex items-center justify-around h-14 px-2">
                     {navigationBarData.navMain.map((item) => {
                         const isActive = active?.title === item.title
                         return (

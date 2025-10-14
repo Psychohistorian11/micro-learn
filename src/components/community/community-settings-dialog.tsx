@@ -43,7 +43,7 @@ export function CommunitySettingsDialog({
   community,
   onCommunityUpdated,
   onCommunityDeleted,
-  children,
+  children
 }: CommunitySettingsDialogProps) {
   const { data: session } = useSession();
   const router = useRouter();
@@ -114,9 +114,7 @@ export function CommunitySettingsDialog({
       setOpen(false);
     } catch (err: any) {
       console.error("Error updating community:", err);
-      setServerError(
-        err.message || "Error al actualizar la comunidad. Intenta de nuevo."
-      );
+      setServerError(err.message || "Error al actualizar la comunidad. Intenta de nuevo.");
     }
   });
 
@@ -138,12 +136,10 @@ export function CommunitySettingsDialog({
       await deleteCommunity(community.id);
       onCommunityDeleted();
       setOpen(false);
-      router.push("/");
+      router.push("/communities");
     } catch (err: any) {
       console.error("Error deleting community:", err);
-      setServerError(
-        err.message || "Error al eliminar la comunidad. Intenta de nuevo."
-      );
+      setServerError(err.message || "Error al eliminar la comunidad. Intenta de nuevo.");
     } finally {
       setIsDeleting(false);
     }
@@ -321,8 +317,7 @@ export function CommunitySettingsDialog({
                   Zona de Peligro
                 </h3>
                 <p className="text-sm text-muted-foreground mb-4">
-                  Una vez que elimines una comunidad, no hay vuelta atrás. Por
-                  favor, ten cuidado.
+                  Una vez que elimines una comunidad, no hay vuelta atrás. Por favor, ten cuidado.
                 </p>
               </div>
 
@@ -338,12 +333,8 @@ export function CommunitySettingsDialog({
               ) : (
                 <div className="space-y-4 p-4 border border-destructive/20 rounded-lg bg-destructive/5">
                   <div>
-                    <Label
-                      htmlFor="deleteConfirm"
-                      className="text-destructive font-medium"
-                    >
-                      Escribe el nombre de la comunidad para confirmar la
-                      eliminación
+                    <Label htmlFor="deleteConfirm" className="text-destructive font-medium">
+                      Escribe el nombre de la comunidad para confirmar la eliminación
                     </Label>
                     <Input
                       id="deleteConfirm"
@@ -372,9 +363,7 @@ export function CommunitySettingsDialog({
                     <Button
                       variant="destructive"
                       onClick={handleDeleteCommunity}
-                      disabled={
-                        deleteConfirmText !== community.title || isDeleting
-                      }
+                      disabled={deleteConfirmText !== community.title || isDeleting}
                       className="flex-1"
                     >
                       {isDeleting ? (

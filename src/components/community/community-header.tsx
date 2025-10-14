@@ -12,7 +12,6 @@ interface CommunityHeaderProps {
   isJoined?: boolean;
   onJoin?: () => void;
   onLeave?: () => void;
-  loading?: boolean;
 }
 
 export function CommunityHeader({
@@ -21,8 +20,7 @@ export function CommunityHeader({
   onlineCount = 0,
   isJoined = false,
   onJoin,
-  onLeave,
-  loading,
+  onLeave
 }: CommunityHeaderProps) {
   return (
     <div className="relative">
@@ -93,27 +91,18 @@ export function CommunityHeader({
           </div>
 
           {/* Action Buttons */}
-          <div className="flex justify-center pt-4">
-            {loading ? (
-              <Button
-                disabled
-                className="w-full max-w-xs text-lg font-bold shadow-lg"
-              >
-                ...
-              </Button>
-            ) : (
-              <Button
-                onClick={isJoined ? onLeave : onJoin}
-                className={`${
-                  isJoined
-                    ? "bg-muted text-foreground hover:bg-muted/80"
-                    : "bg-persian-green hover:bg-persian-green/90"
-                } w-full max-w-xs text-lg font-bold shadow-lg`}
-                size="lg"
-              >
-                {isJoined ? "Dejar" : "Unirse"}
-              </Button>
-            )}
+          <div className="flex items-center gap-2 pt-2">
+
+            <Button
+              onClick={isJoined ? onLeave : onJoin}
+              className={`${isJoined
+                ? "bg-muted text-foreground hover:bg-muted/80"
+                : "bg-persian-green hover:bg-persian-green/90"
+                }`}
+              size="sm"
+            >
+              {isJoined ? "Dejar" : "Unirse"}
+            </Button>
           </div>
         </div>
       </div>

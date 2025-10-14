@@ -69,7 +69,6 @@ export async function search(query: string, areas: string[]): Promise<any> {
         area_ids: areas,
       }),
     });
-    console.log("response", response);
     if (!response.ok) {
       const errorData = await response.json();
       throw new Error(
