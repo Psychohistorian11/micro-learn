@@ -122,68 +122,71 @@ export function CommunityPage({
     };
 
     return (
-        <div className="min-h-screen bg-background">
-            {/* Community Header */}
-            <CommunityHeader
-                community={currentCommunity}
-                memberCount={currentMembers.length}
-                onlineCount={Math.floor(currentMembers.length * 0.1)} // Simulate online count
-                isJoined={!isNotMember}
-                onJoin={handleJoin}
-                onLeave={handleLeave}
-                loading={loading || roleLoading || isJoining}
-            />
+        <div className="min-h-screen bg-background pb-20 md:pb-6">
+            {/* Community Header - Sticky */}
+            <div className="sticky top-0 z-40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b">
+                <CommunityHeader
+                    community={currentCommunity}
+                    memberCount={currentMembers.length}
+                    onlineCount={Math.floor(currentMembers.length * 0.1)} // Simulate online count
+                    isJoined={!isNotMember}
+                    onJoin={handleJoin}
+                    onLeave={handleLeave}
+                    loading={loading || roleLoading || isJoining}
+                />
+            </div>
 
             {/* Main Content */}
-            <div className="container mx-auto px-4 py-6">
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="container mx-auto px-4 py-4 md:py-6">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
                     {/* Left Column - Posts */}
-                    <div className="lg:col-span-2 space-y-6">
+                    <div className="lg:col-span-2 space-y-4 md:space-y-6 min-w-0">
                         {/* Sort and Filter Controls */}
-                        <div className="flex items-center justify-between">
+                        <div className="space-y-4">
                             <Tabs defaultValue="posts" className="w-full">
-                                <TabsList className="grid w-full grid-cols-3">
+                                <TabsList className="grid w-full grid-cols-3 h-auto">
                                     <TabsTrigger
                                         value="posts"
-                                        className="flex items-center gap-2"
+                                        className="flex items-center gap-1 md:gap-2 text-xs md:text-sm"
                                     >
-                                        <MessageSquare className="h-4 w-4" />
-                                        Posts
+                                        <MessageSquare className="h-3 w-3 md:h-4 md:w-4" />
+                                        <span className="hidden sm:inline">Posts</span>
                                     </TabsTrigger>
                                     <TabsTrigger
                                         value="media"
-                                        className="flex items-center gap-2"
+                                        className="flex items-center gap-1 md:gap-2 text-xs md:text-sm"
                                     >
-                                        <BarChart3 className="h-4 w-4" />
-                                        Media
+                                        <BarChart3 className="h-3 w-3 md:h-4 md:w-4" />
+                                        <span className="hidden sm:inline">Media</span>
                                     </TabsTrigger>
                                     <TabsTrigger
                                         value="about"
-                                        className="flex items-center gap-2"
+                                        className="flex items-center gap-1 md:gap-2 text-xs md:text-sm"
                                     >
-                                        <Settings className="h-4 w-4" />
-                                        Info
+                                        <Settings className="h-3 w-3 md:h-4 md:w-4" />
+                                        <span className="hidden sm:inline">Info</span>
                                     </TabsTrigger>
                                 </TabsList>
 
-                                <TabsContent value="posts" className="mt-6">
+                                <TabsContent value="posts" className="mt-4 md:mt-6">
                                     {/* Sort Controls */}
-                                    <div className="flex items-center justify-between mb-4">
-                                        <div className="flex items-center gap-2">
-                                            <Button variant="outline" size="sm">
-                                                <Filter className="h-4 w-4 mr-2" />
-                                                Filtros
+                                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+                                        <div className="flex items-center gap-2 flex-wrap">
+                                            <Button variant="outline" size="sm" className="text-xs">
+                                                <Filter className="h-3 w-3 md:h-4 md:w-4 mr-1 md:mr-2" />
+                                                <span className="hidden sm:inline">Filtros</span>
                                             </Button>
-                                            <Button variant="outline" size="sm">
-                                                <SortAsc className="h-4 w-4 mr-2" />
-                                                Más recientes
+                                            <Button variant="outline" size="sm" className="text-xs">
+                                                <SortAsc className="h-3 w-3 md:h-4 md:w-4 mr-1 md:mr-2" />
+                                                <span className="hidden sm:inline">Más recientes</span>
                                             </Button>
                                         </div>
                                         <Button
                                             onClick={() => router.push("/create-resource")}
-                                            className="bg-persian-green hover:bg-persian-green/90"
+                                            className="bg-persian-green hover:bg-persian-green/90 text-xs md:text-sm"
                                         >
-                                            Crear Post
+                                            <span className="hidden sm:inline">Crear Post</span>
+                                            <span className="sm:hidden">Crear</span>
                                         </Button>
                                     </div>
 
@@ -239,9 +242,9 @@ export function CommunityPage({
                     </div>
 
                     {/* Right Column - Members and Info */}
-                    <div className="space-y-6">
+                    <div className="space-y-4 md:space-y-6">
                         {/* Members */}
-                        <div className="bg-card rounded-lg border p-4">
+                        <div className="bg-card rounded-lg border p-3 md:p-4">
                             <CommunityMembers
                                 members={currentMembers}
                                 loading={loading || roleLoading}
@@ -251,7 +254,7 @@ export function CommunityPage({
                         </div>
 
                         {/* Community Stats */}
-                        <div className="bg-card rounded-lg border p-4">
+                        <div className="bg-card rounded-lg border p-3 md:p-4">
                             <h3 className="font-semibold mb-4 flex items-center gap-2">
                                 <BarChart3 className="h-5 w-5" />
                                 Estadísticas
@@ -297,22 +300,22 @@ export function CommunityPage({
                         </div>
 
                         {/* Quick Actions */}
-                        <div className="bg-card rounded-lg border p-4">
+                        <div className="bg-card rounded-lg border p-3 md:p-4">
                             <h3 className="font-semibold mb-4">Acciones rápidas</h3>
                             <div className="space-y-2">
                                 {!isNotMember && (
                                     <Button
                                         onClick={() => router.push("/create-resource")}
                                         variant="outline"
-                                        className="w-full justify-start"
+                                        className="w-full justify-start text-xs md:text-sm"
                                     >
-                                        <MessageSquare className="h-4 w-4 mr-2" />
+                                        <MessageSquare className="h-3 w-3 md:h-4 md:w-4 mr-2" />
                                         Crear post
                                     </Button>
                                 )}
                                 {canManageMembers && (
-                                    <Button variant="outline" className="w-full justify-start">
-                                        <Users className="h-4 w-4 mr-2" />
+                                    <Button variant="outline" className="w-full justify-start text-xs md:text-sm">
+                                        <Users className="h-3 w-3 md:h-4 md:w-4 mr-2" />
                                         Invitar miembros
                                     </Button>
                                 )}
@@ -322,8 +325,8 @@ export function CommunityPage({
                                         onCommunityUpdated={handleCommunityUpdated}
                                         onCommunityDeleted={handleCommunityDeleted}
                                     >
-                                        <Button variant="outline" className="w-full justify-start">
-                                            <Settings className="h-4 w-4 mr-2" />
+                                        <Button variant="outline" className="w-full justify-start text-xs md:text-sm">
+                                            <Settings className="h-3 w-3 md:h-4 md:w-4 mr-2" />
                                             Configuración
                                         </Button>
                                     </CommunitySettingsDialog>

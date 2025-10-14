@@ -19,7 +19,7 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { MoreHorizontal, Trash2, Flag, Shield } from "lucide-react";
+import { MoreHorizontal, Trash2, Flag, Shield, Download } from "lucide-react";
 import { ResourceDTO } from "@/interface/resource";
 import { deleteCommunityPost } from "@/lib/services/community-service";
 import { useCommunityRole } from "@/hooks/use-community-role";
@@ -53,7 +53,60 @@ export function CommunityPostActions({
         }
     };
 
-    if (!canModerateContent) {
+    const handleDownloadResource = async () => {
+        try {
+            if (post.attachment) {
+                // Si hay un archivo adjunto, descargarlo
+                const response = await fetch(post.attachment);
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `${post.title}.${getFileExtension(post.type)}`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                window.URL.revokeObjectURL(url);
+            } else {
+                // Si no hay archivo adjunto, crear un archivo de texto con la información del recurso
+                const resourceContent = `Título: ${post.title}\n\nDescripción: ${post.description}\n\nTipo: ${post.type}\n\nÁreas: ${post.areas?.map(area => area.area.name).join(', ') || 'N/A'}\n\nFecha de creación: ${new Date(post.createdAt).toLocaleString()}`;
+                const blob = new Blob([resourceContent], { type: 'text/plain;charset=utf-8' });
+                const url = window.URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `${post.title}.txt`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                window.URL.revokeObjectURL(url);
+            }
+        } catch (error) {
+            console.error("Error downloading resource:", error);
+            // TODO: Show error toast
+        }
+    };
+
+    const getFileExtension = (type: string) => {
+        switch (type) {
+            case "Video":
+                return "mp4";
+            case "Text":
+                return "txt";
+            case "Slides":
+                return "pdf";
+            case "Infography":
+                return "png";
+            case "Podcast":
+                return "mp3";
+            default:
+                return "txt";
+        }
+    };
+
+    // En el feed, siempre mostrar las acciones (excepto eliminar que requiere permisos)
+    const showActions = communityId === "feed" || canModerateContent;
+
+    if (!showActions) {
         return null;
     }
 
@@ -66,18 +119,26 @@ export function CommunityPostActions({
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
+                    <DropdownMenuItem onClick={handleDownloadResource}>
+                        <Download className="h-4 w-4 mr-2" />
+                        Descargar recurso
+                    </DropdownMenuItem>
                     <DropdownMenuItem>
                         <Flag className="h-4 w-4 mr-2" />
                         Reportar
                     </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem
-                        onClick={() => setShowDeleteDialog(true)}
-                        className="text-destructive focus:text-destructive"
-                    >
-                        <Trash2 className="h-4 w-4 mr-2" />
-                        Eliminar post
-                    </DropdownMenuItem>
+                    {canModerateContent && (
+                        <>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem
+                                onClick={() => setShowDeleteDialog(true)}
+                                className="text-destructive focus:text-destructive"
+                            >
+                                <Trash2 className="h-4 w-4 mr-2" />
+                                Eliminar post
+                            </DropdownMenuItem>
+                        </>
+                    )}
                 </DropdownMenuContent>
             </DropdownMenu>
 

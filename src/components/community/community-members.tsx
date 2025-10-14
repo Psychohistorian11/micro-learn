@@ -3,14 +3,15 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
-  Users,
-  Crown,
-  Shield,
-  UserPlus,
-  Search,
-  MoreHorizontal,
-} from "lucide-react";
+  IconUsers,
+  IconCrown,
+  IconShield,
+  IconUserPlus,
+  IconSearch,
+  IconDots,
+} from "@tabler/icons-react";
 import { Input } from "@/components/ui/input";
 import { CommunityMemberActions } from "./community-member-actions";
 import { Community, CommunityRole } from "@prisma/client";
@@ -37,9 +38,9 @@ export function CommunityMembers({
   const getRoleIcon = (role: CommunityRole) => {
     switch (role) {
       case CommunityRole.Admin:
-        return <Crown className="h-3 w-3 text-yellow-500" />;
+        return <IconCrown className="h-3 w-3 text-yellow-500" />;
       case CommunityRole.Mod:
-        return <Shield className="h-3 w-3 text-blue-500" />;
+        return <IconShield className="h-3 w-3 text-blue-500" />;
       default:
         return null;
     }
@@ -69,17 +70,17 @@ export function CommunityMembers({
     return (
       <div className="space-y-4">
         <div className="flex items-center gap-2 mb-4">
-          <Users className="h-5 w-5" />
+          <IconUsers className="h-5 w-5" />
           <h3 className="font-semibold">Miembros</h3>
         </div>
 
         <div className="space-y-3">
           {Array.from({ length: 5 }).map((_, i) => (
-            <div key={i} className="flex items-center gap-3 animate-pulse">
-              <div className="w-8 h-8 bg-muted rounded-full" />
+            <div key={i} className="flex items-center gap-3">
+              <Skeleton className="w-8 h-8 rounded-full" />
               <div className="flex-1 space-y-1">
-                <div className="h-3 bg-muted rounded w-1/2" />
-                <div className="h-2 bg-muted rounded w-1/3" />
+                <Skeleton className="h-3 w-1/2" />
+                <Skeleton className="h-2 w-1/3" />
               </div>
             </div>
           ))}
@@ -93,20 +94,20 @@ export function CommunityMembers({
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Users className="h-5 w-5" />
+          <IconUsers className="h-5 w-5" />
           <h3 className="font-semibold">Miembros</h3>
           <Badge variant="secondary" className="text-xs">
             {members.length}
           </Badge>
         </div>
         <Button variant="ghost" size="sm">
-          <MoreHorizontal className="h-4 w-4" />
+          <IconDots className="h-4 w-4" />
         </Button>
       </div>
 
       {/* Search */}
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <IconSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input placeholder="Buscar miembros..." className="pl-10" />
       </div>
 
@@ -166,7 +167,7 @@ export function CommunityMembers({
         variant="outline"
         className="w-full text-persian-green border-persian-green hover:bg-persian-green/10"
       >
-        <UserPlus className="h-4 w-4 mr-2" />
+        <IconUserPlus className="h-4 w-4 mr-2" />
         Invitar miembros
       </Button>
     </div>

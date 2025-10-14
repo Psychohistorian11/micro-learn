@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { CommunityDTO } from "@/interface/community";
 import { InfiniteFeed } from "@/components/feed/infinite-feed";
 import { TrendingUp } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function HomePage() {
   const [initialPosts, setInitialPosts] = useState<ResourceDTO[]>([]);
@@ -65,34 +66,66 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="flex flex-col lg:flex-row gap-6 p-4 max-w-6xl mx-auto">
+      <div className="flex flex-col md:flex-row gap-6 p-4 md:p-6 max-w-6xl mx-auto pb-20 md:pb-6">
         {/* Feed principal */}
-        <div className="flex-1 max-w-2xl mx-auto lg:mx-0">
+        <div className="flex-1 min-w-0">
           {loading ? (
-            <div className="space-y-6">
+            <div className="space-y-4">
               {Array.from({ length: 3 }).map((_, i) => (
                 <div
                   key={i}
-                  className="bg-card rounded-xl border shadow-sm p-6"
+                  className="bg-card rounded-lg border overflow-hidden animate-pulse"
                 >
-                  <div className="flex gap-4 mb-4">
-                    <div className="w-10 h-10 bg-muted rounded-full animate-pulse" />
-                    <div className="flex-1 space-y-2">
-                      <div className="h-4 bg-muted rounded w-1/4 animate-pulse" />
-                      <div className="h-3 bg-muted rounded w-1/6 animate-pulse" />
+                  {/* Header skeleton */}
+                  <div className="p-3 md:p-4 border-b">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <Skeleton className="w-8 h-8 rounded-full" />
+                        <div className="space-y-1">
+                          <Skeleton className="h-3 w-20" />
+                          <Skeleton className="h-2 w-16" />
+                        </div>
+                      </div>
+                      <Skeleton className="w-6 h-6" />
                     </div>
                   </div>
-                  <div className="h-6 bg-muted rounded w-3/4 mb-3 animate-pulse" />
-                  <div className="h-4 bg-muted rounded w-full mb-2 animate-pulse" />
-                  <div className="h-4 bg-muted rounded w-2/3 mb-4 animate-pulse" />
-                  <div className="h-48 bg-muted rounded-lg mb-4 animate-pulse" />
-                  <div className="flex justify-between">
-                    <div className="flex gap-4">
-                      <div className="h-8 w-16 bg-muted rounded animate-pulse" />
-                      <div className="h-8 w-20 bg-muted rounded animate-pulse" />
-                      <div className="h-8 w-20 bg-muted rounded animate-pulse" />
+
+                  {/* Content skeleton */}
+                  <div className="p-3 md:p-4">
+                    <Skeleton className="h-5 w-3/4 mb-2" />
+                    <div className="space-y-2 mb-4">
+                      <Skeleton className="h-4 w-full" />
+                      <Skeleton className="h-4 w-5/6" />
+                      <Skeleton className="h-4 w-2/3" />
                     </div>
-                    <div className="h-8 w-8 bg-muted rounded animate-pulse" />
+
+                    {/* Image skeleton */}
+                    <div className="mb-4">
+                      <Skeleton className="w-full h-40 md:h-48" />
+                    </div>
+
+                    {/* Tags skeleton */}
+                    <div className="flex gap-1 md:gap-2 mb-4">
+                      <Skeleton className="h-6 w-16 rounded-full" />
+                      <Skeleton className="h-6 w-20 rounded-full" />
+                      <Skeleton className="h-6 w-12 rounded-full" />
+                    </div>
+
+                    {/* Actions skeleton */}
+                    <div className="flex items-center justify-between pt-2 border-t">
+                      <div className="flex items-center gap-2 md:gap-4">
+                        <div className="flex items-center gap-1">
+                          <Skeleton className="w-8 h-8" />
+                          <Skeleton className="w-4 h-4" />
+                          <Skeleton className="w-8 h-8" />
+                        </div>
+                        <Skeleton className="w-16 h-8 hidden sm:block" />
+                        <Skeleton className="w-16 h-8 hidden sm:block" />
+                        <Skeleton className="w-8 h-8 sm:hidden" />
+                        <Skeleton className="w-8 h-8 sm:hidden" />
+                      </div>
+                      <Skeleton className="w-8 h-8" />
+                    </div>
                   </div>
                 </div>
               ))}
@@ -102,50 +135,25 @@ export default function HomePage() {
           )}
         </div>
 
-        <aside className="lg:w-80 shrink-0">
-          <div className="sticky space-y-6">
-            <div className="bg-card rounded-xl border shadow-sm p-5">
-              <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
-                <TrendingUp className="h-5 w-5 text-persian-green" />
-                Comunidades populares
-              </h3>
-              <div className="space-y-3">
-                {communities.length > 0 ? (
-                  communities.map((com) => (
-                    <CommunityCard
-                      key={com.id}
-                      community={com}
-                      onClick={() => router.push(`/community/${com.id}`)}
-                    />
-                  ))
-                ) : (
-                  <p className="text-sm text-muted-foreground">
-                    Sin resultados
-                  </p>
-                )}
-              </div>
-            </div>
-
-            <div className="bg-card rounded-xl border shadow-sm p-5">
-              <h3 className="font-semibold text-lg mb-4">Tendencias</h3>
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm">#Python</span>
-                  <span className="text-xs text-muted-foreground">+245</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm">#React</span>
-                  <span className="text-xs text-muted-foreground">+189</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm">#MachineLearning</span>
-                  <span className="text-xs text-muted-foreground">+156</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm">#DevOps</span>
-                  <span className="text-xs text-muted-foreground">+134</span>
-                </div>
-              </div>
+        <aside className="hidden md:block w-72 shrink-0">
+          <div className="border shadow-sm p-5 sticky top-4">
+            <h3 className="font-semibold text-lg mb-4">
+              Comunidades populares
+            </h3>
+            <div className="space-y-3">
+              {communities.length > 0 ? (
+                communities.map((com) => (
+                  <CommunityCard
+                    key={com.id}
+                    community={com}
+                    onClick={() => router.push(`/community/${com.id}`)}
+                  />
+                ))
+              ) : (
+                <p className="text-sm text-muted-foreground">
+                  Sin resultados
+                </p>
+              )}
             </div>
           </div>
         </aside>
