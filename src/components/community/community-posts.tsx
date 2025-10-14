@@ -4,21 +4,22 @@ import { ResourceDTO } from "@/interface/resource";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
-  MessageCircle,
-  Share2,
-  Bookmark,
-  MoreHorizontal,
-  ArrowUp,
-  ArrowDown,
-  Play,
-  FileText,
-  Image as ImageIcon,
-} from "lucide-react";
+  IconMessageCircle,
+  IconShare,
+  IconBookmark,
+  IconArrowUp,
+  IconArrowDown,
+  IconPlayerPlay,
+  IconFileText,
+  IconPhoto
+} from "@tabler/icons-react";
 import { useState } from "react";
 import ResourcePreviewSheet from "../resource/create-resource/resource-preview-sheet";
 import { CommunityPostActions } from "./community-post-actions";
 import { PostDTO } from "@/interface/post";
+import { ShareDialog } from "../ui/share-dialog";
 
 interface CommunityPostsProps {
   posts: PostDTO[];
@@ -42,17 +43,17 @@ export function CommunityPosts({
   const getResourceIcon = (type: string) => {
     switch (type) {
       case "Video":
-        return <Play className="h-4 w-4" />;
+        return <IconPlayerPlay className="h-4 w-4" />;
       case "Text":
-        return <FileText className="h-4 w-4" />;
+        return <IconFileText className="h-4 w-4" />;
       case "Slides":
-        return <ImageIcon className="h-4 w-4" />;
+        return <IconPhoto className="h-4 w-4" />;
       case "Infography":
-        return <ImageIcon className="h-4 w-4" />;
+        return <IconPhoto className="h-4 w-4" />;
       case "Podcast":
-        return <Play className="h-4 w-4" />;
+        return <IconPlayerPlay className="h-4 w-4" />;
       default:
-        return <FileText className="h-4 w-4" />;
+        return <IconFileText className="h-4 w-4" />;
     }
   };
 
@@ -77,14 +78,56 @@ export function CommunityPosts({
     return (
       <div className="space-y-4">
         {Array.from({ length: 3 }).map((_, i) => (
-          <div key={i} className="bg-card rounded-lg border p-4 animate-pulse">
-            <div className="flex gap-3">
-              <div className="w-8 h-8 bg-muted rounded-full" />
-              <div className="flex-1 space-y-2">
-                <div className="h-4 bg-muted rounded w-1/4" />
-                <div className="h-6 bg-muted rounded w-3/4" />
-                <div className="h-4 bg-muted rounded w-full" />
-                <div className="h-4 bg-muted rounded w-2/3" />
+          <div key={i} className="bg-card rounded-lg border overflow-hidden animate-pulse">
+            {/* Header skeleton */}
+            <div className="p-3 md:p-4 border-b">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <Skeleton className="w-8 h-8 rounded-full" />
+                  <div className="space-y-1">
+                    <Skeleton className="h-3 w-20" />
+                    <Skeleton className="h-2 w-16" />
+                  </div>
+                </div>
+                <Skeleton className="w-6 h-6" />
+              </div>
+            </div>
+
+            {/* Content skeleton */}
+            <div className="p-3 md:p-4">
+              <Skeleton className="h-5 w-3/4 mb-2" />
+              <div className="space-y-2 mb-4">
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-4 w-5/6" />
+                <Skeleton className="h-4 w-2/3" />
+              </div>
+
+              {/* Image skeleton */}
+              <div className="mb-4">
+                <Skeleton className="w-full h-40 md:h-48" />
+              </div>
+
+              {/* Tags skeleton */}
+              <div className="flex gap-1 md:gap-2 mb-4">
+                <Skeleton className="h-6 w-16 rounded-full" />
+                <Skeleton className="h-6 w-20 rounded-full" />
+                <Skeleton className="h-6 w-12 rounded-full" />
+              </div>
+
+              {/* Actions skeleton */}
+              <div className="flex items-center justify-between pt-2 border-t">
+                <div className="flex items-center gap-2 md:gap-4">
+                  <div className="flex items-center gap-1">
+                    <Skeleton className="w-8 h-8" />
+                    <Skeleton className="w-4 h-4" />
+                    <Skeleton className="w-8 h-8" />
+                  </div>
+                  <Skeleton className="w-16 h-8 hidden sm:block" />
+                  <Skeleton className="w-16 h-8 hidden sm:block" />
+                  <Skeleton className="w-8 h-8 sm:hidden" />
+                  <Skeleton className="w-8 h-8 sm:hidden" />
+                </div>
+                <Skeleton className="w-8 h-8" />
               </div>
             </div>
           </div>
@@ -97,7 +140,7 @@ export function CommunityPosts({
     return (
       <div className="bg-card rounded-lg border p-8 text-center">
         <div className="text-muted-foreground mb-2">
-          <FileText className="h-12 w-12 mx-auto mb-4" />
+          <IconFileText className="h-12 w-12 mx-auto mb-4" />
           <h3 className="text-lg font-semibold mb-2">
             No hay publicaciones aún
           </h3>
@@ -174,7 +217,7 @@ export function CommunityPosts({
                         className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                       />
                       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-300 flex items-center justify-center">
-                        <Play className="h-8 w-8 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                        <IconPlayerPlay className="h-8 w-8 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                       </div>
                     </div>
                   ) : post.attachment ? (
@@ -213,27 +256,39 @@ export function CommunityPosts({
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-1">
                   <Button variant="ghost" size="sm" className="h-8 px-2">
-                    <ArrowUp className="h-4 w-4" />
+                    <IconArrowUp className="h-4 w-4" />
                   </Button>
                   <span className="text-sm font-medium px-1">0</span>
                   <Button variant="ghost" size="sm" className="h-8 px-2">
-                    <ArrowDown className="h-4 w-4" />
+                    <IconArrowDown className="h-4 w-4" />
                   </Button>
                 </div>
 
                 <Button variant="ghost" size="sm" className="h-8 px-2">
-                  <MessageCircle className="h-4 w-4 mr-1" />
+                  <IconMessageCircle className="h-4 w-4 mr-1" />
                   <span className="text-sm">0 comentarios</span>
                 </Button>
 
-                <Button variant="ghost" size="sm" className="h-8 px-2">
-                  <Share2 className="h-4 w-4 mr-1" />
-                  <span className="text-sm">Compartir</span>
-                </Button>
+                <ShareDialog
+                  resource={{
+                    id: post.id,
+                    title: post.title,
+                    description: post.description,
+                    type: post.type,
+                    image: post.image,
+                    areas: post.areas
+                  }}
+                  trigger={
+                    <Button variant="ghost" size="sm" className="h-8 px-2">
+                      <IconShare className="h-4 w-4 mr-1" />
+                      <span className="text-sm">Compartir</span>
+                    </Button>
+                  }
+                />
               </div>
 
               <Button variant="ghost" size="sm" className="h-8 px-2">
-                <Bookmark className="h-4 w-4" />
+                <IconBookmark className="h-4 w-4" />
               </Button>
             </div>
           </div>

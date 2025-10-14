@@ -28,7 +28,7 @@ export function InfiniteFeed({ initialPosts = [], onPostDeleted }: InfiniteFeedP
             setIsLoading(true);
             setError(null);
             const newPosts = await getResources(page + 1, 10);
-            
+
             if (newPosts.length === 0) {
                 setHasMore(false);
             } else {

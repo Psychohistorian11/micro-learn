@@ -20,6 +20,8 @@ import {
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import ResourcePreviewSheet from "../resource/create-resource/resource-preview-sheet";
+import { ShareDialog } from "../ui/share-dialog";
+import { CommunityPostActions } from "../community/community-post-actions";
 
 interface FeedCardProps {
   post: ResourceDTO;
@@ -114,9 +116,11 @@ export function FeedCard({ post, onPostDeleted }: FeedCardProps) {
                 </div>
               </div>
             </div>
-            <Button variant="ghost" size="sm">
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
+            <CommunityPostActions
+              post={post}
+              communityId="feed" // Usamos "feed" como ID genérico para el feed
+              onPostDeleted={onPostDeleted}
+            />
           </div>
         </div>
 
@@ -196,11 +200,10 @@ export function FeedCard({ post, onPostDeleted }: FeedCardProps) {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className={`h-8 px-3 ${
-                    isLiked
-                      ? "text-red-500 hover:text-red-600"
-                      : "hover:text-red-500"
-                  }`}
+                  className={`h-8 px-3 ${isLiked
+                    ? "text-red-500 hover:text-red-600"
+                    : "hover:text-red-500"
+                    }`}
                   onClick={handleLike}
                 >
                   <Heart
@@ -215,10 +218,22 @@ export function FeedCard({ post, onPostDeleted }: FeedCardProps) {
                 <span className="text-sm">Comentar</span>
               </Button>
 
-              <Button variant="ghost" size="sm" className="h-8 px-3">
-                <Share2 className="h-4 w-4 mr-1" />
-                <span className="text-sm">Compartir</span>
-              </Button>
+              <ShareDialog
+                resource={{
+                  id: post.id,
+                  title: post.title,
+                  description: post.description,
+                  type: post.type,
+                  image: post.image,
+                  areas: post.areas
+                }}
+                trigger={
+                  <Button variant="ghost" size="sm" className="h-8 px-3">
+                    <Share2 className="h-4 w-4 mr-1" />
+                    <span className="text-sm">Compartir</span>
+                  </Button>
+                }
+              />
             </div>
 
             <div className="flex items-center gap-2">

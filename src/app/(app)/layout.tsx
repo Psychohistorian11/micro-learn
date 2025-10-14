@@ -22,12 +22,12 @@ export default function AppLayout({ children }: { children: ReactNode }) {
                     </div>
 
                     {/* contenido */}
-                    <div className="flex-1 flex flex-col ">
-                        <header className="hidden sm:flex p-2 border-b-1 sticky top-0 z-50 bg-black">
+                    <div className="flex-1 flex flex-col min-h-screen">
+                        <header className="hidden sm:flex p-2 border-b-1 sticky top-0 z-50 bg-background">
                             <SidebarTrigger />
                             <Separator orientation="vertical" />
                         </header>
-                        <main className="flex-1">{children}</main>
+                        <main className="flex-1 min-h-0">{children}</main>
                         {/* sidebar mobile */}
                         <div className="sm:hidden">
                             <AppMobileSidebar />

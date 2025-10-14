@@ -64,7 +64,7 @@ export function useCommunityRole(communityId: string): UseCommunityRoleReturn {
   const canManageSettings = isAdmin;
   const canModerateContent = isAdmin || isModerator;
   const canManageMembers = isAdmin || isModerator;
-  
+
   return {
     userId: session?.user?.id || null,
     role,

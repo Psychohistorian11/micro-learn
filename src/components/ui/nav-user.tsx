@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react"; // 👈 hook de next-auth
-import { LogOut } from "lucide-react";
+import { LogOut, Settings, BookOpen, Users, HelpCircle } from "lucide-react";
 import { IconUserCircle } from "@tabler/icons-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -24,6 +24,7 @@ import {
 import { AuthAlertDialog } from "@/components/ui/custom/auth-alert-dialog";
 import { useAuthGuard } from "@/hooks/use-auth-guard";
 import { handleSignOut } from "@/lib/auth-actions";
+import { ModeToggle } from "./mode-toggle";
 
 export function NavUser() {
   const { isMobile } = useSidebar();
@@ -42,6 +43,7 @@ export function NavUser() {
       router.push("/profile");
     }, "Necesitas estar logueado para ver tu perfil.");
   };
+
 
   return (
     <>
@@ -63,7 +65,7 @@ export function NavUser() {
             </DropdownMenuTrigger>
 
             <DropdownMenuContent
-              className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
+              className="w-64 rounded-lg"
               side={isMobile ? "bottom" : "right"}
               align="end"
               sideOffset={4}
@@ -89,6 +91,18 @@ export function NavUser() {
                   <IconUserCircle />
                   Mi perfil
                 </DropdownMenuItem>
+
+              </DropdownMenuGroup>
+
+              <DropdownMenuSeparator />
+              <DropdownMenuGroup>
+                <div className="px-2 py-1.5">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium">Tema</span>
+                    <ModeToggle />
+                  </div>
+                </div>
+
               </DropdownMenuGroup>
 
               {status === "authenticated" && (

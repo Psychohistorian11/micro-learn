@@ -38,7 +38,7 @@ export const navigationBarData = {
     },
     {
       title: "Communities",
-      url: "/communities",
+      url: "/community",
       icon: IconUsers,
       isActive: true,
     }

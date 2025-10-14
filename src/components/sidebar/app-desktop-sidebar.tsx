@@ -88,6 +88,7 @@ export function AppDesktopSidebar({
           </SidebarHeader>
 
           <SidebarContent>
+            {/* Navegación Principal - Arriba */}
             <SidebarGroup>
               <SidebarGroupContent className="px-1.5 md:px-0">
                 <SidebarMenu>
@@ -115,14 +116,16 @@ export function AppDesktopSidebar({
                 </SidebarMenu>
               </SidebarGroupContent>
             </SidebarGroup>
+          </SidebarContent>
 
-            <SidebarGroup className="">
-              <div className="border border-t-1 mb-2"></div>
-              <SidebarGroupContent>
+          {/* Comunidades - Abajo, antes del footer */}
+          <div className="flex-1 flex flex-col justify-end">
+            <SidebarGroup className="border-t border-border/50">
+              <SidebarGroupContent className="px-1.5 md:px-0">
                 <CommunitiesSection />
               </SidebarGroupContent>
             </SidebarGroup>
-          </SidebarContent>
+          </div>
 
           <SidebarFooter>
             <NavUser />

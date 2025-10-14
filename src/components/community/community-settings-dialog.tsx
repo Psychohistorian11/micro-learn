@@ -215,11 +215,10 @@ export function CommunitySettingsDialog({
                 htmlFor="image"
                 className={`flex-1 flex flex-col items-center justify-center
                 border-2 border-dashed rounded-xl cursor-pointer transition overflow-hidden p-6
-                ${
-                  image
+                ${image
                     ? "border-persian-green bg-persian-green/10"
                     : "border-muted-foreground/30 hover:bg-muted/50"
-                }`}
+                  }`}
               >
                 {isUploading ? (
                   <div className="flex flex-col items-center gap-2 text-persian-green">

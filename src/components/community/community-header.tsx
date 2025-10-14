@@ -45,35 +45,35 @@ export function CommunityHeader({
       </div>
 
       {/* Community Info */}
-      <div className="relative px-6 pb-4">
-        <div className="flex items-start justify-between">
+      <div className="relative px-4 md:px-6 pb-4">
+        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
           {/* Community Details */}
-          <div className="flex items-start gap-4 -mt-11">
+          <div className="flex items-start gap-3 md:gap-4 -mt-11 min-w-0 flex-1">
             {/* Community Avatar */}
-            <Avatar className="w-16 h-16 border-4 border-background shadow-lg">
+            <Avatar className="w-12 h-12 md:w-16 md:h-16 border-4 border-background shadow-lg shrink-0">
               <AvatarImage
                 src={community.image}
                 alt={community.title}
                 className="object-cover"
               />
-              <AvatarFallback className="text-lg font-serif bg-persian-green/20">
+              <AvatarFallback className="text-sm md:text-lg font-serif bg-persian-green/20">
                 {community.title.substring(0, 2).toUpperCase()}
               </AvatarFallback>
             </Avatar>
 
             {/* Community Info */}
-            <div className="pt-2">
-              <h1 className="text-4xl font-bold font-serif text-foreground">
+            <div className="pt-2 min-w-0 flex-1">
+              <h1 className="text-2xl md:text-4xl font-bold font-serif text-foreground break-words">
                 {community.title}
               </h1>
-              <p className="text-muted-foreground text-sm mb-3 max-w-2xl">
+              <p className="text-muted-foreground text-xs md:text-sm mb-3 max-w-2xl break-words">
                 {community.description}
               </p>
 
               {/* Community Stats */}
-              <div className="flex items-center gap-4 text-sm text-muted-foreground">
+              <div className="flex flex-wrap items-center gap-2 md:gap-4 text-xs md:text-sm text-muted-foreground">
                 <div className="flex items-center gap-1">
-                  <Users className="h-4 w-4" />
+                  <Users className="h-3 w-3 md:h-4 md:w-4" />
                   <span>{memberCount.toLocaleString()} miembros</span>
                 </div>
                 <div className="flex items-center gap-1">
@@ -81,11 +81,12 @@ export function CommunityHeader({
                   <span>{onlineCount.toLocaleString()} en línea</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <Calendar className="h-4 w-4" />
-                  <span>Creada hace 2 años</span>
+                  <Calendar className="h-3 w-3 md:h-4 md:w-4" />
+                  <span className="hidden sm:inline">Creada hace 2 años</span>
+                  <span className="sm:hidden">Hace 2 años</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <Globe className="h-4 w-4" />
+                  <Globe className="h-3 w-3 md:h-4 md:w-4" />
                   <span>Pública</span>
                 </div>
               </div>
@@ -93,22 +94,21 @@ export function CommunityHeader({
           </div>
 
           {/* Action Buttons */}
-          <div className="flex justify-center pt-4">
+          <div className="flex justify-center lg:justify-end pt-2 lg:pt-4 w-full lg:w-auto">
             {loading ? (
               <Button
                 disabled
-                className="w-full max-w-xs text-lg font-bold shadow-lg"
+                className="w-full sm:w-auto max-w-xs text-sm md:text-lg font-bold shadow-lg"
               >
                 ...
               </Button>
             ) : (
               <Button
                 onClick={isJoined ? onLeave : onJoin}
-                className={`${
-                  isJoined
-                    ? "bg-muted text-foreground hover:bg-muted/80"
-                    : "bg-persian-green hover:bg-persian-green/90"
-                } w-full max-w-xs text-lg font-bold shadow-lg`}
+                className={`${isJoined
+                  ? "bg-muted text-foreground hover:bg-muted/80"
+                  : "bg-persian-green hover:bg-persian-green/90"
+                  } w-full sm:w-auto max-w-xs text-sm md:text-lg font-bold shadow-lg`}
                 size="lg"
               >
                 {isJoined ? "Dejar" : "Unirse"}
