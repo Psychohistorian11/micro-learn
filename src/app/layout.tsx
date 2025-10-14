@@ -4,7 +4,13 @@ import "./globals.css";
 
 
 export const metadata: Metadata = {
-  title: "microlearn",
+  title: "MicroLearn - Aprende y Comparte",
+  description: "Plataforma de aprendizaje colaborativo donde puedes compartir y descubrir recursos educativos",
+  icons: {
+    icon: "/favicon.svg",
+    shortcut: "/favicon.svg",
+    apple: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({

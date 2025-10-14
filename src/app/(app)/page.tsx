@@ -67,28 +67,11 @@ export default function HomePage() {
     };
 
     return (
-        <div className="flex flex-col md:flex-row gap-6 p-6 max-w-6xl mx-auto">
+        <div className="flex flex-col md:flex-row gap-6 p-4 md:p-6 max-w-6xl mx-auto pb-20 md:pb-6">
             {/* Feed principal */}
-            <div className="flex-1">
+            <div className="flex-1 min-w-0">
                 {loading && posts.length === 0 ? (
-                    <div className="space-y-6">
-                        {[...Array(3)].map((_, i) => (
-                            <div
-                                key={i}
-                                className="bg-card rounded-xl border shadow-sm p-6"
-                            >
-                                <div className="flex gap-4">
-                                    <Skeleton className="w-10 h-10 rounded-full" />
-                                    <div className="flex-1 space-y-3">
-                                        <Skeleton className="h-4 w-1/4" />
-                                        <Skeleton className="h-6 w-3/4" />
-                                        <Skeleton className="h-4 w-full" />
-                                        <Skeleton className="h-4 w-2/3" />
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
+                    <CommunityPosts posts={[]} loading={true} communityId="home" />
                 ) : (
                     <CommunityPosts posts={posts} communityId="home" />
                 )}
@@ -108,7 +91,7 @@ export default function HomePage() {
 
             {/* Sidebar derecho */}
             <aside className="hidden md:block w-72 shrink-0">
-                <div className=" border shadow-sm p-5 sticky">
+                <div className="border shadow-sm p-5 sticky top-4">
                     <h3 className="font-semibold text-lg mb-4">
                         Comunidades populares
                     </h3>
