@@ -117,6 +117,13 @@ export function AppDesktopSidebar({
                 <CommunitiesSection />
               </SidebarGroupContent>
             </SidebarGroup>
+
+            <SidebarGroup className="">
+              <div className="border border-t-1 mb-2"></div>
+              <SidebarGroupContent>
+                <CommunitiesSection />
+              </SidebarGroupContent>
+            </SidebarGroup>
           </SidebarContent>
 
           <SidebarFooter>

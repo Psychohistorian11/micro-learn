@@ -6,7 +6,6 @@ import {
   fetchCommunityById,
   fetchCommunityMembers,
   fetchCommunityResources,
-
 } from "@/lib/services/community-service";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
