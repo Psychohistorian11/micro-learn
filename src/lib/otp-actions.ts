@@ -14,8 +14,7 @@ export async function generateOTP(email: string) {
 }
 
 export async function verifyOTP(email: string, code: string) {
-  console.log("email", email);
-  console.log("code", code);
+
   const record = await prisma.otpCode.findFirst({
     where: { email, code, used: false, expiresAt: { gt: new Date() } },
   });

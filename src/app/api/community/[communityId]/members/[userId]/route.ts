@@ -33,13 +33,9 @@ export async function GET(request: NextRequest, context: any) {
   });
 
   if (!membership) {
-    return NextResponse.json(
-      { message: "Membership not found for this user in the community" },
-      { status: 404 }
-    );
+    return NextResponse.json({ role: null });
   }
   const mappedMembership = {
-    ...membership.user,
     role: membership.role,
   };
   return NextResponse.json(mappedMembership);

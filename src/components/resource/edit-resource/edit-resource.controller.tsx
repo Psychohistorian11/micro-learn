@@ -74,7 +74,6 @@ export function EditResourceSheet({ resource, open, onOpenChange }: Props) {
         }
       }
 
-      console.log("Actualizando recurso con:", data);
 
       await editResource(resource.id, data);
 

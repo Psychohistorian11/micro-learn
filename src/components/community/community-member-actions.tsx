@@ -22,13 +22,8 @@ import {
 import { MoreHorizontal, UserMinus, Crown, Shield, User } from "lucide-react";
 import { removeMemberFromCommunity } from "@/lib/services/community-service";
 import { useCommunityRole } from "@/hooks/use-community-role";
-
-interface Member {
-  id: string;
-  name: string;
-  username: string;
-  role: "admin" | "moderator" | "member";
-}
+import { Member } from "./community-members";
+import { CommunityRole } from "@prisma/client";
 
 interface CommunityMemberActionsProps {
   member: Member;
@@ -59,18 +54,19 @@ export function CommunityMemberActions({
     }
   };
 
-  const getRoleIcon = (role: string) => {
+  const getRoleIcon = (role: CommunityRole) => {
     switch (role) {
-      case "admin":
+      case CommunityRole.Admin:
         return <Crown className="h-3 w-3 text-yellow-500" />;
-      case "moderator":
+      case CommunityRole.Mod:
         return <Shield className="h-3 w-3 text-blue-500" />;
       default:
         return <User className="h-3 w-3 text-gray-500" />;
     }
   };
 
-  const canRemoveMember = canManageMembers && member.role !== "admin";
+  const canRemoveMember =
+    canManageMembers && member.role !== CommunityRole.Admin;
 
   if (!canRemoveMember) {
     return (

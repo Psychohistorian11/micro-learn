@@ -11,7 +11,6 @@ export async function GET(request: NextRequest, context: any) {
     where: { id: communityId },
     select: communityBaseSelect,
   });
-  console.log("community", community);
   return NextResponse.json(community);
 }
 

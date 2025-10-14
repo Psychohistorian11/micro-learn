@@ -6,6 +6,9 @@ import {
 import { getBaseUrl } from "../utils";
 import { ResourceDTO } from "@/interface/resource";
 import { UserResponseDTO } from "@/interface/user";
+import { PostDTO } from "@/interface/post";
+import { CommunityRole } from "@prisma/client";
+import { Member } from "@/components/community/community-members";
 const baseUrl = getBaseUrl();
 export async function fetchCommunitiesUserById(
   userId: string
@@ -55,7 +58,6 @@ export async function fetchCommunitiesByIds(
 export async function createCommunity(
   data: CommunityCreateDTO
 ): Promise<CommunityDTO> {
-  console.log("community data: ", data);
   try {
     const response = await fetch(`${baseUrl}/api/community`, {
       method: "POST",
@@ -81,7 +83,6 @@ export async function fetchCommunityById(
   communityId: string
 ): Promise<CommunityDTO> {
   try {
-    console.log("communityId", communityId);
     const response = await fetch(`${baseUrl}/api/community/${communityId}`, {
       method: "GET",
       headers: {
@@ -102,10 +103,10 @@ export async function fetchCommunityById(
 
 export async function fetchCommunityResources(
   communityId: string
-): Promise<ResourceDTO[]> {
+): Promise<PostDTO[]> {
   try {
     const response = await fetch(
-      `${baseUrl}/api/community/${communityId}/resources`,
+      `${baseUrl}/api/community/${communityId}/resources/post`,
       {
         method: "GET",
         headers: {
@@ -127,7 +128,7 @@ export async function fetchCommunityResources(
 
 export async function fetchCommunityMembers(
   communityId: string
-): Promise<UserResponseDTO[]> {
+): Promise<Member[]> {
   try {
     const response = await fetch(
       `${baseUrl}/api/community/${communityId}/members`,
@@ -160,7 +161,7 @@ export async function fetchUserCommunityRole(
 }> {
   try {
     const response = await fetch(
-      `${baseUrl}/api/community/${communityId}/user/${userId}/role`,
+      `${baseUrl}/api/community/${communityId}/members/${userId}`,
       {
         method: "GET",
         headers: {
@@ -217,6 +218,7 @@ export async function deleteCommunity(communityId: string): Promise<void> {
       const errorData = await response.json();
       throw new Error(errorData.message || "Error deleting community");
     }
+    return response.json();
   } catch (error) {
     console.error("Error in deleteCommunity:", error);
     throw error;
@@ -244,6 +246,7 @@ export async function removeMemberFromCommunity(
         errorData.message || "Error removing member from community"
       );
     }
+    return response.json();
   } catch (error) {
     console.error("Error in removeMemberFromCommunity:", error);
     throw error;
@@ -269,8 +272,36 @@ export async function deleteCommunityPost(
       const errorData = await response.json();
       throw new Error(errorData.message || "Error deleting community post");
     }
+    return response.json();
   } catch (error) {
     console.error("Error in deleteCommunityPost:", error);
+    throw error;
+  }
+}
+
+export async function joinCommunity(
+  communityId: string,
+  userId: string,
+  role: CommunityRole = "Member"
+): Promise<void> {
+  try {
+    const response = await fetch(
+      `${baseUrl}/api/community/${communityId}/members`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId, role }),
+      }
+    );
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Error deleting community post");
+    }
+    return response.json();
+  } catch (error) {
+    console.error("Error in joinCommunity:", error);
     throw error;
   }
 }

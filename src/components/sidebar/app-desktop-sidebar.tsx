@@ -22,6 +22,7 @@ import { AuthAlertDialog } from "@/components/ui/custom/auth-alert-dialog";
 import { useAuthGuard } from "@/hooks/use-auth-guard";
 import { CommunitiesSection } from "../community/communities-section-sidebar";
 import { SearchResults } from "../search/search_result";
+import AreasFilter from "../search/areas-filter";
 import { useEffect, useState } from "react";
 import { navigationBarData } from "@/lib/data";
 
@@ -29,13 +30,13 @@ export function AppDesktopSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
   const router = useRouter();
-  const { requireAuth, showDialog, handleLoginRedirect, closeDialog } = useAuthGuard();
-  const [query, setQuery] = useState("")
+  const { requireAuth, showDialog, handleLoginRedirect, closeDialog } =
+    useAuthGuard();
+  const [query, setQuery] = useState("");
   const { setOpen } = useSidebar();
   const [mails, setMails] = useState(navigationBarData.mails || []);
   const [activeItem, setActiveItem] = useState(navigationBarData.navMain[0]);
-
-
+  const [selectedAreas, setSelectedAreas] = useState<string[]>([]);
 
   function handleClick(item: (typeof navigationBarData.navMain)[0]) {
     if (item.title === "Create") {
@@ -66,7 +67,12 @@ export function AppDesktopSidebar({
           <SidebarHeader>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton onClick={() => router.push("/")} size="lg" asChild className="md:h-8 md:p-0">
+                <SidebarMenuButton
+                  onClick={() => router.push("/")}
+                  size="lg"
+                  asChild
+                  className="md:h-8 md:p-0"
+                >
                   <a>
                     <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
                       <Command className="size-4" />
@@ -86,8 +92,9 @@ export function AppDesktopSidebar({
               <SidebarGroupContent className="px-1.5 md:px-0">
                 <SidebarMenu>
                   {navigationBarData.navMain
-                    .filter((item: any) =>
-                      item.title === "Home" || item.url === "/create-resource"
+                    .filter(
+                      (item: any) =>
+                        item.title === "Home" || item.url === "/create-resource"
                     )
                     .map((item: any) => (
                       <SidebarMenuItem key={item.title}>
@@ -117,6 +124,13 @@ export function AppDesktopSidebar({
                 <CommunitiesSection />
               </SidebarGroupContent>
             </SidebarGroup>
+
+            <SidebarGroup className="">
+              <div className="border border-t-1 mb-2"></div>
+              <SidebarGroupContent>
+                <CommunitiesSection />
+              </SidebarGroupContent>
+            </SidebarGroup>
           </SidebarContent>
 
           <SidebarFooter>
@@ -126,17 +140,20 @@ export function AppDesktopSidebar({
 
         <Sidebar collapsible="none" className="hidden flex-1 md:flex">
           <SidebarHeader className="gap-3.5 border-b p-4">
-            <SidebarInput
-              placeholder="Buscar recursos o comunidades..."
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-            />
+            <div className="flex gap-2">
+              <SidebarInput
+                placeholder="Buscar recursos o comunidades..."
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                className="flex-1"
+              />
+              <AreasFilter selected={selectedAreas} onChange={setSelectedAreas} />
+            </div>
           </SidebarHeader>
-
 
           <SidebarContent>
             {query ? (
-              <SearchResults query={query} />
+              <SearchResults query={query} areas={selectedAreas} />
             ) : (
               <div className="p-4 text-center text-muted-foreground text-sm">
                 Escribe para buscar

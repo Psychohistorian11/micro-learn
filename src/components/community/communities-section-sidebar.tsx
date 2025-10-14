@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/sidebar";
 import { CreateCommunityDialog } from "./create-community/create-community-dialog";
 import { fetchCommunitiesUserById } from "@/lib/services/community-service";
+import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 
 export function CommunitiesSection() {
   const { data: session } = useSession();
@@ -78,9 +79,16 @@ export function CommunitiesSection() {
                   hidden: false,
                 }}
               >
-                <div className="h-full w-full">
-                  <img src={community.image} className="w-full h-full"></img>
-                </div>
+                <Avatar className="w-full h-full rounded">
+                  <AvatarImage
+                    src={community.image || ""}
+                    alt={community.title}
+                    className="w-full h-full object-cover rounded"
+                  />
+                  <AvatarFallback className="w-full h-full flex items-center justify-center rounded bg-muted text-xs font-medium">
+                    {community.title.substring(0, 2).toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
               </SidebarMenuButton>
             </SidebarMenuItem>
           ))}

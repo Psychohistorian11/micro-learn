@@ -1,8 +1,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
-import { IconLogout, IconHelp } from "@tabler/icons-react";
+import { useSession } from "next-auth/react"; // 👈 hook de next-auth
+import { LogOut } from "lucide-react";
 import { IconUserCircle } from "@tabler/icons-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -31,7 +31,7 @@ export function NavUser() {
   const router = useRouter();
   const { requireAuth, showDialog, handleLoginRedirect, closeDialog } = useAuthGuard();
 
-  const { data: session, status } = useSession();
+  const { data: session, status } = useSession(); // 👈 sesión del usuario
   const user = session?.user || {
     name: "Invitado",
     email: "",
@@ -97,25 +97,11 @@ export function NavUser() {
                 </DropdownMenuItem>
               </DropdownMenuGroup>
 
-              <DropdownMenuSeparator />
-              <DropdownMenuGroup>
-                <div className="px-2 py-1.5">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium">Tema</span>
-                    <ModeToggle />
-                  </div>
-                </div>
-                <DropdownMenuItem onClick={handleHelpClick}>
-                  <IconHelp />
-                  Ayuda
-                </DropdownMenuItem>
-              </DropdownMenuGroup>
-
               {status === "authenticated" && (
                 <>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleSignOut}>
-                    <IconLogout />
+                    <LogOut />
                     Cerrar sesión
                   </DropdownMenuItem>
                 </>
