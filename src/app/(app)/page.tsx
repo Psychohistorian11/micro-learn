@@ -20,6 +20,7 @@ export default function HomePage() {
     {
       id: "1234567689",
       title: "Pythonhunters",
+      isPublic: true,
       description:
         "Comunidad para auténticos lovers a Python. Aquí compartimos recursos, tutoriales, proyectos y nos ayudamos mutuamente.",
       image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=500",
@@ -28,6 +29,7 @@ export default function HomePage() {
     {
       id: "1234567688",
       title: "Frontend Masters",
+      isPublic: true,
       description:
         "Todo sobre React, Vue, Angular y frameworks modernos. Comparte tu experiencia y mejora tus skills.",
       image:
@@ -38,6 +40,7 @@ export default function HomePage() {
     {
       id: "1234567687",
       title: "DevOps World",
+      isPublic: true,
       description:
         "Un espacio para hablar de CI/CD, Docker, Kubernetes y todo lo relacionado con infraestructura moderna.",
       image:
@@ -150,9 +153,7 @@ export default function HomePage() {
                   />
                 ))
               ) : (
-                <p className="text-sm text-muted-foreground">
-                  Sin resultados
-                </p>
+                <p className="text-sm text-muted-foreground">Sin resultados</p>
               )}
             </div>
           </div>
