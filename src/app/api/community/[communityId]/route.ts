@@ -1,9 +1,11 @@
 import { CommunityUpdateDTO } from "@/interface/community";
 import { communityBaseSelect, communitySelect } from "@/lib/prisma-selects";
 import prismadb from "@/lib/prismadb";
+import { userBaseSelect } from "@/lib/prisma-selects";
 import { plainToInstance } from "class-transformer";
 import { validate } from "class-validator";
 import { NextRequest, NextResponse } from "next/server";
+import { CommunityRequestUpdateDTO } from "@/interface/community-request";
 
 export async function GET(request: NextRequest, context: any) {
   const { communityId } = (await context.params) as { communityId: string };
@@ -46,6 +48,7 @@ export async function PATCH(request: NextRequest, context: any) {
       image: dto.image ?? undefined,
       description: dto.description ?? undefined,
       avatar: dto.avatar ?? undefined,
+      isPublic: dto.isPublic ?? undefined,
     },
     select: communitySelect,
   });

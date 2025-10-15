@@ -40,3 +40,27 @@ export async function GET(request: NextRequest, context: any) {
   };
   return NextResponse.json(mappedMembership);
 }
+
+export async function DELETE(request: NextRequest, context: any) {
+  const { communityId, userId } = (await context.params) as {
+    communityId: string;
+    userId: string;
+  };
+
+  if (!communityId || !userId) {
+    return NextResponse.json(
+      { message: "communityId and userId are required" },
+      { status: 400 }
+    );
+  }
+
+  const membership = await prismadb.user_Community.findFirst({
+    where: { communityId, userId },
+  });
+  if (!membership) {
+    return NextResponse.json({ message: "Membership not found" }, { status: 404 });
+  }
+
+  await prismadb.user_Community.delete({ where: { id: membership.id } });
+  return NextResponse.json({ ok: true });
+}
