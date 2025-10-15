@@ -5,6 +5,7 @@ import { CommunityHeader } from "./community-header";
 import { CommunityPosts } from "./community-posts";
 import { CommunityMembers, Member } from "./community-members";
 import { CommunitySettingsDialog } from "./community-settings-dialog";
+import { CommunityRequestsDialog } from "./community-requests-dialog";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -14,13 +15,15 @@ import {
     BarChart3,
     Filter,
     SortAsc,
+    UserPlus,
 } from "lucide-react";
 import { useCommunityRole } from "@/hooks/use-community-role";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { PostDTO } from "@/interface/post";
-import { joinCommunity, removeMemberFromCommunity } from "@/lib/services/community-service";
+import { joinCommunity, removeMemberFromCommunity, requestToJoinCommunity, fetchCommunityMembers } from "@/lib/services/community-service";
 import { useSession } from "next-auth/react";
+import { toast } from "sonner";
 
 interface CommunityPageProps {
     community: CommunityDTO;
@@ -59,24 +62,15 @@ export function CommunityPage({
 
         try {
             setIsJoining(true);
-            await joinCommunity(community.id, userId);
+            await requestToJoinCommunity(community.id, userId);
 
-            // Add current user to members list immediately
-            const currentUser: Member = {
-                id: session.user.id,
-                username: session.user.name || session.user.email?.split('@')[0] || 'usuario',
-                email: session.user.email || '',
-                profilePicture: session.user.image || '',
-                role: 'Member',
-                isOnline: true,
-            };
-
-            setCurrentMembers(prev => [...prev, currentUser]);
-
-            // Refresh the role to update isJoined state
-            await refreshRole();
+            // Mostrar mensaje de éxito
+            toast.success("¡Solicitud enviada!", {
+                description: "Espera a que un administrador o moderador apruebe tu solicitud para unirte a la comunidad."
+            });
         } catch (error) {
-            console.error('Error joining community:', error);
+            console.error('Error sending join request:', error);
+            toast.error("Error al enviar la solicitud. Inténtalo de nuevo.");
         } finally {
             setIsJoining(false);
         }
@@ -119,6 +113,16 @@ export function CommunityPage({
         setCurrentMembers((prev) =>
             prev.filter((member) => member.id !== memberId)
         );
+    };
+
+    const handleRequestProcessed = async () => {
+        // Refrescar la lista de miembros cuando se procese una solicitud
+        try {
+            const updatedMembers = await fetchCommunityMembers(community.id);
+            setCurrentMembers(updatedMembers);
+        } catch (error) {
+            console.error('Error refreshing members:', error);
+        }
     };
 
     return (
@@ -181,13 +185,15 @@ export function CommunityPage({
                                                 <span className="hidden sm:inline">Más recientes</span>
                                             </Button>
                                         </div>
-                                        <Button
-                                            onClick={() => router.push("/create-resource")}
-                                            className="bg-persian-green hover:bg-persian-green/90 text-xs md:text-sm"
-                                        >
-                                            <span className="hidden sm:inline">Crear Post</span>
-                                            <span className="sm:hidden">Crear</span>
-                                        </Button>
+                                        {!isNotMember && (
+                                            <Button
+                                                onClick={() => router.push("/create-resource")}
+                                                className="bg-persian-green hover:bg-persian-green/90 text-xs md:text-sm"
+                                            >
+                                                <span className="hidden sm:inline">Crear Post</span>
+                                                <span className="sm:hidden">Crear</span>
+                                            </Button>
+                                        )}
                                     </div>
 
                                     {/* Posts */}
@@ -299,40 +305,43 @@ export function CommunityPage({
                             </div>
                         </div>
 
-                        {/* Quick Actions */}
-                        <div className="bg-card rounded-lg border p-3 md:p-4">
-                            <h3 className="font-semibold mb-4">Acciones rápidas</h3>
-                            <div className="space-y-2">
-                                {!isNotMember && (
-                                    <Button
-                                        onClick={() => router.push("/create-resource")}
-                                        variant="outline"
-                                        className="w-full justify-start text-xs md:text-sm"
-                                    >
-                                        <MessageSquare className="h-3 w-3 md:h-4 md:w-4 mr-2" />
-                                        Crear post
-                                    </Button>
-                                )}
-                                {canManageMembers && (
-                                    <Button variant="outline" className="w-full justify-start text-xs md:text-sm">
-                                        <Users className="h-3 w-3 md:h-4 md:w-4 mr-2" />
-                                        Invitar miembros
-                                    </Button>
-                                )}
-                                {canManageSettings && (
-                                    <CommunitySettingsDialog
-                                        community={currentCommunity}
-                                        onCommunityUpdated={handleCommunityUpdated}
-                                        onCommunityDeleted={handleCommunityDeleted}
-                                    >
+                        {/* Quick Actions - Solo para admin y moderadores */}
+                        {(canManageMembers || canManageSettings) && (
+                            <div className="bg-card rounded-lg border p-3 md:p-4">
+                                <h3 className="font-semibold mb-4">Acciones rápidas</h3>
+                                <div className="space-y-2">
+                                    {canManageMembers && (
+                                        <CommunityRequestsDialog
+                                            communityId={community.id}
+                                            onRequestProcessed={handleRequestProcessed}
+                                        >
+                                            <Button variant="outline" className="w-full justify-start text-xs md:text-sm">
+                                                <UserPlus className="h-3 w-3 md:h-4 md:w-4 mr-2" />
+                                                Solicitudes pendientes
+                                            </Button>
+                                        </CommunityRequestsDialog>
+                                    )}
+                                    {canManageMembers && (
                                         <Button variant="outline" className="w-full justify-start text-xs md:text-sm">
-                                            <Settings className="h-3 w-3 md:h-4 md:w-4 mr-2" />
-                                            Configuración
+                                            <Users className="h-3 w-3 md:h-4 md:w-4 mr-2" />
+                                            Invitar miembros
                                         </Button>
-                                    </CommunitySettingsDialog>
-                                )}
+                                    )}
+                                    {canManageSettings && (
+                                        <CommunitySettingsDialog
+                                            community={currentCommunity}
+                                            onCommunityUpdated={handleCommunityUpdated}
+                                            onCommunityDeleted={handleCommunityDeleted}
+                                        >
+                                            <Button variant="outline" className="w-full justify-start text-xs md:text-sm">
+                                                <Settings className="h-3 w-3 md:h-4 md:w-4 mr-2" />
+                                                Configuración
+                                            </Button>
+                                        </CommunitySettingsDialog>
+                                    )}
+                                </div>
                             </div>
-                        </div>
+                        )}
                     </div>
                 </div>
             </div>

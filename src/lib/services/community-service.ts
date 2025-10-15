@@ -349,3 +349,101 @@ export async function rejectJoinRequest(
     throw new Error(data.message || "Error rejecting request");
   }
 }
+
+// Nuevos servicios para el sistema de solicitudes
+export async function requestToJoinCommunity(
+  communityId: string,
+  userId: string
+): Promise<void> {
+  try {
+    const response = await fetch(`${baseUrl}/api/community/${communityId}/requests`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ userId }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Error sending join request");
+    }
+  } catch (error) {
+    console.error("Error in requestToJoinCommunity:", error);
+    throw error;
+  }
+}
+
+export async function fetchCommunityRequests(
+  communityId: string
+): Promise<{ id: string; createdAt: string; user: UserResponseDTO }[]> {
+  try {
+    const response = await fetch(`${baseUrl}/api/community/${communityId}/requests`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Error fetching community requests");
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Error in fetchCommunityRequests:", error);
+    throw error;
+  }
+}
+
+export async function approveCommunityRequest(
+  communityId: string,
+  requestId: string
+): Promise<void> {
+  try {
+    const response = await fetch(`${baseUrl}/api/community/${communityId}/requests`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: requestId,
+        status: "Accepted"
+      }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Error approving request");
+    }
+  } catch (error) {
+    console.error("Error in approveCommunityRequest:", error);
+    throw error;
+  }
+}
+
+export async function rejectCommunityRequest(
+  communityId: string,
+  requestId: string
+): Promise<void> {
+  try {
+    const response = await fetch(`${baseUrl}/api/community/${communityId}/requests`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: requestId,
+        status: "Rejected"
+      }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Error rejecting request");
+    }
+  } catch (error) {
+    console.error("Error in rejectCommunityRequest:", error);
+    throw error;
+  }
+}
