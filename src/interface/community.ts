@@ -16,6 +16,8 @@ export class CommunityDTO {
   @IsString()
   description: string;
 
+  isPublic: boolean;
+
   @IsString({ each: true })
   @IsOptional()
   users?: string[]; // IDs de usuarios
@@ -42,6 +44,9 @@ export class CommunityCreateDTO {
 
   @IsString()
   description: string;
+
+  @IsOptional()
+  isPublic?: boolean;
 }
 
 export class CommunityUpdateDTO {
@@ -63,6 +68,9 @@ export class CommunityUpdateDTO {
   @IsString()
   @IsOptional()
   description?: string;
+
+  @IsOptional()
+  isPublic?: boolean;
 
   @IsString({ each: true })
   @IsOptional()

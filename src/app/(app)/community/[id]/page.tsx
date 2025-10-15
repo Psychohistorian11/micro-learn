@@ -19,6 +19,7 @@ const mockCommunity: CommunityDTO = {
   title: "Pythonhunters",
   description:
     "Comunidad para auténticos lovers a Python. Aquí compartimos recursos, tutoriales, proyectos y nos ayudamos mutuamente en nuestro viaje de aprendizaje con Python. Desde principiantes hasta expertos, todos son bienvenidos.",
+  isPublic: true,
   image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=500",
   avatar: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=500",
 };
