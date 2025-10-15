@@ -32,6 +32,7 @@ export async function POST(request: NextRequest) {
       image: dto.image ?? undefined,
       description: dto.description,
       avatar: dto.avatar ?? undefined,
+      isPublic: dto.isPublic ?? true,
       users: {
         create: {
           user: {

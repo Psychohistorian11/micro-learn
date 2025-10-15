@@ -305,3 +305,47 @@ export async function joinCommunity(
     throw error;
   }
 }
+
+export async function fetchJoinRequests(communityId: string): Promise<
+  { id: string; createdAt: string; user: UserResponseDTO }[]
+> {
+  const response = await fetch(`${baseUrl}/api/community/${communityId}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ action: "list" }),
+  });
+  if (!response.ok) {
+    throw new Error("Error fetching join requests");
+  }
+  return response.json();
+}
+
+export async function approveJoinRequest(
+  communityId: string,
+  requestId: string
+): Promise<void> {
+  const response = await fetch(`${baseUrl}/api/community/${communityId}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ action: "approve", requestId }),
+  });
+  if (!response.ok) {
+    const data = await response.json();
+    throw new Error(data.message || "Error approving request");
+  }
+}
+
+export async function rejectJoinRequest(
+  communityId: string,
+  requestId: string
+): Promise<void> {
+  const response = await fetch(`${baseUrl}/api/community/${communityId}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ action: "reject", requestId }),
+  });
+  if (!response.ok) {
+    const data = await response.json();
+    throw new Error(data.message || "Error rejecting request");
+  }
+}

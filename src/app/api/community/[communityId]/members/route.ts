@@ -51,15 +51,36 @@ export async function POST(request: NextRequest, context: any) {
     );
   }
 
-  const newMembership = await prismadb.user_Community.create({
+  // If community is public, add membership immediately; otherwise create a join request
+  if (existingCommunity.isPublic) {
+    const newMembership = await prismadb.user_Community.create({
+      data: {
+        userId: dto.userId,
+        communityId: dto.communityId,
+        role: dto.role,
+      },
+    });
+    return NextResponse.json(newMembership);
+  }
+
+  // For private communities, ensure there isn't already a pending request
+  const existingRequest = await prismadb.community_Request.findFirst({
+    where: { userId: dto.userId, communityId: dto.communityId },
+  });
+  if (existingRequest) {
+    return NextResponse.json(
+      { message: "Join request already exists" },
+      { status: 409 }
+    );
+  }
+
+  const requestCreated = await prismadb.community_Request.create({
     data: {
       userId: dto.userId,
       communityId: dto.communityId,
-      role: dto.role,
     },
   });
-
-  return NextResponse.json(newMembership);
+  return NextResponse.json({ requested: true, requestId: requestCreated.id });
 }
 
 export async function GET(request: NextRequest, context: any) {

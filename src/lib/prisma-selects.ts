@@ -43,6 +43,7 @@ export const communitySelect = {
   image: true,
   avatar: true,
   description: true,
+  isPublic: true,
   users: {
     select: { id: true, role: true },
   },
@@ -78,4 +79,5 @@ export const communityBaseSelect = {
   image: true,
   avatar: true,
   description: true,
+  isPublic: true,
 };
