@@ -13,12 +13,6 @@ export class CommunityRequestUpdateDTO {
   @IsUUID()
   id: string;
 
-  @IsUUID()
-  userId: string;
-
-  @IsUUID()
-  communityId: string;
-
   @IsEnum(RequestStatus)
   status: RequestStatus;
 }

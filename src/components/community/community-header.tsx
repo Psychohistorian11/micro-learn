@@ -98,20 +98,22 @@ export function CommunityHeader({
             {loading ? (
               <Button
                 disabled
-                className="w-full sm:w-auto max-w-xs text-sm md:text-lg font-bold shadow-lg"
+                size="sm"
+                className="text-xs md:text-sm"
               >
                 ...
               </Button>
             ) : (
               <Button
                 onClick={isJoined ? onLeave : onJoin}
+                size="sm"
+                variant={isJoined ? "outline" : "default"}
                 className={`${isJoined
-                  ? "bg-muted text-foreground hover:bg-muted/80"
-                  : "bg-persian-green hover:bg-persian-green/90"
-                  } w-full sm:w-auto max-w-xs text-sm md:text-lg font-bold shadow-lg`}
-                size="lg"
+                  ? "text-muted-foreground hover:text-foreground"
+                  : "bg-persian-green hover:bg-persian-green/90 text-white"
+                  } text-xs md:text-sm`}
               >
-                {isJoined ? "Dejar" : "Unirse"}
+                {isJoined ? "Dejar" : "Solicitar unirse"}
               </Button>
             )}
           </div>

@@ -17,48 +17,47 @@ model OtpCode {
 }
 
 model User {
-  id             String           @id @default(uuid())
-  email          String           @unique
-  username       String           @unique
+  id             String              @id @default(uuid())
+  email          String              @unique
+  username       String              @unique
   password       String
-  profilePicture String           @default("")
-  description    String           @default("")
+  profilePicture String              @default("")
+  description    String              @default("")
   role           Role
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
-  resources      Resource[]       @relation("UserResources")
-  communities    User_Community[] 
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
+  resources      Resource[]          @relation("UserResources")
+  communities    User_Community[]
   requests       Community_Request[]
 
   @@map("users")
 }
 
 model Community {
-  id          String               @id @default(uuid())
+  id          String   @id @default(uuid())
   title       String
-  image       String               @default("")
-  description String               @default("")
-  createdAt   DateTime             @default(now())
-  updatedAt   DateTime             @updatedAt
-  avatar      String               @default("")
-  isPublic    Boolean              @default(true)
-  
-  requests    Community_Request[]
-  resources   Resource_Community[]
-  users       User_Community[]
+  image       String   @default("")
+  description String   @default("")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  avatar      String   @default("")
+  isPublic    Boolean  @default(true)
+
+  requests  Community_Request[]
+  resources Resource_Community[]
+  users     User_Community[]
 }
 
 model Community_Request {
-  id           String     @id @default(uuid())
-  userId       String
-  communityId  String
-  status       RequestStatus  @default(Pending)
-  createdAt    DateTime    @default(now())
-  respondedAt  DateTime?
-  community    Community   @relation(fields: [communityId], references: [id], onDelete: Cascade)
-  user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id          String        @id @default(uuid())
+  userId      String
+  communityId String
+  status      RequestStatus @default(Pending)
+  createdAt   DateTime      @default(now())
+  respondedAt DateTime?
+  community   Community     @relation(fields: [communityId], references: [id], onDelete: Cascade)
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
-
 
 model User_Community {
   id          String        @id @default(uuid())
@@ -134,5 +133,3 @@ enum RequestStatus {
   Accepted
   Rejected
 }
-
-
