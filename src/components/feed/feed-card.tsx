@@ -127,7 +127,7 @@ export function FeedCard({ post, onPostDeleted }: FeedCardProps) {
         {/* Post Content */}
         <div className="p-4">
           <h3
-            className="text-lg font-semibold mb-3 line-clamp-2 cursor-pointer hover:text-persian-green transition-colors"
+            className="text-lg font-serif mb-3 line-clamp-2 cursor-pointer hover:text-persian-green transition-colors"
             onClick={handleViewFull}
           >
             {post.title}

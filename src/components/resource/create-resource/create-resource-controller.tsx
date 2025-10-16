@@ -91,7 +91,7 @@ export default function CreateResourceController() {
     return (
         <form
             onSubmit={onSubmit}
-            className="flex flex-col justify-between items-center w-full h-full max-w-3xl p-4"
+            className="flex flex-col justify-between items-center w-full h-full  max-w-3xl p-4"
         >
             <div className="flex gap-2 mb-6 w-full justify-center sm:justify-start">
                 {!session ? (

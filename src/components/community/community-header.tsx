@@ -2,7 +2,7 @@
 
 import { CommunityDTO } from "@/interface/community";
 import { Button } from "@/components/ui/button";
-import { Users, Calendar, Globe } from "lucide-react";
+import { IconUsers, IconWorld, IconLock } from "@tabler/icons-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface CommunityHeaderProps {
@@ -10,6 +10,7 @@ interface CommunityHeaderProps {
   memberCount?: number;
   onlineCount?: number;
   isJoined?: boolean;
+  hasPendingRequest?: boolean;
   onJoin?: () => void;
   onLeave?: () => void;
   loading?: boolean;
@@ -20,6 +21,7 @@ export function CommunityHeader({
   memberCount = 0,
   onlineCount = 0,
   isJoined = false,
+  hasPendingRequest = false,
   onJoin,
   onLeave,
   loading,
@@ -73,28 +75,32 @@ export function CommunityHeader({
               {/* Community Stats */}
               <div className="flex flex-wrap items-center gap-2 md:gap-4 text-xs md:text-sm text-muted-foreground">
                 <div className="flex items-center gap-1">
-                  <Users className="h-3 w-3 md:h-4 md:w-4" />
+                  <IconUsers className="h-3 w-3 md:h-4 md:w-4" />
                   <span>{memberCount.toLocaleString()} miembros</span>
                 </div>
-                <div className="flex items-center gap-1">
+                {/*<div className="flex items-center gap-1">
                   <div className="w-2 h-2 bg-green-500 rounded-full" />
                   <span>{onlineCount.toLocaleString()} en línea</span>
-                </div>
-                <div className="flex items-center gap-1">
+                </div>*/}
+                {/*<div className="flex items-center gap-1">
                   <Calendar className="h-3 w-3 md:h-4 md:w-4" />
                   <span className="hidden sm:inline">Creada hace 2 años</span>
                   <span className="sm:hidden">Hace 2 años</span>
-                </div>
+                </div>*/}
                 <div className="flex items-center gap-1">
-                  <Globe className="h-3 w-3 md:h-4 md:w-4" />
-                  <span>Pública</span>
+                  {community.isPublic ? (
+                    <IconWorld className="h-3 w-3 md:h-4 md:w-4" />
+                  ) : (
+                    <IconLock className="h-3 w-3 md:h-4 md:w-4" />
+                  )}
+                  <span>{community.isPublic ? "Pública" : "Privada"}</span>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Action Buttons */}
-          <div className="flex justify-center lg:justify-end pt-2 lg:pt-4 w-full lg:w-auto">
+          <div className="flex justify-center lg:justify-end  lg:pt-4 w-full lg:w-auto">
             {loading ? (
               <Button
                 disabled
@@ -108,12 +114,20 @@ export function CommunityHeader({
                 onClick={isJoined ? onLeave : onJoin}
                 size="sm"
                 variant={isJoined ? "outline" : "default"}
+                disabled={hasPendingRequest}
                 className={`${isJoined
                   ? "text-muted-foreground hover:text-foreground"
-                  : "bg-persian-green hover:bg-persian-green/90 text-white"
+                  : hasPendingRequest
+                    ? "bg-yellow-100 text-yellow-800 hover:bg-yellow-100 cursor-not-allowed"
+                    : "bg-persian-green hover:bg-persian-green/90 text-white"
                   } text-xs md:text-sm`}
               >
-                {isJoined ? "Dejar" : "Solicitar unirse"}
+                {isJoined
+                  ? "Dejar"
+                  : hasPendingRequest
+                    ? "Solicitud pendiente"
+                    : (community.isPublic ? "Unirse" : "Solicitar unirse")
+                }
               </Button>
             )}
           </div>

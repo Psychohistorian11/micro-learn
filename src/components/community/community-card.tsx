@@ -37,12 +37,12 @@ export function CommunityCard({
 
             <div className="flex-1 min-w-0">
                 {/* 🔹 Forzar altura del título */}
-                <h3 className="font-serif text-lg leading-tight mb-1 line-clamp-1 h-6">
+                <h3 className="font-serif text-base leading-tight mb-1 line-clamp-1 h-6">
                     {community.title}
                 </h3>
 
                 {/* 🔹 Forzar altura de la descripción */}
-                <p className="text-sm text-muted-foreground line-clamp-2 h-10">
+                <p className="text-xs text-muted-foreground line-clamp-2 h-10">
                     {community.description}
                 </p>
             </div>

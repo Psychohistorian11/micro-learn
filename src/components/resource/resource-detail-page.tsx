@@ -195,7 +195,7 @@ export function ResourceDetailPage({ resource, loading = false }: ResourceDetail
                         <p className="text-lg text-muted-foreground leading-relaxed">
                             {resource.description}
                         </p>
-                        
+
                         {/* Resource Meta */}
                         <div className="flex items-center gap-6 text-sm text-muted-foreground">
                             <div className="flex items-center gap-2">

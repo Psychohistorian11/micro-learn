@@ -39,11 +39,11 @@ export function ResourceCardSearch({
             </div>
 
             <div className="flex-1 p-4 flex flex-col justify-center">
-                <h3 className="font-semibold text-base mb-2 line-clamp-1 h-6">
+                <h3 className="font-serif text-base mb-1 line-clamp-1 h-6">
                     {resource.title}
                 </h3>
 
-                <p className="text-sm text-muted-foreground line-clamp-3 h-[30px]">
+                <p className="text-xs text-muted-foreground line-clamp-3 h-[30px]">
                     {resource.description}
                 </p>
             </div>

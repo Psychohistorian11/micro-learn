@@ -71,7 +71,7 @@ export function CommunityMembers({
       <div className="space-y-4">
         <div className="flex items-center gap-2 mb-4">
           <IconUsers className="h-5 w-5" />
-          <h3 className="font-semibold">Miembros</h3>
+          <h3 className="font-serif text-xl">Miembros</h3>
         </div>
 
         <div className="space-y-3">
@@ -95,7 +95,7 @@ export function CommunityMembers({
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <IconUsers className="h-5 w-5" />
-          <h3 className="font-semibold">Miembros</h3>
+          <h3 className="font-serif text-xl">Miembros</h3>
           <Badge variant="secondary" className="text-xs">
             {members.length}
           </Badge>
@@ -163,13 +163,13 @@ export function CommunityMembers({
       </div>
 
       {/* Invite Button */}
-      <Button
+      {/* <Button
         variant="outline"
         className="w-full text-persian-green border-persian-green hover:bg-persian-green/10"
       >
         <IconUserPlus className="h-4 w-4 mr-2" />
         Invitar miembros
-      </Button>
+      </Button>*/}
     </div>
   );
 }

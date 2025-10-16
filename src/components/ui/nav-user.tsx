@@ -1,8 +1,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react"; // 👈 hook de next-auth
-import { LogOut, Settings, BookOpen, Users, HelpCircle } from "lucide-react";
+import { useSession } from "next-auth/react";
+import { LogOut } from "lucide-react";
 import { IconUserCircle } from "@tabler/icons-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";

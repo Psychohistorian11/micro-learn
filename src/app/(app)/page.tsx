@@ -7,7 +7,6 @@ import { CommunityCard } from "@/components/community/community-card";
 import { useRouter } from "next/navigation";
 import { CommunityDTO } from "@/interface/community";
 import { InfiniteFeed } from "@/components/feed/infinite-feed";
-import { TrendingUp } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function HomePage() {
@@ -138,9 +137,9 @@ export default function HomePage() {
           )}
         </div>
 
-        <aside className="hidden md:block w-72 shrink-0">
-          <div className="border shadow-sm p-5 sticky top-4">
-            <h3 className="font-semibold text-lg mb-4">
+        <aside className="hidden md:block w-72 shrink-0 rounded-lg">
+          <div className="border shadow-sm p-5 sticky top-4 rounded-lg">
+            <h3 className="font-serif text-lg mb-4">
               Comunidades populares
             </h3>
             <div className="space-y-3">
