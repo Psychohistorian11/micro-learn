@@ -71,12 +71,12 @@ export function AvatarEditable({ user }: { user?: any }) {
   return (
     <div className="flex flex-col items-center gap-2">
       <div
-        className="relative cursor-pointer group w-full sm:w-auto justify-center flex"
+        className="relative cursor-pointer group w-full sm:w-30justify-center flex"
         onClick={() => fileInputRef.current?.click()}
       >
-        <Avatar className="w-full sm:w-auto h-auto sm:h-30  rounded-lg">
+        <Avatar className="w-full sm:w-30 h-auto sm:h-30  rounded-lg">
           <AvatarImage src={current ?? undefined} alt={user?.name ?? "User"} />
-          <AvatarFallback className="w-full sm:w-auto h-full rounded-lg">
+          <AvatarFallback className="w-full sm:w-full h-full rounded-lg">
             {user?.username?.substring(0, 2).toUpperCase()}
           </AvatarFallback>
         </Avatar>

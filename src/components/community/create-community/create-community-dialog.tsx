@@ -15,6 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
 import { IconUpload, IconX, IconLoader2 } from "@tabler/icons-react";
 import { uploadFile } from "@/lib/storage";
 import { createCommunity } from "@/lib/services/community-service";
@@ -30,6 +31,7 @@ interface CommunityFormData {
     title: string;
     description: string;
     image: string;
+    isPublic: boolean;
 }
 
 export function CreateCommunityDialog({
@@ -94,6 +96,7 @@ export function CreateCommunityDialog({
                     title: data.title,
                     description: data.description,
                     image: data.image,
+                    isPublic: data.isPublic,
                 };
                 const newCommunity = await createCommunity(communityData);
 
@@ -259,6 +262,29 @@ export function CreateCommunityDialog({
                                 disabled={isUploading || !!image}
                             />
                         </label>
+                    </div>
+
+                    {/* Visibilidad */}
+                    <div className="space-y-2">
+                        <Label htmlFor="isPublic">Visibilidad de la comunidad</Label>
+                        <div className="flex items-center justify-between p-4 border rounded-lg">
+                            <div className="space-y-1">
+                                <div className="font-medium">
+                                    {watch("isPublic") ? "Comunidad Pública" : "Comunidad Privada"}
+                                </div>
+                                <div className="text-sm text-muted-foreground">
+                                    {watch("isPublic")
+                                        ? "Cualquier usuario puede unirse directamente"
+                                        : "Los usuarios necesitan solicitar unirse y ser aprobados"
+                                    }
+                                </div>
+                            </div>
+                            <Switch
+                                id="isPublic"
+                                checked={watch("isPublic")}
+                                onCheckedChange={(checked) => setValue("isPublic", checked)}
+                            />
+                        </div>
                     </div>
 
                     {/* Error del servidor */}

@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
 import FieldError from "@/components/ui/custom/field-error";
 import {
   IconLoader2,
@@ -68,6 +69,7 @@ export function CommunitySettingsDialog({
       title: community.title,
       description: community.description,
       image: community.image,
+      isPublic: community.isPublic,
     },
   });
 
@@ -288,6 +290,29 @@ export function CommunitySettingsDialog({
                   disabled={isUploading || !!image}
                 />
               </label>
+            </div>
+
+            {/* Visibilidad */}
+            <div className="space-y-2">
+              <Label htmlFor="isPublic">Visibilidad de la comunidad</Label>
+              <div className="flex items-center justify-between p-4 border rounded-lg">
+                <div className="space-y-1">
+                  <div className="font-medium">
+                    {watch("isPublic") ? "Comunidad Pública" : "Comunidad Privada"}
+                  </div>
+                  <div className="text-sm text-muted-foreground">
+                    {watch("isPublic")
+                      ? "Cualquier usuario puede unirse directamente"
+                      : "Los usuarios necesitan solicitar unirse y ser aprobados"
+                    }
+                  </div>
+                </div>
+                <Switch
+                  id="isPublic"
+                  checked={watch("isPublic")}
+                  onCheckedChange={(checked) => setValue("isPublic", checked)}
+                />
+              </div>
             </div>
 
             {serverError && (

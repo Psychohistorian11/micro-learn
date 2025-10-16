@@ -45,7 +45,7 @@ async function ProfileContent({
   const isOwner = !!session?.user && session.user.name == username;
 
   return (
-    <div className="flex flex-col sm:items-start w-full max-w-3xl h-full gap-4 ">
+    <div className="flex flex-col sm:items-start w-full max-w-3xl h-full gap-4">
       <ProfileHeader user={user} isOwner={isOwner} />
       <ResourceList resources={resources} isOwner={isOwner} />
     </div>

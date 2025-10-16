@@ -18,10 +18,10 @@ import {
     UserPlus,
 } from "lucide-react";
 import { useCommunityRole } from "@/hooks/use-community-role";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { PostDTO } from "@/interface/post";
-import { joinCommunity, removeMemberFromCommunity, requestToJoinCommunity, fetchCommunityMembers } from "@/lib/services/community-service";
+import { joinCommunity, removeMemberFromCommunity, requestToJoinCommunity, fetchCommunityMembers, fetchCommunityRequests } from "@/lib/services/community-service";
 import { useSession } from "next-auth/react";
 import { toast } from "sonner";
 
@@ -42,6 +42,7 @@ export function CommunityPage({
     const [currentPosts, setCurrentPosts] = useState(posts);
     const [currentMembers, setCurrentMembers] = useState(members);
     const [isJoining, setIsJoining] = useState(false);
+    const [hasPendingRequest, setHasPendingRequest] = useState(false);
     const router = useRouter();
     const { data: session } = useSession();
     const {
@@ -55,6 +56,23 @@ export function CommunityPage({
         refreshRole,
     } = useCommunityRole(community.id);
 
+    // Verificar si el usuario tiene una solicitud pendiente
+    useEffect(() => {
+        const checkPendingRequest = async () => {
+            if (!userId || !community.isPublic) {
+                try {
+                    const requests = await fetchCommunityRequests(community.id);
+                    const userRequest = requests.find(req => req.user.id === userId);
+                    setHasPendingRequest(!!userRequest);
+                } catch (error) {
+                    console.error('Error checking pending request:', error);
+                }
+            }
+        };
+
+        checkPendingRequest();
+    }, [userId, community.id, community.isPublic]);
+
     const handleJoin = async () => {
         if (!userId || !session?.user) {
             return;
@@ -62,15 +80,41 @@ export function CommunityPage({
 
         try {
             setIsJoining(true);
-            await requestToJoinCommunity(community.id, userId);
 
-            // Mostrar mensaje de éxito
-            toast.success("¡Solicitud enviada!", {
-                description: "Espera a que un administrador o moderador apruebe tu solicitud para unirte a la comunidad."
-            });
+            if (community.isPublic) {
+                // Comunidad pública: unirse directamente
+                await joinCommunity(community.id, userId);
+
+                // Add current user to members list immediately
+                const currentUser: Member = {
+                    id: session.user.id,
+                    username: session.user.name || session.user.email?.split('@')[0] || 'usuario',
+                    email: session.user.email || '',
+                    profilePicture: session.user.image || '',
+                    role: 'Member',
+                    isOnline: true,
+                };
+
+                setCurrentMembers(prev => [...prev, currentUser]);
+
+                // Refresh the role to update isJoined state
+                await refreshRole();
+
+                toast.success("¡Te has unido a la comunidad!", {
+                    description: "Ahora puedes crear posts y participar en las discusiones."
+                });
+            } else {
+                // Comunidad privada: enviar solicitud
+                await requestToJoinCommunity(community.id, userId);
+                setHasPendingRequest(true);
+
+                toast.success("¡Solicitud enviada!", {
+                    description: "Espera a que un administrador o moderador apruebe tu solicitud para unirte a la comunidad."
+                });
+            }
         } catch (error) {
-            console.error('Error sending join request:', error);
-            toast.error("Error al enviar la solicitud. Inténtalo de nuevo.");
+            console.error('Error joining community:', error);
+            toast.error("Error al unirse a la comunidad. Inténtalo de nuevo.");
         } finally {
             setIsJoining(false);
         }
@@ -134,6 +178,7 @@ export function CommunityPage({
                     memberCount={currentMembers.length}
                     onlineCount={Math.floor(currentMembers.length * 0.1)} // Simulate online count
                     isJoined={!isNotMember}
+                    hasPendingRequest={hasPendingRequest}
                     onJoin={handleJoin}
                     onLeave={handleLeave}
                     loading={loading || roleLoading || isJoining}
@@ -260,7 +305,7 @@ export function CommunityPage({
                         </div>
 
                         {/* Community Stats */}
-                        <div className="bg-card rounded-lg border p-3 md:p-4">
+                        {/* <div className="bg-card rounded-lg border p-3 md:p-4">
                             <h3 className="font-semibold mb-4 flex items-center gap-2">
                                 <BarChart3 className="h-5 w-5" />
                                 Estadísticas
@@ -303,7 +348,7 @@ export function CommunityPage({
                                     </div>
                                 )}
                             </div>
-                        </div>
+                        </div>*/}
 
                         {/* Quick Actions - Solo para admin y moderadores */}
                         {(canManageMembers || canManageSettings) && (

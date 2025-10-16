@@ -75,7 +75,7 @@ export default function AreasFilter({ selected, onChange }: AreasFilterProps) {
               Filtrar por Áreas
             </DialogTitle>
             <DialogDescription>
-              Selecciona las áreas para filtrar los resultados de búsqueda. 
+              Selecciona las áreas para filtrar los resultados de búsqueda.
               Deja vacío para buscar en todas las áreas.
             </DialogDescription>
           </DialogHeader>
