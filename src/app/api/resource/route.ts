@@ -44,10 +44,10 @@ export async function POST(request: NextRequest) {
         : undefined,
       communities: dto.communities
         ? {
-          create: dto.communities.map((id) => ({
-            community: { connect: { id } },
-          })),
-        }
+            create: dto.communities.map((id) => ({
+              community: { connect: { id } },
+            })),
+          }
         : undefined,
     },
     select: resourceSelect,
@@ -129,15 +129,39 @@ export async function PUT(request: NextRequest) {
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl;
 
-  const resources = await prismadb.resource.findMany({
-    where: {
-      title: {
-        contains: searchParams.get("query") || "",
-        mode: "insensitive",
+  const page = parseInt(searchParams.get("page") || "1", 10);
+  const limit = parseInt(searchParams.get("limit") || "10", 10);
+  const query = searchParams.get("query") || "";
+
+  const skip = (page - 1) * limit;
+
+  // Obtener recursos paginados
+  const [resources, total] = await Promise.all([
+    prismadb.resource.findMany({
+      where: {
+        title: {
+          contains: query,
+          mode: "insensitive",
+        },
       },
-    },
-    select: resourceSelect,
-  });
+      select: resourceSelect,
+      skip,
+      take: limit,
+      orderBy: {
+        createdAt: "desc", // opcional: ordena por fecha de creación
+      },
+    }),
+    prismadb.resource.count({
+      where: {
+        title: {
+          contains: query,
+          mode: "insensitive",
+        },
+      },
+    }),
+  ]);
+
+  const totalPages = Math.ceil(total / limit);
 
   return NextResponse.json(resources);
 }
